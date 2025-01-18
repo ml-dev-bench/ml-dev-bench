@@ -67,18 +67,20 @@ make lint
 
 ## Project Structure
 
-README.md
-calipers/
-├── agents/ # Agent implementations
-├── callbacks/ # Callback handlers
-├── framework/ # Core evaluation framework
-├── metrics/ # Metrics tracking
-└── scripts/ # CLI tools
-runtime/
-├── backends/ # Runtime backend implementations
-├── environments/ # Environment configurations
-└── tools/ # Runtime tools
-
+```
+.
+├── calipers/
+│   ├── agents/          # Agent implementations
+│   ├── callbacks/       # Callback handlers
+│   ├── framework/       # Core evaluation framework
+│   ├── metrics/         # Metrics tracking
+│   └── scripts/         # CLI tools
+│
+└── runtime/
+    ├── backends/        # Runtime backend implementations
+    ├── environments/    # Environment configurations
+    └── tools/           # Runtime tools
+```
 ## Contributing
 
 1. Fork the repository
