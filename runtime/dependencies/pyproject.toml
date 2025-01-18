@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "ml_dev_bench_runtime"
+version = "0.1.0"
+description = ""
+readme = "README.md"
+authors = ["MLDevBench"]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+jupyterlab = "*"
+notebook = "*"
+jupyter_kernel_gateway = "*"
+flake8 = "*"
+torch = "2.2.0"
+torchvision = "0.17.0"
+transformers = ">=4.0.0,<5.0.0"
+timm = ">=0.6.0,<1.0.0"
+scikit-learn = ">=1.0.0,<2.0.0"
+opencv-python = ">=4.5.0,<5.0.0"
+lightning = "^2.4.0"
+wandb = "0.18.5"
+numpy = ">=1.23.0,<2.0.0"
+matplotlib = "3.9.0"
+pytest = ">=7.0.0,<8.0.0"
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = [
+  "poetry-core",
+]

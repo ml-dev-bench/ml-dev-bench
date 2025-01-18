@@ -1,0 +1,26 @@
+You are working on a simple PyTorch training verification task. Create a minimal working example that:
+
+1. Initialize W&B with:
+   - Project name: "ml_workflow_test_wandb"
+   - Run name: "test-run-{timestamp}"
+   - Tags: ["test", "evaluation"]
+   Save the initialization results (including run_id) to wandb_info.json
+
+2. Read the run_id from wandb_info.json and use it to log these metrics:
+   - training_loss: 0.5
+   - validation_loss: 0.4
+   - epoch: 0
+
+3. Read the run_id from wandb_info.json again and use it to retrieve the metrics via API.
+   Compare the retrieved metrics with the expected values to verify:
+   - training_loss == 0.5
+   - validation_loss == 0.4
+   - epoch == 0
+   Dump the retrieved metrics to wandb_metrics.json
+
+Success criteria:
+- wandb_info.json is created with run initialization info
+- All specified metrics are logged using run_id from the json file
+- Metrics are correctly retrieved and verified using run_id from the json file
+
+Note: This approach ensures proper tracking of the run_id through a file, making the workflow more robust and verifiable.

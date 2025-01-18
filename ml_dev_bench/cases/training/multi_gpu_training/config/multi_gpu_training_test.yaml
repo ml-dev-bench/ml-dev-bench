@@ -1,0 +1,21 @@
+workspace_dir: ./ml_dev_bench/cases/training/multi_gpu_training/setup_workspace
+output_dir: ./ml_dev_bench/cases/training/multi_gpu_training/results
+fail_fast: false
+log_level: "INFO"
+num_runs: 1
+langchain_project: "ml-dev-bench-evaluation-multi-gpu-training"
+
+task_packages:
+  - "ml_workflow_bench.cases.training.multi_gpu_training"
+
+agent:
+  id: oh_agent
+  agent_type: "plan_and_execute"
+  planner_model: "anthropic/claude-3-5-haiku-20241022"
+  executor_model: "anthropic/claude-3-5-haiku-20241022"
+  replanner_model: "anthropic/claude-3-5-haiku-20241022"
+  executor_recursion_limit: 25
+  workflow_recursion_limit: 60
+
+tasks:
+  - id: multi_gpu_training

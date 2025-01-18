@@ -1,0 +1,55 @@
+[tool.poetry]
+name = "ml-dev-bench"
+version = "0.1.0"
+description = "A framework for evaluating AI agents"
+authors = ["MLDevBench"]
+readme = "README.md"
+packages = [
+    { include = "ml_dev_bench" },
+    { include = "calipers" },
+    { include = "runtime" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pydantic = "^2.0"
+PyYAML = "^6.0"
+python-dotenv = "^1.0.0"
+litellm = "^1.52.3"
+langchain-community = "^0.0.1"
+composio = "^0.1.0"
+GitPython = "^3.1.0"
+pandas = "*"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "0.9.2"
+mypy = "1.13.0"
+pre-commit = "4.0.1"
+build = "*"
+jupyter = "1.1.1"
+notebook = ">=7.0.0"
+pytest = "^7.4.0"
+pytest-asyncio = "^0.21.0"
+pytest-cov = "^4.1.0"
+types-PyYAML = "^6.0.12.12"
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = [
+  "poetry-core",
+]
+
+[tool.autopep8]
+# autopep8 fights with mypy on line length issue
+ignore = [ "E501" ]
+
+[tool.black]
+# prevent black (if installed) from changing single quotes to double quotes
+skip-string-normalization = true
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+check_untyped_defs = true

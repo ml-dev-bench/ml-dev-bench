@@ -1,0 +1,22 @@
+# Core evaluation settings
+num_runs: 1
+fail_fast: false
+log_level: "INFO"
+output_dir: "evaluation/tests/results"
+workspace_dir: "./test_workspace"
+
+# Agent configuration
+agent:
+  id: "oh_agent"
+  agent_type: "plan_and_execute"
+  planner_model: "gpt-4o-mini"
+  executor_model: "gpt-4o-mini"
+  replanner_model: "gpt-4o-mini"
+
+# Task configurations
+tasks:
+  - id: "random_array_generation"
+    categories:
+      - "array"
+      - "generation"
+      - "numpy"

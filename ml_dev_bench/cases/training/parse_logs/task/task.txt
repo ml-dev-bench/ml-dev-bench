@@ -1,0 +1,16 @@
+Analyze the training logs to extract key information appropriately:
+
+1. In the 'training' directory, there is a file called 'training_logs.txt'
+2. Read and analyze the training logs to determine:
+   - Training status (success/failure)
+   - Final training metrics (accuracy, loss) from the last successful epoch
+   - Any error messages if training failed
+3. Save your findings in a JSON file named 'training_analysis.json' inside the 'training' directory with the following structure:
+   {
+     "status": "failed" or "success",
+     "final_metrics": {
+       "accuracy": float or null,
+       "loss": float or null
+     },
+     "error_message": string (empty if successful)
+   }

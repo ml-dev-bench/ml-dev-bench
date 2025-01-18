@@ -1,0 +1,45 @@
+# Evaluation configuration for running a set of tasks based on category filters
+
+# Core evaluation settings
+num_runs: 1
+fail_fast: false
+log_level: "INFO"
+output_dir: "evaluation/results"
+
+# Category filters for task selection
+# List of lists where:
+# - Inner list: AND condition (tasks must match all categories)
+# - Outer list: OR condition (tasks must match any group)
+category_filters:
+  - # First group: Tasks that are both dataset AND preprocessing related
+    - "dataset"
+    - "preprocessing"
+  - # Second group: Tasks that are download related
+    - "download"
+  # This will select tasks that are either:
+  # - Both dataset AND preprocessing related
+  # OR
+  # - Download related
+
+# If category_filters is all, evaluate all tasks
+# category_filters: ["all"]
+
+# Agent configuration
+agent:
+  id: "oh_agent"
+  agent_type: "plan_and_execute"
+  workspace_dir: "./workspace"
+  planner_model: "gpt-4"
+  executor_model: "gpt-4"
+  replanner_model: "gpt-4"
+  runtime_config:
+    persistent: true
+    environment: {}
+    local_config:
+      max_tree_items: 2
+
+# Specify packages containing tasks to import
+task_packages:
+  - ml_workflow_bench.tasks.array_generation
+  - ml_workflow_bench.tasks.code_generation
+  - custom_tasks.my_task_package

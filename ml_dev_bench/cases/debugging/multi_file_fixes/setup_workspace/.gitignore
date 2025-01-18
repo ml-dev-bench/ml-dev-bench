@@ -1,0 +1,6 @@
+data/
+checkpoints/
+wandb/
+wandb_info.json
+training.log
+.spawn_process/

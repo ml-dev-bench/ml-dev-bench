@@ -1,0 +1,16 @@
+In the given training the validation metrics arent improving even though training metrics are improving.
+
+
+Your task:
+1. Run the training script using run_training.py to observe the behavior
+2. Fix the issues by modifying train.py
+3. Test your fix by running run_training.py again to see if the validation metrics improve
+
+
+Rules:
+- Only modify train.py
+- Do not change the model architecture or the dataset
+- The training should run without any errors
+- The validation metrics should improve
+
+Proceed with implementation till task is complete, do not request for additional user input or clarification.

@@ -1,0 +1,7 @@
+Your task is to download and load the ResNet18 pretrained model from torchvision for use in machine learning tasks. Follow these steps:
+
+1. Download a pretrained resnet18 model from torchvision.
+
+2. Save the loaded model to disk and create a model_info.json file in the workspace directory with the following information: model_name, model_path, architecture (should contain input_shape and num_parameters in model)
+
+The model_info.json file will be used to validate your implementation.

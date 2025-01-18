@@ -1,0 +1,23 @@
+workspace_dir: ./ml_dev_bench/cases/dataset/dataset_not_available_download/workspace
+output_dir: ./ml_dev_bench/cases/dataset/dataset_not_available_download/results
+fail_fast: false
+log_level: "INFO"
+num_runs: 1
+langchain_project: "ml-dev-bench-evaluation-dataset-not-available-download"
+
+task_packages:
+  - "ml_workflow_bench.cases.dataset.dataset_not_available_download"
+
+agent:
+  id: oh_agent
+  agent_type: "plan_and_execute"
+  #planner_model: "anthropic/claude-3-5-haiku-20241022"
+  # executor_model: "anthropic/claude-3-5-haiku-20241022"
+  # replanner_model: "anthropic/claude-3-5-haiku-20241022"
+  planner_model: "gpt-4o-mini"
+  executor_model: "gpt-4o-mini"
+  replanner_model: "gpt-4o-mini"
+  executor_recursion_limit: 25
+  workflow_recursion_limit: 60
+tasks:
+  - id: "dataset_not_available_download"

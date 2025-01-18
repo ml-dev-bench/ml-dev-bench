@@ -1,0 +1,21 @@
+workspace_dir: ./ml_dev_bench/cases/training/parse_logs/setup_workspace
+output_dir: ./ml_dev_bench/cases/training/parse_logs/results
+fail_fast: false
+log_level: "INFO"
+num_runs: 1
+langchain_project: "ml-dev-bench-evaluation-training-logs"
+
+task_packages:
+  - "ml_workflow_bench.cases.training.parse_logs"
+
+agent:
+  id: oh_agent
+  agent_type: "plan_and_execute"
+  planner_model: "gpt-4o-mini"
+  executor_model: "gpt-4o-mini"
+  replanner_model: "gpt-4o-mini"
+  executor_recursion_limit: 25
+  workflow_recursion_limit: 60
+
+tasks:
+  - id: parse_logs
