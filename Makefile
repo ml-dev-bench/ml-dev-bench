@@ -113,7 +113,7 @@ install-react-agent-dependencies:
 	POETRY_VIRTUALENVS_PATH="./.venv-react" poetry env use python$(PYTHON_VERSION)
 	POETRY_VIRTUALENVS_PATH="./.venv-react" poetry install --with react-agent
 	@echo "$(GREEN)Python dependencies with react-agent installed successfully in .venv-react$(RESET)"
-	@echo "$(BLUE)To activate this environment, run: source .venv-react/bin/activate$(RESET)"
+	@echo "$(BLUE)To activate this environment, run: POETRY_VIRTUALENVS_PATH='./.venv-react' poetry shell$(RESET)"
 
 install-runtime-dependencies:
 	@echo "$(GREEN)Installing runtime Python dependencies...$(RESET)"
