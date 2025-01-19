@@ -4,9 +4,6 @@ from typing import Any, Dict, List, Optional, Set
 
 import litellm
 
-from calipers.callbacks.litellm_callbacks.metrics_callback import (
-    MetricsCallbackHandler,
-)
 from calipers.framework.base import BaseRuntime
 from calipers.logger import logger
 from runtime.environments import LocalConfig, RuntimeConfig
@@ -40,7 +37,7 @@ class EvaluationFramework:
         self.config = EvaluationConfig.from_dict(config)
 
     def get_task(
-        self, task_id: str, task_config: Dict[str, Any]
+        self, task_id: str, task_config: Optional[TaskConfig] = None
     ) -> Optional[BaseEvaluationTask]:
         """Get task instance from registry with config"""
         task_class = EvalRegistry.get_task(task_id)
@@ -49,37 +46,24 @@ class EvaluationFramework:
             return None
 
         # Create TaskConfig from dict
-        config = TaskConfig(
-            id=task_id,
-            workspace_dir=Path(
-                task_config.get('workspace_dir', self.config.workspace_dir)
-            ),
-            categories=set(task_config.get('categories', [])),
-            config=task_config,
-        )
+        if task_config is None:
+            task_config = TaskConfig(
+                id=task_id,
+                workspace_dir=Path(self.config.workspace_dir),
+                config={},
+            )
 
-        return task_class(config)
+        return task_class(task_config)
 
     def get_agent(
-        self, agent_id: str, agent_config: Dict[str, Any]
+        self, agent_id: str, agent_config: AgentConfig
     ) -> Optional[BaseAgent]:
         """Get agent instance from registry with config"""
         agent_class = EvalRegistry.get_agent(agent_id)
         if not agent_class:
             logger.error('Agent %s not found in registry', agent_id)
             return None
-
-        # Create AgentConfig from dict
-        config = AgentConfig(
-            id=agent_id,
-            workspace_dir=Path(
-                agent_config.get('workspace_dir', self.config.workspace_dir)
-            ),
-            model_name=agent_config.get('model_name'),
-            config=agent_config,
-        )
-
-        return agent_class(config)
+        return agent_class(agent_config)
 
     def get_tasks_by_category(self, category: str) -> Set[str]:
         """Get task IDs that belong to a category"""
@@ -89,7 +73,7 @@ class EvaluationFramework:
                 tasks.add(task_id)
         return tasks
 
-    def get_eval_runtime(self) -> BaseRuntime:
+    def get_eval_runtime(self, workspace_dir: Path) -> BaseRuntime:
         """Get MLDevBench runtime for evaluation"""
         runtime_manager = MLDevBenchRuntimeManager(
             backend_type=RuntimeBackendType.COMPOSIO
@@ -98,7 +82,7 @@ class EvaluationFramework:
             persistent=True,
             environment={},
             local_config=LocalConfig(
-                working_dir=str(self.config.workspace_dir),
+                working_dir=str(workspace_dir),
                 max_tree_items=2,
             ),
         )
@@ -145,21 +129,37 @@ class EvaluationFramework:
         self, task_id: str, agent_id: str, num_runs: int = 1
     ) -> EvaluationResult:
         """Run evaluation multiple times and collect results"""
-        task = self.get_task(task_id, {})  # Empty dict as fallback config
-        agent = self.get_agent(agent_id, {})  # Empty dict as fallback config
+        # Get task config from self.config
+        task_config = None
+        for task_cfg in self.config.tasks:
+            if task_cfg.id == task_id:
+                task_config = task_cfg
+                break
+
+        task = self.get_task(task_id, task_config)
+        if not task:
+            logger.error('Task %s not found', task_id)
+            raise ValueError(f'Task {task_id} not found')
+
+        # Get agent config from self.config and update with task's workspace_dir
+        agent_config = self.config.agent.replace_workspace_dir(task.workspace_dir)
+        agent = self.get_agent(agent_id, agent_config)
+        if not agent:
+            logger.error('Agent %s not found', agent_id)
+            raise ValueError(f'Agent {agent_id} not found')
+
         metrics_callback = None
-
-        if not task or not agent:
-            logger.error('Task %s or Agent %s not found', task_id, agent_id)
-            raise ValueError(f'Task {task_id} or Agent {agent_id} not found')
-
         if agent.uses_litellm():
             # Setup MetricsCallback if agent uses LiteLLM
             try:
+                from calipers.callbacks.litellm_callbacks.metrics_callback import (
+                    MetricsCallbackHandler,
+                )
+
                 metrics_callback = MetricsCallbackHandler(metrics_tracker=task.metrics)
                 litellm.callbacks = [metrics_callback]
             except Exception as e:
-                logger.warning(f'Failed to create MetricsCallbackHandler: {e}')
+                logger.warning('Failed to create MetricsCallbackHandler: %s', str(e))
                 # Continue without metrics callback
                 metrics_callback = None
 
@@ -177,7 +177,8 @@ class EvaluationFramework:
                 task.initialize()
 
             try:
-                evaluation_runtime = self.get_eval_runtime()
+                # create a clean runtime for each run
+                evaluation_runtime = self.get_eval_runtime(task.workspace_dir)
                 start_time = datetime.now()
                 logger.info(f'Running task {task_id} with agent {agent_id}')
                 agent_output = await task.run(agent)

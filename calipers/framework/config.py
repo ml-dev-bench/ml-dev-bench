@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional
 
 import yaml  # type: ignore[import-untyped]
 
@@ -11,7 +11,6 @@ class TaskConfig:
 
     id: str
     workspace_dir: Optional[Path] = None
-    categories: Set[str] = field(default_factory=set)
     config: Dict[str, Any] = field(default_factory=dict)
 
 
@@ -23,6 +22,15 @@ class AgentConfig:
     workspace_dir: Optional[Path] = None
     model_name: Optional[str] = None
     config: Dict[str, Any] = field(default_factory=dict)
+
+    def replace_workspace_dir(self, workspace_dir: Path) -> 'AgentConfig':
+        """Replace the workspace_dir with a new value"""
+        return AgentConfig(
+            id=self.id,
+            workspace_dir=workspace_dir,
+            model_name=self.model_name,
+            config=self.config,
+        )
 
 
 @dataclass
@@ -69,7 +77,6 @@ class EvaluationConfig:
             task = TaskConfig(
                 id=task_data.get('id'),
                 workspace_dir=Path(task_data.get('workspace_dir', workspace)),
-                categories=set(task_data.get('categories', [])),
                 config=task_data,
             )
             tasks.append(task)
