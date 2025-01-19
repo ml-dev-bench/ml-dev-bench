@@ -115,6 +115,18 @@ install-react-agent-dependencies:
 	@echo "$(GREEN)Python dependencies with react-agent installed successfully in .venv-react$(RESET)"
 	@echo "$(BLUE)To activate this environment, run: POETRY_VIRTUALENVS_PATH='./.venv-react' poetry shell$(RESET)"
 
+install-aide-agent-dependencies:
+	@echo "$(GREEN)Installing Python dependencies with aide-agent in new environment...$(RESET)"
+	@if [ -z "${TZ}" ]; then \
+		echo "Defaulting TZ (timezone) to UTC"; \
+		export TZ="UTC"; \
+	fi
+	@echo "$(YELLOW)Creating new virtual environment for aide-agent...$(RESET)"
+	POETRY_VIRTUALENVS_PATH="./.venv-aide" poetry env use python$(PYTHON_VERSION)
+	POETRY_VIRTUALENVS_PATH="./.venv-aide" poetry install --with aide
+	@echo "$(GREEN)Python dependencies with aide-agent installed successfully in .venv-aide$(RESET)"
+	@echo "$(BLUE)To activate this environment, run: POETRY_VIRTUALENVS_PATH='./.venv-aide' poetry shell$(RESET)"
+
 install-runtime-dependencies:
 	@echo "$(GREEN)Installing runtime Python dependencies...$(RESET)"
 	@if [ -z "${TZ}" ]; then \
@@ -124,7 +136,6 @@ install-runtime-dependencies:
 	cd runtime/dependencies && poetry env use python$(PYTHON_VERSION)
 	@cd runtime/dependencies && poetry install --no-root
 	@echo "$(GREEN)Runtime dependencies installed successfully.$(RESET)"
-
 
 install-pre-commit-hooks:
 	@echo "$(YELLOW)Installing pre-commit hooks...$(RESET)"
