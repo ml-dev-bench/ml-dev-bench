@@ -47,7 +47,7 @@ class ChannelViTImplementTask(BaseEvaluationTask):
             # Run the test script to validate implementation
             if isinstance(runtime, MLAgentBenchRuntime):
                 result = runtime.execute_action(
-                    action=Action.MLDevBench_SHELL_TOOL_EXEC_COMMAND,
+                    action=Action.ML_DEV_BENCH_SHELL_TOOL_EXEC_COMMAND,
                     request_data={'cmd': f'python {test_script}'},
                     metadata={},
                 )

@@ -16,10 +16,18 @@ pydantic = "^2.0"
 PyYAML = "^6.0"
 python-dotenv = "^1.0.0"
 litellm = "^1.52.3"
-langchain-community = "^0.0.1"
-composio = "^0.1.0"
+langchain-community = "^0.3.8"
+composio-core = { git = "https://github.com/Deduction-Dev/composio/", branch = "deduction_master", subdirectory = "python" }
 GitPython = "^3.1.0"
 pandas = "*"
+
+[tool.poetry.group.react-agent.dependencies]
+langgraph = "^0.2.53"
+langgraph-checkpoint-sqlite = "^2.0.1"
+langchain-openai = "^0.2.10"
+langchain-core = "^0.3.21"
+langchain-anthropic = "^0.3.0"
+composio-langchain = "^0.6.10"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "0.9.2"
@@ -31,7 +39,6 @@ notebook = ">=7.0.0"
 pytest = "^7.4.0"
 pytest-asyncio = "^0.21.0"
 pytest-cov = "^4.1.0"
-types-PyYAML = "^6.0.12.12"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"

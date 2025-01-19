@@ -66,7 +66,7 @@ class OutputShapeDebugTask(BaseEvaluationTask):
             # Run the model to check if the shape error is fixed
             if isinstance(runtime, MLAgentBenchRuntime):
                 result = runtime.execute_action(
-                    action=Action.MLDevBench_SHELL_TOOL_EXEC_COMMAND,
+                    action=Action.ML_DEV_BENCH_SHELL_TOOL_EXEC_COMMAND,
                     request_data={'cmd': f'python {run_script}'},
                     metadata={},
                 )

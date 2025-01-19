@@ -65,6 +65,33 @@ make install-runtime-dependencies
 make lint
 ```
 
+## Adding New Agent Groups
+
+To add a new agent group with its specific dependencies:
+
+1. Add a new group in `pyproject.toml`:
+```toml
+[tool.poetry.group.{your-agent-name}.dependencies]
+dependency1 = "^version"
+dependency2 = "^version"
+```
+
+2. Add a corresponding make target in `Makefile`:
+```makefile
+install-{your-agent}-dependencies:
+	@echo "$(GREEN)Installing Python dependencies with {your-agent} in new environment...$(RESET)"
+	POETRY_VIRTUALENVS_PATH="./.venv-{your-agent}" poetry env use python$(PYTHON_VERSION)
+	POETRY_VIRTUALENVS_PATH="./.venv-{your-agent}" poetry install --with {your-agent}
+```
+
+This creates a separate virtual environment with a suffix matching your agent name (e.g., `.venv-{your-agent}`).
+
+Example: The react-agent group is set up with:
+```bash
+make install-react-agent-dependencies
+```
+This creates a dedicated environment at `.venv-react` with all react-agent specific dependencies.
+
 ## Project Structure
 
 ```
