@@ -2,7 +2,7 @@
 num_runs: 1
 fail_fast: false
 log_level: "INFO"
-output_dir: "evaluation/tests/results"
+output_dir: "./results"
 workspace_dir: "./test_workspace"
 
 # Agent configuration

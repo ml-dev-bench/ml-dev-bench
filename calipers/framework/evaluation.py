@@ -9,6 +9,7 @@ from calipers.callbacks.litellm_callbacks.metrics_callback import (
 )
 from calipers.framework.base import BaseRuntime
 from calipers.logger import logger
+from runtime.environments import LocalConfig, RuntimeConfig
 from runtime.runtime import (
     MLDevBenchRuntimeManager,
     RuntimeBackendType,
@@ -93,8 +94,16 @@ class EvaluationFramework:
         runtime_manager = MLDevBenchRuntimeManager(
             backend_type=RuntimeBackendType.COMPOSIO
         )
+        runtime_config = RuntimeConfig(
+            persistent=True,
+            environment={},
+            local_config=LocalConfig(
+                working_dir=str(self.config.workspace_dir),
+                max_tree_items=2,
+            ),
+        )
         runtime_context = runtime_manager.get_runtime(
-            runtime_type=RuntimeEnvironmentType.LOCAL, config=None
+            runtime_type=RuntimeEnvironmentType.LOCAL, config=runtime_config
         )
         return runtime_context.runtime
 

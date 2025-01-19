@@ -146,11 +146,6 @@ class BaseAgent(ABC):
     async def run(self, task: str) -> Dict[str, Any]:
         pass
 
-    @property
-    @abstractmethod
-    def runtime(self) -> BaseRuntime:
-        pass
-
 
 class BaseEvaluationTask(ABC):
     task_id: str
