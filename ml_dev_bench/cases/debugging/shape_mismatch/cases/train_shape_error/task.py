@@ -67,7 +67,7 @@ class TrainShapeDebugTask(BaseEvaluationTask):
             run_script = self.workspace_dir / 'run_training.py'
             if isinstance(runtime, MLAgentBenchRuntime):
                 result = runtime.execute_action(
-                    action=Action.MLDevBench_SHELL_TOOL_EXEC_COMMAND,
+                    action=Action.ML_DEV_BENCH_SHELL_TOOL_EXEC_COMMAND,
                     request_data={'cmd': f'python {run_script}'},
                     metadata={},
                 )

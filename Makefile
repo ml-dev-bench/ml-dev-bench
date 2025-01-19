@@ -103,6 +103,18 @@ install-python-dependencies:
 	@poetry install
 	@echo "$(GREEN)Python dependencies installed successfully.$(RESET)"
 
+install-react-agent-dependencies:
+	@echo "$(GREEN)Installing Python dependencies with react-agent in new environment...$(RESET)"
+	@if [ -z "${TZ}" ]; then \
+		echo "Defaulting TZ (timezone) to UTC"; \
+		export TZ="UTC"; \
+	fi
+	@echo "$(YELLOW)Creating new virtual environment for react-agent...$(RESET)"
+	POETRY_VIRTUALENVS_PATH="./.venv-react" poetry env use python$(PYTHON_VERSION)
+	POETRY_VIRTUALENVS_PATH="./.venv-react" poetry install --with react-agent
+	@echo "$(GREEN)Python dependencies with react-agent installed successfully in .venv-react$(RESET)"
+	@echo "$(BLUE)To activate this environment, run: source .venv-react/bin/activate$(RESET)"
+
 install-runtime-dependencies:
 	@echo "$(GREEN)Installing runtime Python dependencies...$(RESET)"
 	@if [ -z "${TZ}" ]; then \

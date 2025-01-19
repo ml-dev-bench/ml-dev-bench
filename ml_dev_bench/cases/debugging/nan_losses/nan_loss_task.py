@@ -38,7 +38,7 @@ class NaNLossDebugTask(BaseEvaluationTask):
             test_script = self.workspace_dir / 'test_model.py'
             if isinstance(runtime, MLAgentBenchRuntime):
                 result = runtime.execute_action(
-                    action=Action.MLDevBench_SHELL_TOOL_EXEC_COMMAND,
+                    action=Action.ML_DEV_BENCH_SHELL_TOOL_EXEC_COMMAND,
                     request_data={'cmd': f'python {test_script}'},
                     metadata={},
                 )
