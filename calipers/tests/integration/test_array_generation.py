@@ -18,18 +18,28 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+def find_env_file(start_path: Path, filename: str = '.env.runtime') -> Path:
+    """Recursively search for environment file starting from given path."""
+    current = start_path
+    while current != current.parent:  # Stop at root directory
+        env_file = current / filename
+        if env_file.exists():
+            return env_file
+        current = current.parent
+    raise FileNotFoundError(f'Could not find {filename} in any parent directory')
+
+
 @pytest.fixture
 def setup_test_env(tmp_path):
     """Setup test environment"""
     logger.info('Setting up test environment')
-    env_file = (
-        Path(__file__).resolve().parent.parent.parent.parent.parent / '.env.runtime'
-    )
-    if not env_file.exists():
-        logger.error(f'Environment file not found at {env_file}')
-        raise FileNotFoundError(f'Environment file not found at {env_file}')
-    load_dotenv(env_file)
-    logger.debug('Loaded environment file')
+    try:
+        env_file = find_env_file(Path(__file__).resolve().parent)
+        load_dotenv(env_file)
+        logger.debug(f'Loaded environment file from {env_file}')
+    except FileNotFoundError as e:
+        logger.error(str(e))
+        raise
 
     # Create test workspace and results directories
     workspace_dir = tmp_path / 'test_workspace'
@@ -88,7 +98,7 @@ async def test_array_generation(setup_test_env):
 
     # Validate task results
     assert result.task_id == 'random_array_generation'
-    assert result.agent_id == 'oh_agent'
+    assert result.agent_id == 'simple_react'
     assert len(result.runs) == 1
     # Allow failure as well and validate metrics only in success cases
     if result.success_rate == 1.0:
@@ -98,7 +108,8 @@ async def test_array_generation(setup_test_env):
         # Check metrics
         assert 'array_shapes' in run.metrics
         assert 'steps' in run.metrics
-        assert 'tokens' in run.metrics
+        assert 'token_cost' in run.metrics
+        assert 'token__total_tokens' in run.metrics
 
         # Verify array shapes metric
         assert run.metrics['array_shapes']['value'] == 3  # All shapes correct
