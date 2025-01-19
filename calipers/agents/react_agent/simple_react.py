@@ -68,6 +68,7 @@ class SimpleReactAgent(BaseAgent):
         workspace = runtime_context.runtime
         self.workspace = workspace
         self.tool_set = ComposioToolSet(**tool_config)
+        self.tool_set.set_workspace_id(workspace.id)
         self.tools = self.tool_set.get_tools(actions=AGENT_TOOLS)
         system_message = SystemMessage(
             content=create_message_content('You are a helpful assistant.')
@@ -87,7 +88,7 @@ class SimpleReactAgent(BaseAgent):
         try:
             # Execute the agent
             result = await self.agent.ainvoke(
-                {'input': task},
+                {'messages': [('user', task)]},
                 config={
                     'recursion_limit': self.config.config.get('recursion_limit', 25)
                 },
@@ -111,22 +112,4 @@ class SimpleReactAgent(BaseAgent):
     @property
     def runtime(self) -> BaseRuntime:
         """Get or create the runtime."""
-        if self._runtime is None:
-            runtime_manager = MLDevBenchRuntimeManager(
-                backend_type=RuntimeBackendType.COMPOSIO
-            )
-            runtime_config = RuntimeConfig(
-                persistent=True,
-                environment={},
-                local_config=LocalConfig(
-                    working_dir=str(self.config.workspace_dir),
-                    max_tree_items=2,
-                ),
-            )
-            runtime_context = runtime_manager.get_runtime(
-                runtime_type=RuntimeEnvironmentType.LOCAL,
-                config=runtime_config,
-            )
-            self._runtime = runtime_context.runtime
-
-        return self._runtime
+        return self.workspace

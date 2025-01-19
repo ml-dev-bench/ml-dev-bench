@@ -47,6 +47,7 @@ Thumbs.db
 
 # Working directory
 notebooks/workspace/*
+notebooks/test_workspace/*
 !notebooks/workspace/.gitkeep
 
 # Evaluation workspaces
