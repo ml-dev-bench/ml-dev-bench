@@ -23,23 +23,16 @@ category_filters:
 
 # If category_filters is all, evaluate all tasks
 # category_filters: ["all"]
+agent_packages:
+  - "agents.react_agent"
 
 # Agent configuration
 agent:
-  id: "oh_agent"
-  agent_type: "plan_and_execute"
-  workspace_dir: "./workspace"
-  planner_model: "gpt-4"
-  executor_model: "gpt-4"
-  replanner_model: "gpt-4"
-  runtime_config:
-    persistent: true
-    environment: {}
-    local_config:
-      max_tree_items: 2
+  id: "simple_react"
+  model_name: "gpt-4o-mini"
 
 # Specify packages containing tasks to import
 task_packages:
-  - ml_workflow_bench.tasks.array_generation
-  - ml_workflow_bench.tasks.code_generation
+  - ml_dev_bench.cases.array_generation
+  - ml_dev_bench.cases.code_generation
   - custom_tasks.my_task_package

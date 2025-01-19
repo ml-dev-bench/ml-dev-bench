@@ -13,7 +13,6 @@ import yaml
 from dotenv import load_dotenv
 
 import calipers
-from calipers import agents  # noqa
 from calipers.framework import EvaluationFramework, EvaluationResult
 from calipers.logger import logger, setup_logger
 
@@ -134,6 +133,15 @@ async def run_evaluation(
             except ImportError as e:
                 logger.warning(f'Failed to import task package {package}: {e}')
 
+    # Import agent packages if specified
+    if config.get('agent_packages'):
+        for package in config['agent_packages']:
+            try:
+                logger.info(f'Importing agent package: {package}')
+                __import__(package)
+            except ImportError as e:
+                logger.warning(f'Failed to import agent package {package}: {e}')
+
     # Get commit hash if not provided
     if not commit_hash:
         import git
@@ -175,6 +183,8 @@ async def run_evaluation(
                 config['workspace_dir'], workspace_temp_dir, dirs_exist_ok=True
             )
             config['workspace_dir'] = workspace_temp_dir
+
+        logger.info(f'Workspace dir: {config["workspace_dir"]}')
 
     try:
         framework = EvaluationFramework(config)

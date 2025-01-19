@@ -1,0 +1,33 @@
+# Ignore agents directory
+agents/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.env
+
+# Development/IDE
+.git
+.gitignore
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Testing
+tests/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Notebooks
+notebooks/
+.ipynb_checkpoints
+
+# Build
+dist/
+build/
+*.egg-info/

@@ -31,8 +31,10 @@ def get_poetry_python_path() -> str:
 
         return python_path
 
-    except subprocess.CalledProcessError:
-        raise RuntimeError('Poetry environment not found. Are you in a Poetry project?')
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError(
+            f'Poetry environment not found. Are you in a Poetry project? Error: {str(e)}'
+        )
     except Exception as e:
         raise RuntimeError(f'Error getting Poetry Python path: {str(e)}')
 

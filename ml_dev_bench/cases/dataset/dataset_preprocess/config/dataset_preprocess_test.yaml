@@ -8,14 +8,14 @@ langchain_project: "ml-dev-bench-evaluation-dataset-preprocess"
 task_packages:
   - "ml_workflow_bench.cases.dataset.dataset_preprocess"
 
+agent_packages:
+  - "agents.react_agent"
+
+# Agent configuration
 agent:
-  id: oh_agent
-  agent_type: "plan_and_execute"
-  planner_model: "anthropic/claude-3-5-haiku-20241022"
-  executor_model: "anthropic/claude-3-5-haiku-20241022"
-  replanner_model: "anthropic/claude-3-5-haiku-20241022"
-  executor_recursion_limit: 25
-  workflow_recursion_limit: 60
+  id: "simple_react"
+  model_name: "gpt-4o-mini"
+
 
 tasks:
   - id: dataset_preprocess

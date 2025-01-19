@@ -6,12 +6,13 @@ output_dir: "./results"
 workspace_dir: "./test_workspace"
 
 # Agent configuration
+agent_packages:
+  - "agents.react_agent"
+
+# Agent configuration
 agent:
-  id: "oh_agent"
-  agent_type: "plan_and_execute"
-  planner_model: "gpt-4o-mini"
-  executor_model: "gpt-4o-mini"
-  replanner_model: "gpt-4o-mini"
+  id: "simple_react"
+  model_name: "gpt-4o-mini"
 
 # Task configurations
 tasks:

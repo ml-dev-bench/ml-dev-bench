@@ -57,6 +57,12 @@ make install-runtime-dependencies
 
 ```
 
+To run the hello world evaluation:
+
+```bash
+./scripts/eval.sh --config ml_dev_bench/cases/hello_world/hello_world_config.yaml
+```
+
 ## Development
 
 - Format and lint code:
@@ -107,6 +113,67 @@ This creates a dedicated environment at `.venv-react` with all react-agent speci
     ├── backends/        # Runtime backend implementations
     ├── environments/    # Environment configurations
     └── tools/           # Runtime tools
+```
+
+## Adding New Agents
+
+### Directory Structure
+To add a new agent:
+1. Create a new directory under `agents/` with your agent name (e.g., `agents/my_agent/`)
+2. Add your agent implementation files in this directory
+3. Create a `Dockerfile` in your agent directory that extends the base image
+
+Example structure:
+```
+agents/
+├── env/
+│   └── base.Dockerfile    # Base Docker image
+├── my_agent/
+│   ├── __init__.py
+│   ├── my_agent.py       # Your agent implementation
+│   └── Dockerfile        # Agent-specific Dockerfile
+└── utils.py              # Shared utilities
+```
+
+### Docker Setup
+The project uses a two-stage Docker build:
+1. A base image with core dependencies
+2. Agent-specific images that extend the base image
+
+#### Building Images
+1. Build the base image (from project root):
+```bash
+docker build -t ml-dev-bench-base -f env/base.Dockerfile .
+```
+
+2. Build your agent's image (from project root):
+```bash
+docker build -t ml-dev-bench-myagent -f agents/my_agent/Dockerfile .
+```
+
+#### Creating Agent Dockerfile
+Your agent's Dockerfile should:
+1. Extend the base image
+2. Copy agent-specific code
+3. Install agent-specific dependencies
+
+Example agent Dockerfile:
+```dockerfile
+FROM ml-dev-bench-base:latest
+
+# Copy the agent code
+COPY agents/my_agent/ ./agents/my_agent/
+COPY agents/__init__.py ./agents/
+COPY agents/utils.py ./agents/
+
+# Install agent-specific dependencies
+RUN poetry install --with my-agent
+
+# Set working directory
+WORKDIR $WORKDIR/agents/my_agent
+
+# Default command - open a shell with poetry env
+CMD ["poetry", "shell"]
 ```
 ## Contributing
 

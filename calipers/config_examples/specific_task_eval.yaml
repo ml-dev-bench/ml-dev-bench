@@ -9,23 +9,18 @@ env_file: ".env"  # Default environment file path
 langchain_project: "ml-dev-bench-evaluation"
 
 # Agent configuration
+agent_packages:
+  - "agents.react_agent"
+
+# Agent configuration
 agent:
-  id: "oh_agent"
-  agent_type: "plan_and_execute"
-  workspace_dir: "./workspace"
-  planner_model: "gpt-4"
-  executor_model: "gpt-4"
-  replanner_model: "gpt-4"
-  runtime_config:
-    persistent: true
-    environment: {}
-    local_config:
-      max_tree_items: 2
+  id: "simple_react"
+  model_name: "gpt-4o-mini"
 
 # Specify packages containing tasks to import
 task_packages:
-  - ml_workflow_bench.tasks.dataset_download
-  - ml_workflow_bench.tasks.dataset_preprocessing
+  - ml_dev_bench.cases.dataset_download
+  - ml_dev_bench.cases.dataset_preprocessing
   - custom_tasks.my_task_package
 
 
