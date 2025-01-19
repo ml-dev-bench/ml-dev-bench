@@ -30,7 +30,7 @@ WORKDIR $WORKDIR
 COPY pyproject.toml poetry.lock ./
 
 # Install main project dependencies
-RUN poetry install --no-root --without dev,test
+RUN poetry install --no-root --without dev
 
 # Copy the core application code
 COPY ml_dev_bench/ ./ml_dev_bench/
