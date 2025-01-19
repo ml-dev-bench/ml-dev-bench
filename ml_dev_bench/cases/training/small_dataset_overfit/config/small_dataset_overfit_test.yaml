@@ -8,14 +8,13 @@ langchain_project: "ml-dev-bench-evaluation-small-dataset-overfit"
 task_packages:
   - "ml_workflow_bench.cases.training.small_dataset_overfit"
 
+agent_packages:
+  - "agents.react_agent"
+
+# Agent configuration
 agent:
-  id: oh_agent
-  agent_type: "plan_and_execute"
-  planner_model: "anthropic/claude-3-5-sonnet-20240620"
-  executor_model: "anthropic/claude-3-5-sonnet-20240620"
-  replanner_model: "anthropic/claude-3-5-sonnet-20240620"
-  executor_recursion_limit: 25
-  workflow_recursion_limit: 60
+  id: "simple_react"
+  model_name: "anthropic/claude-3-5-haiku-20241022"
 
 tasks:
   - id: small_dataset_overfit

@@ -45,7 +45,7 @@ class SimpleReactAgent(BaseAgent):
         self._runtime = None
 
         # Initialize LLM
-        model_name = config.model_name or 'gpt-4'
+        model_name = config.model_name or config.config.get('model_name', 'gpt-4o-mini')
         temperature = config.config.get('temperature', 0)
         tool_config = config.config.get('tool_config', {})
         self.llm = ChatLiteLLM(model_name=model_name, temperature=temperature)

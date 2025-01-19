@@ -11,7 +11,7 @@ from calipers.framework.base import (
     BaseRuntime,
 )
 from calipers.framework.registry import EvalRegistry
-from calipers.runtime.ml_dev_bench_runtime import MLAgentBenchRuntime
+from calipers.runtime.ml_dev_bench_runtime import MLDevBenchRuntime
 
 
 @EvalRegistry.register_task
@@ -55,7 +55,7 @@ class CIFAR10ImprovementTask(BaseEvaluationTask):
             # Run test_model.py to evaluate the model
             test_script = os.path.join(self.workspace_dir, 'test_model.py')
 
-            if isinstance(runtime, MLAgentBenchRuntime):
+            if isinstance(runtime, MLDevBenchRuntime):
                 result = runtime.execute_action(
                     action=Action.ML_DEV_BENCH_SHELL_TOOL_EXEC_COMMAND,
                     request_data={

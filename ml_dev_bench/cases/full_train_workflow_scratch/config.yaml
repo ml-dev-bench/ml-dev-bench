@@ -11,12 +11,13 @@ task_packages:
   - "ml_workflow_bench.cases.full_train_workflow_scratch"
 
 # Agent configuration
+agent_packages:
+  - "agents.react_agent"
+
+# Agent configuration
 agent:
-  id: "oh_agent"
-  agent_type: "plan_and_execute"
-  planner_model: "anthropic/claude-3-5-haiku-20241022"
-  executor_model: "anthropic/claude-3-5-haiku-20241022"
-  replanner_model: "anthropic/claude-3-5-haiku-20241022"
+  id: "simple_react"
+  model_name: "gpt-4o-mini"
   executor_recursion_limit: 25
   workflow_recursion_limit: 60
 
