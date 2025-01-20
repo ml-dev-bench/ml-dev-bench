@@ -51,9 +51,9 @@ determine:
 
 1. output_file: The name of the Python file where the solution should be saved based on the task description
 
-2. requires_execution: Whether running the code is needed to generate output based on the task description
-   - True if code needs to run (e.g., generating files, computing results) to output artifacts
-   - False if task description just asks generate a code file
+2. requires_execution: Whether running the code is needed to generate output artifacts (e.g., generating files, computing results)
+   - True if code needs to run to generate output artifacts required by the task description
+   - False if the code added to the output_file is sufficient to meet the task requirements
 
 3. explanation: Brief reason for your choices
 """,

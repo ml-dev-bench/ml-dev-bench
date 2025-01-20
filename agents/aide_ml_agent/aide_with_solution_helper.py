@@ -37,9 +37,6 @@ class AIDEAgent(BaseAgent):
     def __init__(self, config: AgentConfig):
         """Initialize AIDE agent with config."""
         super().__init__(config)
-        self.openai_api_key = os.getenv('OPENAI_API_KEY')
-        if not self.openai_api_key:
-            raise ValueError('OPENAI_API_KEY environment variable must be set')
 
         # Initialize solution helper agent
         self.solution_helper = SolutionHelperAgent(config)
@@ -98,7 +95,7 @@ class AIDEAgent(BaseAgent):
         output_path = os.path.join(self.config.workspace_dir, output_file)
         with open(output_path, 'w') as f:
             f.write(best_solution.code)
-        logger.info(f'Solution {best_solution.code}')
+        logger.info(f'Solution code:\n {best_solution.code}')
 
         execution_results = None
         if requires_execution:
