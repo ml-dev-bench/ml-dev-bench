@@ -7,12 +7,15 @@ workspace_dir: "./test_workspace"
 
 # Agent configuration
 agent_packages:
-  - "agents.react_agent"
+  - "agents.aide_ml_agent"
 
 # Agent configuration
 agent:
-  id: "simple_react"
+  id: "aide_ml_agent"
   model_name: "gpt-4o-mini"
+
+task_packages:
+  - "calipers.tests.integration.tasks.array_generation"
 
 # Task configurations
 tasks:
