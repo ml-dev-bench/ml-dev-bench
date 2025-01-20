@@ -83,7 +83,6 @@ class HelloWorldTask(BaseEvaluationTask):
 
         except Exception as e:
             return {
-                'agent_output': agent_output,
                 'success': False,
                 'error': (f'Error validating hello world: {str(e)}'),
             }

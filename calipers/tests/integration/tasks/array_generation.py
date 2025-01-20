@@ -84,7 +84,6 @@ class RandomArrayGenerationTask(BaseEvaluationTask):
 
             success = correct_shapes == len(expected_shapes)
             return {
-                'agent_output': agent_output,
                 'success': success,
                 'shape_validation': shape_validation,
                 'correct_shapes': correct_shapes,
@@ -94,6 +93,5 @@ class RandomArrayGenerationTask(BaseEvaluationTask):
         except Exception as e:
             return {
                 'success': False,
-                'agent_output': agent_output,
                 'error': f'Error validating arrays: {str(e)}',
             }
