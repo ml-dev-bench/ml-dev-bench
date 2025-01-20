@@ -193,6 +193,7 @@ class EvaluationFramework:
                     success=validation_results.get('success', False),
                     validation_details=validation_results,
                     metrics=metrics,
+                    agent_output=agent_output,
                     start_time=start_time,
                     end_time=end_time,
                 )

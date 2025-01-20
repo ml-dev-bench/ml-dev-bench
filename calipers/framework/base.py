@@ -21,6 +21,7 @@ class RunResult:
     """Result of a single evaluation run"""
 
     success: bool
+    agent_output: Dict[str, Any]
     validation_details: Dict[str, Any]
     metrics: Dict[str, Any]
     start_time: datetime
