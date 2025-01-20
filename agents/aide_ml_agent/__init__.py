@@ -1,5 +1,5 @@
 """AIDE agent package."""
 
-from .simple_aide import AIDEAgent
+from .aide_with_solution_helper import AIDEAgent
 
 __all__ = ['AIDEAgent']

@@ -180,7 +180,6 @@ class EvaluationFramework:
                 start_time = datetime.now()
                 # create a clean runtime for each run
                 evaluation_runtime = self.get_eval_runtime(task.workspace_dir)
-                start_time = datetime.now()
                 logger.info(f'Running task {task_id} with agent {agent_id}')
                 agent_output = await task.run(agent)
                 logger.info(f'Validating task {task_id}')

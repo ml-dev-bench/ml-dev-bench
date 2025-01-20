@@ -27,7 +27,10 @@ AIDE_PROMPT_SUFFIX = '\n Note: When creating files, assume they are created in t
 
 @EvalRegistry.register_agent
 class AIDEAgent(BaseAgent):
-    """AIDE agent that uses WecoAI/aideml for ML tasks."""
+    """
+    AIDE agent that uses WecoAI/aideml for ML tasks.
+    Uses solution helper agent to determine output file and execute the solution.
+    """
 
     agent_id = 'aide_ml_agent'
 
