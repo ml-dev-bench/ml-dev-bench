@@ -29,6 +29,15 @@ langchain-core = "^0.3.21"
 langchain-anthropic = "^0.3.0"
 composio-langchain = "^0.6.10"
 
+[tool.poetry.group.openhands-agent.dependencies]
+# Core dependencies for OpenHands integration
+playwright = "^1.41.0"  # Required for web interactions
+litellm = "^1.0.0"  # For LLM operations
+python-dotenv = "^1.0.0"  # For environment variable management
+pydantic = "^2.0"  # For data validation
+PyYAML = "^6.0"  # For configuration handling
+requests = "^2.31.0"  # For HTTP operations
+
 [tool.poetry.group.dev.dependencies]
 ruff = "0.9.2"
 mypy = "1.13.0"
