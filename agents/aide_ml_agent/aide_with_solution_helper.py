@@ -68,6 +68,14 @@ class AIDEAgent(BaseAgent):
         """
         task += AIDE_PROMPT_SUFFIX
 
+        # Get model configurations, falling back to default model_name
+        default_model = self.config.config.get('default_model', self.config.model_name)
+        code_model = self.config.config.get('code_model', self.config.model_name)
+        feedback_model = self.config.config.get(
+            'feedback_model', self.config.model_name
+        )
+        report_model = self.config.config.get('report_model', self.config.model_name)
+
         # Create AIDE experiment with task description
         exp = aide.Experiment(
             # Default to current directory
@@ -76,6 +84,11 @@ class AIDEAgent(BaseAgent):
             goal=task,
             # Optional evaluation metric
             eval=self.config.config.get('eval_metric', ''),
+            # Use configured models
+            default_model=default_model,
+            code_model=code_model,
+            feedback_model=feedback_model,
+            report_model=report_model,
         )
 
         # Run AIDE and get best solution
