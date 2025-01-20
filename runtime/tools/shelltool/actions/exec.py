@@ -73,6 +73,9 @@ class ExecCommand(LocalAction[ShellExecRequest, ShellExecResponse]):
     directory. It will not work. Always try to find files within the base
     directory given in the task.
 
+    Inspecting large files like logs using `cat` can potentially timeout,
+    instead use `tail -n` to retreive content from the end.
+
     Note: Use the SpawnProcess action to run long running commands in the background.
     """
 
