@@ -1,6 +1,7 @@
 """Simple AIDE agent implementation."""
 
 import os
+import shutil
 import subprocess
 from typing import Any, Dict
 
@@ -52,94 +53,137 @@ class AIDEAgent(BaseAgent):
         except Exception as e:
             raise RuntimeError(f'Failed to get Poetry Python path: {str(e)}')
 
-    async def run(self, task: str) -> Dict[str, Any]:
-        """Run AIDE agent on the given task.
+    def _setup_experiment_dirs(self) -> tuple[str, str]:
+        """Set up data and experiment directories."""
+        data_dir = os.path.join(self.config.workspace_dir, 'data')
+        exp_dir = os.path.join(self.config.workspace_dir, 'aide_working_dir')
 
-        Args:
-            task: Task description string
+        # Copy data and create experiment directory
+        shutil.copytree(self.config.workspace_dir, data_dir)
+        os.makedirs(exp_dir, exist_ok=True)
 
-        Returns:
-            Dict containing:
-                - code: Generated solution code
-                - metric: Validation metric value
-                - success: Whether the solution was successful
-                - output_file: Name of file where solution was saved
-                - execution_results: Results of running the code (if executed)
-        """
-        task += AIDE_PROMPT_SUFFIX
+        return data_dir, exp_dir
 
-        # Get model configurations, falling back to default model_name
+    def _get_model_configs(self) -> tuple[str, str, str, str]:
+        """Get model configurations with fallbacks."""
         default_model = self.config.config.get('default_model', self.config.model_name)
         code_model = self.config.config.get('code_model', self.config.model_name)
         feedback_model = self.config.config.get(
             'feedback_model', self.config.model_name
         )
         report_model = self.config.config.get('report_model', self.config.model_name)
+        return default_model, code_model, feedback_model, report_model
 
-        # Create AIDE experiment with task description
+    def _copy_output_files(self, output_dir: str) -> None:
+        """Copy generated files from output directory to workspace."""
+        for file in os.listdir(output_dir):
+            if os.path.isfile(os.path.join(output_dir, file)):
+                shutil.copy(os.path.join(output_dir, file), self.config.workspace_dir)
+                logger.info(f'Copied {file} to {self.config.workspace_dir}')
+
+    async def _execute_solution(self, output_path: str) -> Dict[str, Any]:
+        """Execute the solution file and return results."""
+        try:
+            process = subprocess.run(
+                [self.python_path, output_path],
+                capture_output=True,
+                text=True,
+                cwd=self.config.workspace_dir,
+                env={**os.environ, 'PYTHONPATH': self.config.workspace_dir},
+            )
+            return {
+                'exit_code': process.returncode,
+                'stdout': process.stdout,
+                'stderr': process.stderr,
+            }
+        except Exception as e:
+            return {
+                'exit_code': -1,
+                'stdout': '',
+                'stderr': f'Failed to execute: {str(e)}',
+            }
+
+    async def run(self, task: str) -> Dict[str, Any]:
+        """Run AIDE agent on the given task."""
+        task += AIDE_PROMPT_SUFFIX
+
+        # Check if output directory already has generated files
+        output_dir = os.path.join(
+            self.config.workspace_dir, 'aide_working_dir', '2-aide_exp'
+        )
+        if os.path.exists(output_dir) and os.listdir(output_dir):
+            logger.info('Found existing output files, copying to workspace...')
+            self._copy_output_files(output_dir)
+            return {
+                'code': None,  # We don't have access to the original code
+                'metric': None,
+                'success': True,
+                'output_file': None,
+                'execution_results': None,
+            }
+
+        # Set up directories and get model configs
+        data_dir, exp_dir = self._setup_experiment_dirs()
+        default_model, code_model, feedback_model, report_model = (
+            self._get_model_configs()
+        )
+
+        # Create and run AIDE experiment
         exp = aide.Experiment(
-            # Default to current directory
-            data_dir=str(self.config.workspace_dir),
-            # Use task description as goal
+            data_dir=data_dir,
             goal=task,
-            # Optional evaluation metric
             eval=self.config.config.get('eval_metric', ''),
-            # Use configured models
             default_model=default_model,
             code_model=code_model,
             feedback_model=feedback_model,
             report_model=report_model,
+            workspace_dir=str(exp_dir),
+            exp_name='aide_exp',
+            copy_data=False,
         )
 
-        # Run AIDE and get best solution
         best_solution = exp.run(steps=self.config.config.get('steps', 10))
-        logger.info(f'working dir files {os.listdir(self.config.workspace_dir)}')
 
-        logger.info('Using solution helper agent to determine output file ...')
-        # Use solution helper to determine output file
+        # Copy generated files to workspace
+        logger.info(f'Experiment directory contents: {os.listdir(exp_dir)}')
+        output_dir = os.path.join(exp_dir, '2-aide_exp')
+        self._copy_output_files(output_dir)
+
+        # Check if AIDE generated any files
+        generated_files = [
+            f
+            for f in os.listdir(output_dir)
+            if os.path.isfile(os.path.join(output_dir, f))
+        ]
+        if generated_files:
+            logger.info(
+                f'AIDE generated files: {generated_files}. Skipping solution helper.'
+            )
+            return {
+                'code': best_solution.code,
+                'metric': best_solution.valid_metric,
+                'success': True if best_solution.valid_metric else False,
+                'output_file': generated_files[0] if generated_files else None,
+                'execution_results': None,
+            }
+
+        # If no files were generated, use solution helper
+        logger.info('No files generated by AIDE, using solution helper...')
         helper_input = f'{task}\nSolution Code: {best_solution.code}'
         analysis = await self.solution_helper.run(helper_input)
-        output_file = analysis['output_file']
-        requires_execution = analysis['requires_execution']
 
-        logger.info(f'Writing solution to {output_file} ...')
-        logger.info(f'The solution will be executed: {requires_execution}')
-        # Write solution to the determined file
+        output_file = analysis['output_file']
         output_path = os.path.join(self.config.workspace_dir, output_file)
+
+        # Write and potentially execute solution
         with open(output_path, 'w') as f:
             f.write(best_solution.code)
-        logger.info(f'Solution code:\n {best_solution.code}')
 
         execution_results = None
-        if requires_execution:
-            # TODO: Use the eval runtime to run the solution
+        if analysis['requires_execution']:
             logger.info('Executing the solution ...')
-            try:
-                # Run the Python file using Poetry's Python
-                process = subprocess.run(
-                    [self.python_path, output_path],
-                    capture_output=True,
-                    text=True,
-                    cwd=self.config.workspace_dir,
-                    env={
-                        **os.environ,
-                        'PYTHONPATH': self.config.workspace_dir,
-                    },
-                )
-                execution_results = {
-                    'exit_code': process.returncode,
-                    'stdout': process.stdout,
-                    'stderr': process.stderr,
-                }
-                logger.info(f'Execution completed with exit code: {process.returncode}')
-                logger.info(f'Execution results: {execution_results}')
-            except Exception as e:
-                execution_results = {
-                    'exit_code': -1,
-                    'stdout': '',
-                    'stderr': f'Failed to execute: {str(e)}',
-                }
-                logger.error(f'Failed to execute solution: {e}')
+            execution_results = await self._execute_solution(output_path)
+            logger.info(f'Execution completed with results: {execution_results}')
 
         return {
             'code': best_solution.code,

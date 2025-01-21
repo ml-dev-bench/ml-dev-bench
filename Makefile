@@ -122,10 +122,18 @@ install-aide-agent-dependencies:
 		export TZ="UTC"; \
 	fi
 	@echo "$(YELLOW)Creating new virtual environment for aide-agent...$(RESET)"
-	POETRY_VIRTUALENVS_PATH="./.venv-aide" poetry env use python$(PYTHON_VERSION)
-	POETRY_VIRTUALENVS_PATH="./.venv-aide" poetry install --with aide
+	@rm -rf .venv-aide
+	@mkdir -p .venv-aide
+	POETRY_VIRTUALENVS_CREATE=true \
+	POETRY_VIRTUALENVS_IN_PROJECT=false \
+	POETRY_VIRTUALENVS_PATH="$(PWD)/.venv-aide" \
+	poetry env use python$(PYTHON_VERSION)
+	POETRY_VIRTUALENVS_CREATE=true \
+	POETRY_VIRTUALENVS_IN_PROJECT=false \
+	POETRY_VIRTUALENVS_PATH="$(PWD)/.venv-aide" \
+	poetry install --with aide
 	@echo "$(GREEN)Python dependencies with aide-agent installed successfully in .venv-aide$(RESET)"
-	@echo "$(BLUE)To activate this environment, run: POETRY_VIRTUALENVS_PATH='./.venv-aide' poetry shell$(RESET)"
+	@echo "$(BLUE)To activate this environment, run: POETRY_VIRTUALENVS_PATH='$(PWD)/.venv-aide' poetry shell$(RESET)"
 
 install-runtime-dependencies:
 	@echo "$(GREEN)Installing runtime Python dependencies...$(RESET)"
