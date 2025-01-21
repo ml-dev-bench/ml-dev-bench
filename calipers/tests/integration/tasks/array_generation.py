@@ -91,4 +91,7 @@ class RandomArrayGenerationTask(BaseEvaluationTask):
             }
 
         except Exception as e:
-            return {'success': False, 'error': f'Error validating arrays: {str(e)}'}
+            return {
+                'success': False,
+                'error': f'Error validating arrays: {str(e)}',
+            }
