@@ -53,6 +53,8 @@ notebooks/test_workspace/*
 evaluation_outputs/*
 test_workspace/*
 results/*
+workspace/*
+workspaces/*
 
 # Secrets
 .secrets

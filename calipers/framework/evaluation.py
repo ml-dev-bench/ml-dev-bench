@@ -159,7 +159,7 @@ class EvaluationFramework:
                 metrics_callback = MetricsCallbackHandler(metrics_tracker=task.metrics)
                 litellm.callbacks = [metrics_callback]
             except Exception as e:
-                logger.warning('Failed to create MetricsCallbackHandler: %s', str(e))
+                logger.warning(f'Failed to create MetricsCallbackHandler: {e}')
                 # Continue without metrics callback
                 metrics_callback = None
 
@@ -177,9 +177,9 @@ class EvaluationFramework:
                 task.initialize()
 
             try:
+                start_time = datetime.now()
                 # create a clean runtime for each run
                 evaluation_runtime = self.get_eval_runtime(task.workspace_dir)
-                start_time = datetime.now()
                 logger.info(f'Running task {task_id} with agent {agent_id}')
                 agent_output = await task.run(agent)
                 logger.info(f'Validating task {task_id}')
