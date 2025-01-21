@@ -63,6 +63,12 @@ To run the hello world evaluation:
 ./scripts/eval.sh --config ml_dev_bench/cases/hello_world/hello_world_config.yaml
 ```
 
+To run the array-generation evaluation:
+
+```bash
+./scripts/eval.sh calipers/tests/integration/config/array_generation_test.yaml
+```
+
 ## Development
 
 - Format and lint code:
@@ -70,11 +76,28 @@ To run the hello world evaluation:
 ```bash
 make lint
 ```
+## Project Structure
 
-## Adding New Agent Groups
+```
+.
+├── calipers/
+│   ├── agents/          # Agent implementations
+│   ├── callbacks/       # Callback handlers
+│   ├── framework/       # Core evaluation framework
+│   ├── metrics/         # Metrics tracking
+│   └── scripts/         # CLI tools
+│
+└── runtime/
+    ├── backends/        # Runtime backend implementations
+    ├── environments/    # Environment configurations
+    └── tools/           # Runtime tools
 
-To add a new agent group with its specific dependencies:
+```
 
+
+## Adding New Agents
+
+### Setting up Agent Dependencies using Poetry
 1. Add a new group in `pyproject.toml`:
 ```toml
 [tool.poetry.group.{your-agent-name}.dependencies]
@@ -98,27 +121,9 @@ make install-react-agent-dependencies
 ```
 This creates a dedicated environment at `.venv-react` with all react-agent specific dependencies.
 
-## Project Structure
 
-```
-.
-├── calipers/
-│   ├── agents/          # Agent implementations
-│   ├── callbacks/       # Callback handlers
-│   ├── framework/       # Core evaluation framework
-│   ├── metrics/         # Metrics tracking
-│   └── scripts/         # CLI tools
-│
-└── runtime/
-    ├── backends/        # Runtime backend implementations
-    ├── environments/    # Environment configurations
-    └── tools/           # Runtime tools
-```
+### Adding Agents Code
 
-## Adding New Agents
-
-### Directory Structure
-To add a new agent:
 1. Create a new directory under `agents/` with your agent name (e.g., `agents/my_agent/`)
 2. Add your agent implementation files in this directory
 3. Create a `Dockerfile` in your agent directory that extends the base image
@@ -135,7 +140,7 @@ agents/
 └── utils.py              # Shared utilities
 ```
 
-### Docker Setup
+### Agent Docker Setup
 The project uses a two-stage Docker build:
 1. A base image with core dependencies
 2. Agent-specific images that extend the base image

@@ -50,6 +50,7 @@ def save_results(
                         'success': run.success,
                         'metrics': run.metrics,
                         'validation_details': run.validation_details,
+                        'agent_output': run.agent_output,
                         'start_time': run.start_time.isoformat(),
                         'end_time': run.end_time.isoformat(),
                         'error': run.error,

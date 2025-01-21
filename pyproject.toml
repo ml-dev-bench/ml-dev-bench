@@ -21,6 +21,25 @@ composio-core = { git = "https://github.com/Deduction-Dev/composio/", branch = "
 GitPython = "^3.1.0"
 pandas = "*"
 
+[tool.poetry.group.aide]
+optional = true
+
+[tool.poetry.group.aide.dependencies]
+aideml = { git = "https://github.com/ml-dev-bench/aideml/", branch = "ml_dev_bench_compat", rev ="d72c265d1574c56e4326a37a93ac3c521141c665"}
+streamlit = ">=1.24.0"
+openai = ">=1.0.0"
+anthropic = ">=0.5.0"
+torch = "==2.2.2"
+torchvision = "==0.17.2"
+torchaudio = "==2.2.2"
+torchtext = "==0.17.2"
+torchmetrics = "==1.3.1"
+pytorch-lightning = "==2.2.1"
+transformers = "<5.0.0"
+kornia = "<0.8.0"
+timm = "<0.10.0"
+fastai = "<3.0.0"
+
 [tool.poetry.group.react-agent.dependencies]
 langgraph = "^0.2.53"
 langgraph-checkpoint-sqlite = "^2.0.1"
