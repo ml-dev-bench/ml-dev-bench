@@ -98,9 +98,10 @@ install-python-dependencies:
 		echo "Defaulting TZ (timezone) to UTC"; \
 		export TZ="UTC"; \
 	fi
+	poetry config installer.parallel true
 	poetry config virtualenvs.create true
 	poetry env use python$(PYTHON_VERSION)
-	@poetry install
+	@POETRY_REQUESTS_TIMEOUT=120 poetry install --no-interaction --verbose
 	@echo "$(GREEN)Python dependencies installed successfully.$(RESET)"
 
 install-react-agent-dependencies:
@@ -124,6 +125,7 @@ install-aide-agent-dependencies:
 	@echo "$(YELLOW)Creating new virtual environment for aide-agent...$(RESET)"
 	@rm -rf .venv-aide
 	@mkdir -p .venv-aide
+	@poetry config installer.parallel true
 	POETRY_VIRTUALENVS_CREATE=true \
 	POETRY_VIRTUALENVS_IN_PROJECT=false \
 	POETRY_VIRTUALENVS_PATH="$(PWD)/.venv-aide" \
@@ -131,6 +133,7 @@ install-aide-agent-dependencies:
 	POETRY_VIRTUALENVS_CREATE=true \
 	POETRY_VIRTUALENVS_IN_PROJECT=false \
 	POETRY_VIRTUALENVS_PATH="$(PWD)/.venv-aide" \
+	POETRY_REQUESTS_TIMEOUT=120 \
 	poetry install --with aide
 	@echo "$(GREEN)Python dependencies with aide-agent installed successfully in .venv-aide$(RESET)"
 	@echo "$(BLUE)To activate this environment, run: POETRY_VIRTUALENVS_PATH='$(PWD)/.venv-aide' poetry shell$(RESET)"
