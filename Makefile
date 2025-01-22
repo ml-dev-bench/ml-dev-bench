@@ -145,6 +145,28 @@ install-runtime-dependencies:
 	@cd runtime/dependencies && poetry install --no-root
 	@echo "$(GREEN)Runtime dependencies installed successfully.$(RESET)"
 
+install-openhands-agent-dependencies:
+	@echo "$(GREEN)Installing Python dependencies with openhands-agent in new environment...$(RESET)"
+	@if [ -z "${TZ}" ]; then \
+		echo "Defaulting TZ (timezone) to UTC"; \
+		export TZ="UTC"; \
+	fi
+	@echo "$(YELLOW)Creating new virtual environment for openhands-agent...$(RESET)"
+	@rm -rf .venv-openhands
+	@mkdir -p .venv-openhands
+	POETRY_VIRTUALENVS_CREATE=true \
+	POETRY_VIRTUALENVS_IN_PROJECT=false \
+	POETRY_VIRTUALENVS_PATH="$(PWD)/.venv-openhands" \
+	poetry env use python$(PYTHON_VERSION)
+	POETRY_VIRTUALENVS_CREATE=true \
+	POETRY_VIRTUALENVS_IN_PROJECT=false \
+	POETRY_VIRTUALENVS_PATH="$(PWD)/.venv-openhands" \
+	poetry install --with openhands-agent
+	POETRY_VIRTUALENVS_PATH="$(PWD)/.venv-openhands" \
+	poetry run playwright install --with-deps chromium
+	@echo "$(GREEN)Python dependencies with openhands-agent installed successfully in .venv-openhands$(RESET)"
+	@echo "$(BLUE)To activate this environment, run: POETRY_VIRTUALENVS_PATH='$(PWD)/.venv-openhands' poetry shell$(RESET)"
+
 install-pre-commit-hooks:
 	@echo "$(YELLOW)Installing pre-commit hooks...$(RESET)"
 	@git config --unset-all core.hooksPath || true
