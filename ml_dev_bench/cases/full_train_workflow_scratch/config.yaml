@@ -8,7 +8,7 @@ langchain_project: "ml-dev-bench-evaluation-full-train-workflow-scratch"
 
 # Task package imports
 task_packages:
-  - "ml_workflow_bench.cases.full_train_workflow_scratch"
+  - "ml_dev_bench.cases.full_train_workflow_scratch"
 
 # Agent configuration
 agent_packages:

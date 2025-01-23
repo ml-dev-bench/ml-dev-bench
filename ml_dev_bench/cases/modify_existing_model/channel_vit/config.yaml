@@ -9,7 +9,7 @@ clone_workspace: true
 
 # Task package imports
 task_packages:
-  - "ml_workflow_bench.cases.modify_existing_model.channel_vit"
+  - "ml_dev_bench.cases.modify_existing_model.channel_vit"
 
 # Agent configuration
 agent_packages:

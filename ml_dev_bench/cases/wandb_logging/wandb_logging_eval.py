@@ -2,14 +2,13 @@ import json
 import os
 from typing import Any, Dict
 
-from ml_workflow_bench.cases.wandb_logging.metrics import WandBFileMetric
-
 from calipers.framework.base import (
     BaseAgent,
     BaseEvaluationTask,
     BaseRuntime,
 )
 from calipers.framework.registry import EvalRegistry
+from ml_dev_bench.cases.wandb_logging.metrics import WandBFileMetric
 
 
 @EvalRegistry.register_task

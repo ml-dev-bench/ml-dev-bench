@@ -9,7 +9,7 @@ clone_workspace: true
 
 # Task package imports
 task_packages:
-  - "ml_workflow_bench.cases.improve_baseline.cifar10"
+  - "ml_dev_bench.cases.improve_baseline.cifar10"
 
 # Agent configuration
 agent_packages:

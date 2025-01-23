@@ -8,7 +8,7 @@ langchain_project: "ml-dev-bench-evaluation-wandb-logging"
 
 # Task package imports
 task_packages:
-  - "ml_workflow_bench.cases.wandb_logging"
+  - "ml_dev_bench.cases.wandb_logging"
 
 # Agent configuration
 agent_packages:

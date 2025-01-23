@@ -660,7 +660,7 @@
 #             'config': {},
 #         },
 #         'task_packages': [
-#             'ml_workflow_bench.tasks.array_generation',
+#             'ml_dev_bench.tasks.array_generation',
 #             'nonexistent.package',
 #         ],
 #         'tasks': [
@@ -695,7 +695,7 @@
 #         )
 
 #         # Verify imports were attempted
-#         mock_import.assert_any_call('ml_workflow_bench.tasks.array_generation')
+#         mock_import.assert_any_call('ml_dev_bench.tasks.array_generation')
 #         mock_import.assert_any_call('nonexistent.package')
 
 #         # Verify evaluation still runs despite failed import

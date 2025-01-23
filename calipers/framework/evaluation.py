@@ -213,6 +213,7 @@ class EvaluationFramework:
                     success=False,
                     validation_details={},
                     metrics={},
+                    agent_output=agent_output,
                     start_time=start_time,
                     end_time=end_time,
                     error=str(e),

@@ -8,7 +8,7 @@ langchain_project: "ml-dev-bench-evaluation-pretrained-model-load-from-torchvisi
 
 # Task package imports
 task_packages:
-  - "ml_workflow_bench.cases.training.pretrained_model_load_from_torchvision"
+  - "ml_dev_bench.cases.training.pretrained_model_load_from_torchvision"
 
 # Agent configuration
 agent_packages:

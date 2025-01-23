@@ -6,7 +6,7 @@ num_runs: 1
 langchain_project: "ml-dev-bench-evaluation-dataset-preprocess"
 
 task_packages:
-  - "ml_workflow_bench.cases.dataset.dataset_preprocess"
+  - "ml_dev_bench.cases.dataset.dataset_preprocess"
 
 agent_packages:
   - "agents.react_agent"
