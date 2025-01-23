@@ -12,8 +12,6 @@ from calipers.framework.base import (
 )
 from calipers.framework.registry import EvalRegistry
 
-from .metrics import DatasetDownloadMetric
-
 
 @EvalRegistry.register_task
 class DatasetDownloadTask(BaseEvaluationTask):
@@ -37,7 +35,6 @@ class DatasetDownloadTask(BaseEvaluationTask):
     def _setup_metrics(self) -> None:
         """Setup metrics for dataset download task"""
         super()._setup_metrics()
-        self.add_metric(DatasetDownloadMetric())
 
     async def run(self, agent: BaseAgent) -> Dict[str, Any]:
         # Load task description from file
@@ -122,9 +119,6 @@ class DatasetDownloadTask(BaseEvaluationTask):
                     'status': 'valid',
                     'images_found': len(image_files),
                 }
-
-            # Update metric with fraction of correct classes
-            self.update_metric('dataset_class_fraction', correct_classes, total_classes)
 
             return {
                 'success': correct_classes == total_classes,

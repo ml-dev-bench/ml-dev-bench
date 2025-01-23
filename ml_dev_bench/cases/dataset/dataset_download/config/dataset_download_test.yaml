@@ -12,17 +12,20 @@ task_packages:
 
 # Agent configuration
 agent_packages:
-  - "agents.aide_ml_agent"
+  - "agents.react_agent"
+
+# agent_packages:
+#   - "agents.aide_ml_agent"
 
 # Agent configuration
-# agent:
-#   id: "simple_react"
-#   model_name: "gpt-4o-mini"
-#   executor_recursion_limit: 25
-#   workflow_recursion_limit: 60
 agent:
-  id: "aide_ml_agent"
+  id: "simple_react"
   model_name: "gpt-4o-mini"
+  executor_recursion_limit: 25
+  workflow_recursion_limit: 60
+# agent:
+#   id: "aide_ml_agent"
+#   model_name: "gpt-4o-mini"
 
 # Task configurations
 tasks:
