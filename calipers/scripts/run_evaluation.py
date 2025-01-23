@@ -100,6 +100,7 @@ async def run_evaluation(
     output_dir: Optional[Union[str, Path]] = None,
     commit_hash: Optional[str] = None,
     langchain_project: Optional[str] = None,
+    debug_mode: bool = False,
 ) -> List[EvaluationResult]:
     """Run evaluation with given config"""
 
@@ -174,8 +175,8 @@ async def run_evaluation(
             root_dir = Path(calipers.__path__[0]).parent
             config['workspace_dir'] = str(root_dir / config['workspace_dir'])
 
-        # If clone_workspace is specified, create a temporary clone
-        if config.get('clone_workspace'):
+        # Clone if debug mode is enabled or clone_workspace is specified
+        if debug_mode or config.get('clone_workspace'):
             workspace_temp_dir = tempfile.mkdtemp(prefix='workspace_clone_')
             logger.info(
                 f'Cloning workspace to temporary directory: {workspace_temp_dir}'
@@ -184,6 +185,11 @@ async def run_evaluation(
                 config['workspace_dir'], workspace_temp_dir, dirs_exist_ok=True
             )
             config['workspace_dir'] = workspace_temp_dir
+            if debug_mode:
+                logger.info(
+                    'Debug mode: Workspace clone will be preserved at '
+                    f'{workspace_temp_dir}'
+                )
 
         logger.info(f'Workspace dir: {config["workspace_dir"]}')
 
@@ -228,10 +234,14 @@ async def run_evaluation(
         return results
 
     finally:
-        # Clean up temporary workspace if it was created
-        if workspace_temp_dir:
+        # Clean up workspace if not in debug mode
+        if workspace_temp_dir and not debug_mode:
             logger.info(f'Cleaning up temporary workspace: {workspace_temp_dir}')
             shutil.rmtree(workspace_temp_dir, ignore_errors=True)
+        elif workspace_temp_dir:
+            logger.info(
+                f'Debug mode: Preserving workspace clone at {workspace_temp_dir}'
+            )
 
 
 async def main():
@@ -241,7 +251,7 @@ async def main():
     parser.add_argument(
         '--tasks',
         type=str,
-        nargs='+',
+        nargs='*',
         help='Specific task IDs to run',
     )
     parser.add_argument(
@@ -256,6 +266,11 @@ async def main():
     parser.add_argument(
         '--langchain-project', type=str, help='LangChain project name for tracking'
     )
+    parser.add_argument(
+        '--debug',
+        action='store_true',
+        help='Enable debug mode - preserves cloned workspace',
+    )
     args = parser.parse_args()
 
     # Run evaluation
@@ -265,6 +280,7 @@ async def main():
         args.output_dir,
         args.commit_hash,
         args.langchain_project,
+        debug_mode=args.debug,
     )
 
     # Exit with error if any test had 0% success rate
