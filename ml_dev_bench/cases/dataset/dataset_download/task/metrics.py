@@ -6,7 +6,7 @@ from calipers.metrics.base import BaseMetric
 class DatasetDownloadMetric(BaseMetric[float]):
     """Metric for tracking dataset download progress"""
 
-    name = 'dataset_download'
+    name = 'dataset_class_fraction'
     description = 'Dataset download progress'
     unit = 'percentage'
 
