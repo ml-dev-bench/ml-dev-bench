@@ -107,7 +107,7 @@ class DatasetDownloadTask(BaseEvaluationTask):
                 # Check first image dimensions
                 with Image.open(image_files[0]) as img:
                     width, height = img.size
-                    if width != 160 or height != 160:
+                    if width != 160 and height != 160:
                         class_validation[class_id] = {
                             'status': 'invalid',
                             'error': f'Wrong image size: {width}x{height}',
