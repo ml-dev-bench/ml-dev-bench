@@ -6,7 +6,7 @@ num_runs: 1
 langchain_project: "ml-dev-bench-evaluation-multi-gpu-training"
 
 task_packages:
-  - "ml_workflow_bench.cases.training.multi_gpu_training"
+  - "ml_dev_bench.cases.training.multi_gpu_training"
 
 agent_packages:
   - "agents.react_agent"

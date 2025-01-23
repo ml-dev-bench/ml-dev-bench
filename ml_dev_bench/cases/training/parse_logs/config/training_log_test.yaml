@@ -6,7 +6,7 @@ num_runs: 1
 langchain_project: "ml-dev-bench-evaluation-training-logs"
 
 task_packages:
-  - "ml_workflow_bench.cases.training.parse_logs"
+  - "ml_dev_bench.cases.training.parse_logs"
 
 agent_packages:
   - "agents.react_agent"

@@ -6,7 +6,7 @@ num_runs: 1
 langchain_project: "ml-dev-bench-evaluation-small-dataset-overfit"
 
 task_packages:
-  - "ml_workflow_bench.cases.training.small_dataset_overfit"
+  - "ml_dev_bench.cases.training.small_dataset_overfit"
 
 agent_packages:
   - "agents.react_agent"

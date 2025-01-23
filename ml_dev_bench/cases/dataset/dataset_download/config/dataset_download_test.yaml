@@ -8,18 +8,21 @@ langchain_project: "ml-dev-bench-evaluation-dataset-download"
 
 # Task package imports
 task_packages:
-  - "ml_workflow_bench.cases.dataset.dataset_download"
+  - "ml_dev_bench.cases.dataset.dataset_download"
 
 # Agent configuration
 agent_packages:
-  - "agents.react_agent"
+  - "agents.aide_ml_agent"
 
 # Agent configuration
+# agent:
+#   id: "simple_react"
+#   model_name: "gpt-4o-mini"
+#   executor_recursion_limit: 25
+#   workflow_recursion_limit: 60
 agent:
-  id: "simple_react"
+  id: "aide_ml_agent"
   model_name: "gpt-4o-mini"
-  executor_recursion_limit: 25
-  workflow_recursion_limit: 60
 
 # Task configurations
 tasks:
