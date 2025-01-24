@@ -77,9 +77,15 @@ class AIDEAgent(BaseAgent):
     def _copy_output_files(self, output_dir: str) -> None:
         """Copy generated files from output directory to workspace."""
         for file in os.listdir(output_dir):
-            if os.path.isfile(os.path.join(output_dir, file)):
-                shutil.copy(os.path.join(output_dir, file), self.config.workspace_dir)
-                logger.info(f'Copied {file} to {self.config.workspace_dir}')
+            src_path = os.path.join(output_dir, file)
+            dst_path = os.path.join(self.config.workspace_dir, file)
+
+            if os.path.isfile(src_path):
+                shutil.copy(src_path, dst_path)
+                logger.info(f'Copied file {file} to {self.config.workspace_dir}')
+            else:  # is directory
+                shutil.copytree(src_path, dst_path, dirs_exist_ok=True)
+                logger.info(f'Copied directory {file} to {self.config.workspace_dir}')
 
     async def _execute_solution(self, output_path: str) -> Dict[str, Any]:
         """Execute the solution file and return results."""
@@ -111,17 +117,6 @@ class AIDEAgent(BaseAgent):
         output_dir = os.path.join(
             self.config.workspace_dir, 'aide_working_dir', '2-aide_exp'
         )
-        if os.path.exists(output_dir) and os.listdir(output_dir):
-            logger.info('Found existing output files, copying to workspace...')
-            self._copy_output_files(output_dir)
-            return {
-                'code': None,  # We don't have access to the original code
-                'metric': None,
-                'success': True,
-                'output_file': None,
-                'execution_results': None,
-            }
-
         # Set up directories and get model configs
         data_dir, exp_dir = self._setup_experiment_dirs()
         default_model, code_model, feedback_model, report_model = (
@@ -165,6 +160,7 @@ class AIDEAgent(BaseAgent):
                 'success': True if best_solution.valid_metric else False,
                 'output_file': generated_files[0] if generated_files else None,
                 'execution_results': None,
+                'output_dir': output_dir,
             }
 
         # If no files were generated, use solution helper
