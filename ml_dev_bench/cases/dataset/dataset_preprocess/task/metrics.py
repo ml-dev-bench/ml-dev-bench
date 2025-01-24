@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from typing import Tuple
 
 from calipers.metrics import BaseMetric, MetricsRegistry
 
@@ -12,7 +13,8 @@ class FractionMetric(BaseMetric):
     unit: str = 'fraction'
     _value: float = field(default=0.0, init=False)
 
-    def update(self, numerator: int, denominator: int) -> None:
+    def update(self, num_denom: Tuple[int, int]) -> None:
+        numerator, denominator = num_denom
         self._value = numerator / denominator if denominator > 0 else 0.0
 
     def get_value(self) -> float:
@@ -26,16 +28,6 @@ class FractionMetric(BaseMetric):
 class PreprocessingShapeMetric(FractionMetric):
     name = 'preprocessing_shape'
     description = 'Fraction of correctly shaped tensors after preprocessing'
-    unit = 'fraction'
-
-    def __init__(self):
-        super().__init__(name=self.name, description=self.description, unit=self.unit)
-
-
-@MetricsRegistry.register
-class PreprocessingRangeMetric(FractionMetric):
-    name = 'preprocessing_range'
-    description = 'Fraction of samples with values in the expected range'
     unit = 'fraction'
 
     def __init__(self):

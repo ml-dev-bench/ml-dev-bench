@@ -176,6 +176,7 @@ class EvaluationFramework:
             if run_idx == 0:
                 task.initialize()
 
+            agent_output = None
             try:
                 start_time = datetime.now()
                 # create a clean runtime for each run

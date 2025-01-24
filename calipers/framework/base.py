@@ -1,4 +1,3 @@
-import shutil
 from abc import ABC, abstractmethod
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -187,8 +186,8 @@ class BaseEvaluationTask(ABC):
         Called after validating a run and useful to reset any state and clear artifacts
         """
         # clear the workspace_dir by default and create an empty one
-        shutil.rmtree(self.workspace_dir)
-        self.workspace_dir.mkdir(parents=True, exist_ok=True)
+
+        return
 
     def update_metric(self, name: str, value: Any) -> None:
         """Update a metric value"""

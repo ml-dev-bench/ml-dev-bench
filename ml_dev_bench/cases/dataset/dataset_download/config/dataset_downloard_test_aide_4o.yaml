@@ -11,20 +11,15 @@ task_packages:
   - "ml_dev_bench.cases.dataset.dataset_download"
 
 # Agent configuration
-agent_packages:
-  - "agents.react_agent"
 
-# agent_packages:
-#   - "agents.aide_ml_agent"
+agent_packages:
+  - "agents.aide_ml_agent"
 
 # Agent configuration
+
 agent:
-  id: "simple_react"
-  # model_name: "gpt-4o-mini"
-  model_name: "anthropic/claude-3-5-sonnet-20241022"
-# agent:
-#   id: "aide_ml_agent"
-#   model_name: "gpt-4o-mini"
+  id: "aide_ml_agent"
+  model_name: "gpt-4o"
 
 # Task configurations
 tasks:

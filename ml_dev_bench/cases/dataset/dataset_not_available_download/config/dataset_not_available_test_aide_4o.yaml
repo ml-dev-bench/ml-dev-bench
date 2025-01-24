@@ -1,5 +1,5 @@
-output_dir: "./results"
-workspace_dir: "./test_workspace"
+workspace_dir: ./ml_dev_bench/cases/dataset/dataset_not_available_download/workspace
+output_dir: ./ml_dev_bench/cases/dataset/dataset_not_available_download/results
 fail_fast: false
 log_level: "INFO"
 num_runs: 1
@@ -9,14 +9,14 @@ task_packages:
   - "ml_dev_bench.cases.dataset.dataset_not_available_download"
 
 agent_packages:
-  - "agents.react_agent"
+  - "agents.aide_ml_agent"
 
 # Agent configuration
+
 agent:
-  id: "simple_react"
-  # model_name: "anthropic/claude-3-5-haiku-20241022"
-  model_name: "anthropic/claude-3-5-sonnet-20241022"
-  recursion_limit: 30
+  id: "aide_ml_agent"
+  model_name: "gpt-4o"
+
 
 tasks:
   - id: "dataset_not_available_download"

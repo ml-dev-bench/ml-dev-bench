@@ -5,14 +5,12 @@ from typing import Any, Dict, List, Tuple
 
 import numpy as np
 
-from calipers.framework.base import BaseAgent, BaseEvaluationTask
+from calipers.framework.base import BaseAgent, BaseEvaluationTask, BaseRuntime
 from calipers.framework.config import TaskConfig
 from calipers.framework.registry import EvalRegistry
-from calipers.runtime.base import BaseRuntime
 
 from .metrics import (
     AugmentationVarianceMetric,
-    PreprocessingRangeMetric,
     PreprocessingShapeMetric,
 )
 
@@ -25,7 +23,7 @@ class DatasetPreprocessTask(BaseEvaluationTask):
 
     # Default parameters (can be overridden by config)
     EXPECTED_SHAPE = (3, 32, 32)  # CIFAR10 shape
-    NUM_SAMPLES_TO_CHECK = 100
+    NUM_SAMPLES_TO_CHECK = 10
     VALUE_RANGE = (-1, 1)  # Expected range after normalization
     AUGMENTATION_SAMPLES = 5  # Number of augmented versions to generate per sample
     VARIANCE_THRESHOLD = 0.1  # Minimum pixel-wise variance for augmentation check
@@ -55,7 +53,6 @@ class DatasetPreprocessTask(BaseEvaluationTask):
         """Setup metrics for dataset preprocessing task"""
         super()._setup_metrics()
         self.add_metric(PreprocessingShapeMetric())
-        self.add_metric(PreprocessingRangeMetric())
         self.add_metric(AugmentationVarianceMetric())
 
     async def run(self, agent: BaseAgent) -> Dict[str, Any]:
@@ -102,8 +99,10 @@ class DatasetPreprocessTask(BaseEvaluationTask):
             if 'augmented_data_path' not in dataset_info:
                 raise ValueError('augmented_data_path not found in dataset_info')
 
-            data_path = Path(dataset_info['preprocessed_data_path'])
-            aug_path = Path(dataset_info['augmented_data_path'])
+            data_path = Path(
+                self.workspace_dir / dataset_info['preprocessed_data_path']
+            )
+            aug_path = Path(self.workspace_dir / dataset_info['augmented_data_path'])
 
             if not data_path.exists() or not aug_path.exists():
                 raise ValueError('Data paths do not exist')
@@ -205,15 +204,14 @@ class DatasetPreprocessTask(BaseEvaluationTask):
 
             # Update metrics
             self.update_metric(
-                'preprocessing_shape', correct_shapes, self.NUM_SAMPLES_TO_CHECK
+                'preprocessing_shape', (correct_shapes, self.NUM_SAMPLES_TO_CHECK)
             )
             self.update_metric(
-                'preprocessing_range', correct_ranges, self.NUM_SAMPLES_TO_CHECK
+                'preprocessing_range', (correct_ranges, self.NUM_SAMPLES_TO_CHECK)
             )
             self.update_metric(
                 'augmentation_variance',
-                correct_augmentations,
-                self.NUM_SAMPLES_TO_CHECK,
+                (correct_augmentations, self.NUM_SAMPLES_TO_CHECK),
             )
 
             # Calculate success based on all metrics

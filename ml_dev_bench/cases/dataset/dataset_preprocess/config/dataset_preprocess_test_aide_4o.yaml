@@ -9,14 +9,11 @@ task_packages:
   - "ml_dev_bench.cases.dataset.dataset_preprocess"
 
 agent_packages:
-  - "agents.react_agent"
+  - "agents.aide_ml_agent"
 
-# Agent configuration
 agent:
-  id: "simple_react"
-  # model_name: "gpt-4o-mini"
-  model_name: "anthropic/claude-3-5-sonnet-20241022"
-  recursion_limit: 30
+  id: "aide_ml_agent"
+  model_name: "gpt-4o-mini"
 
 
 tasks:
