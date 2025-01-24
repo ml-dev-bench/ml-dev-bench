@@ -1,5 +1,5 @@
-workspace_dir: ./ml_dev_bench/cases/training/parse_logs/setup_workspace
-output_dir: ./ml_dev_bench/cases/training/parse_logs/results
+workspace_dir: ./workspace
+output_dir: ./results
 fail_fast: false
 log_level: "INFO"
 num_runs: 1
