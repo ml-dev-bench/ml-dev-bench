@@ -1,5 +1,5 @@
-workspace_dir: ./notebooks/workspace
-output_dir: ./notebooks/results
+workspace_dir: ./workspace
+output_dir: ./results
 fail_fast: false
 log_level: "INFO"
 num_runs: 1
@@ -15,6 +15,8 @@ agent_packages:
 agent:
   id: "simple_react"
   model_name: "gpt-4o-mini"
+  # model_name: "anthropic/claude-3-5-sonnet-20241022"
+  recursion_limit: 30
 
 
 tasks:
