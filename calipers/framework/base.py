@@ -186,6 +186,7 @@ class BaseEvaluationTask(ABC):
         Called after validating a run and useful to reset any state and clear artifacts
         """
         # clear the workspace_dir by default and create an empty one
+
         return
 
     def update_metric(self, name: str, value: Any) -> None:

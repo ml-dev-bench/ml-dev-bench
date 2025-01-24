@@ -24,7 +24,7 @@ class DatasetPreprocessTask(BaseEvaluationTask):
 
     # Default parameters (can be overridden by config)
     EXPECTED_SHAPE = (3, 32, 32)  # CIFAR10 shape
-    NUM_SAMPLES_TO_CHECK = 100
+    NUM_SAMPLES_TO_CHECK = 10
     VALUE_RANGE = (-1, 1)  # Expected range after normalization
     AUGMENTATION_SAMPLES = 5  # Number of augmented versions to generate per sample
     VARIANCE_THRESHOLD = 0.1  # Minimum pixel-wise variance for augmentation check

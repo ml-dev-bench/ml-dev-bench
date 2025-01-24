@@ -1,3 +1,3 @@
-from .multi_gpu_training_eval import MultiGPUTrainingEvaluation
+from .multi_gpu_training_eval import MultiGPUTrainingEvaluationTask
 
-__all__ = ['MultiGPUTrainingEvaluation']
+__all__ = ['MultiGPUTrainingEvaluationTask']
