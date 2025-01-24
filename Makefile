@@ -125,7 +125,10 @@ install-aide-agent-dependencies:
 	@echo "$(YELLOW)Creating new virtual environment for aide-agent...$(RESET)"
 	@rm -rf .venv-aide
 	@mkdir -p .venv-aide
+<<<<<<< HEAD
 	@poetry config installer.parallel true
+=======
+>>>>>>> fa4323566ee441a232b5050f98b35b84ab872bc5
 	POETRY_VIRTUALENVS_CREATE=true \
 	POETRY_VIRTUALENVS_IN_PROJECT=false \
 	POETRY_VIRTUALENVS_PATH="$(PWD)/.venv-aide" \
@@ -133,7 +136,10 @@ install-aide-agent-dependencies:
 	POETRY_VIRTUALENVS_CREATE=true \
 	POETRY_VIRTUALENVS_IN_PROJECT=false \
 	POETRY_VIRTUALENVS_PATH="$(PWD)/.venv-aide" \
+<<<<<<< HEAD
 	POETRY_REQUESTS_TIMEOUT=120 \
+=======
+>>>>>>> fa4323566ee441a232b5050f98b35b84ab872bc5
 	poetry install --with aide
 	@echo "$(GREEN)Python dependencies with aide-agent installed successfully in .venv-aide$(RESET)"
 	@echo "$(BLUE)To activate this environment, run: POETRY_VIRTUALENVS_PATH='$(PWD)/.venv-aide' poetry shell$(RESET)"
