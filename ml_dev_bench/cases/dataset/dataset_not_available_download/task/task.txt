@@ -4,4 +4,4 @@ Your task is to download and prepare a dataset for training a machine learning m
 
 2. The dataset should be downloaded and extracted to a directory structure
 
-3. Create a dataset_info.json file in the workspace directory with the dataset path
+3. If successful, create a dataset_info.json file in the workspace directory with the dataset path

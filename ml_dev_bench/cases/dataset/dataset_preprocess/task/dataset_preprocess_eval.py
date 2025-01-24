@@ -5,10 +5,9 @@ from typing import Any, Dict, List, Tuple
 
 import numpy as np
 
-from calipers.framework.base import BaseAgent, BaseEvaluationTask
+from calipers.framework.base import BaseAgent, BaseEvaluationTask, BaseRuntime
 from calipers.framework.config import TaskConfig
 from calipers.framework.registry import EvalRegistry
-from calipers.runtime.base import BaseRuntime
 
 from .metrics import (
     AugmentationVarianceMetric,
