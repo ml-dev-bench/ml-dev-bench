@@ -176,12 +176,12 @@ class EvaluationFramework:
             if run_idx == 0:
                 task.initialize()
 
+            agent_output = None
             try:
                 start_time = datetime.now()
                 # create a clean runtime for each run
                 evaluation_runtime = self.get_eval_runtime(task.workspace_dir)
                 logger.info(f'Running task {task_id} with agent {agent_id}')
-                agent_output = None
                 agent_output = await task.run(agent)
                 logger.info(f'Validating task {task_id}')
                 validation_results = await task.validate(
