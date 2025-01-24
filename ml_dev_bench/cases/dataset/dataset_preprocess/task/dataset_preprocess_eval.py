@@ -5,10 +5,9 @@ from typing import Any, Dict, List, Tuple
 
 import numpy as np
 
-from calipers.framework.base import BaseAgent, BaseEvaluationTask
+from calipers.framework.base import BaseAgent, BaseEvaluationTask, BaseRuntime
 from calipers.framework.config import TaskConfig
 from calipers.framework.registry import EvalRegistry
-from calipers.runtime.base import BaseRuntime
 
 from .metrics import (
     AugmentationVarianceMetric,
@@ -205,15 +204,16 @@ class DatasetPreprocessTask(BaseEvaluationTask):
 
             # Update metrics
             self.update_metric(
-                'preprocessing_shape', correct_shapes, self.NUM_SAMPLES_TO_CHECK
+                'preprocessing_shape',
+                correct_shapes,
             )
             self.update_metric(
-                'preprocessing_range', correct_ranges, self.NUM_SAMPLES_TO_CHECK
+                'preprocessing_range',
+                correct_ranges,
             )
             self.update_metric(
                 'augmentation_variance',
                 correct_augmentations,
-                self.NUM_SAMPLES_TO_CHECK,
             )
 
             # Calculate success based on all metrics

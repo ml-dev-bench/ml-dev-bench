@@ -181,8 +181,9 @@ class EvaluationFramework:
                 # create a clean runtime for each run
                 evaluation_runtime = self.get_eval_runtime(task.workspace_dir)
                 logger.info(f'Running task {task_id} with agent {agent_id}')
-                agent_output = await task.run(agent)
-                logger.info(f'Validating task {task_id}')
+                agent_output = None
+                # agent_output = await task.run(agent)
+                # logger.info(f'Validating task {task_id}')
                 validation_results = await task.validate(
                     agent_output, evaluation_runtime
                 )
