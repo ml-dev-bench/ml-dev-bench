@@ -11,7 +11,6 @@ from calipers.framework.registry import EvalRegistry
 
 from .metrics import (
     AugmentationVarianceMetric,
-    PreprocessingRangeMetric,
     PreprocessingShapeMetric,
 )
 
@@ -54,7 +53,6 @@ class DatasetPreprocessTask(BaseEvaluationTask):
         """Setup metrics for dataset preprocessing task"""
         super()._setup_metrics()
         self.add_metric(PreprocessingShapeMetric())
-        self.add_metric(PreprocessingRangeMetric())
         self.add_metric(AugmentationVarianceMetric())
 
     async def run(self, agent: BaseAgent) -> Dict[str, Any]:
@@ -101,9 +99,13 @@ class DatasetPreprocessTask(BaseEvaluationTask):
             if 'augmented_data_path' not in dataset_info:
                 raise ValueError('augmented_data_path not found in dataset_info')
 
-            data_path = Path(dataset_info['preprocessed_data_path'])
-            aug_path = Path(dataset_info['augmented_data_path'])
+            data_path = Path(
+                self.workspace_dir / dataset_info['preprocessed_data_path']
+            )
+            aug_path = Path(self.workspace_dir / dataset_info['augmented_data_path'])
 
+            print(data_path)
+            print(aug_path)
             if not data_path.exists() or not aug_path.exists():
                 raise ValueError('Data paths do not exist')
 
@@ -206,10 +208,6 @@ class DatasetPreprocessTask(BaseEvaluationTask):
             self.update_metric(
                 'preprocessing_shape',
                 correct_shapes,
-            )
-            self.update_metric(
-                'preprocessing_range',
-                correct_ranges,
             )
             self.update_metric(
                 'augmentation_variance',

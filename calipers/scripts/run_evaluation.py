@@ -269,6 +269,7 @@ async def main():
     parser.add_argument(
         '--debug',
         action='store_true',
+        default=True,
         help='Enable debug mode - preserves cloned workspace',
     )
     args = parser.parse_args()
