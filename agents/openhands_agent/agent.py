@@ -9,6 +9,7 @@ from openhands.core.main import create_runtime, run_controller
 from openhands.events.action import MessageAction
 
 from agents.openhands_agent.utils import codeact_user_response
+from calipers.framework.base import BaseAgent
 from calipers.framework.config import AgentConfig
 from calipers.framework.registry import EvalRegistry
 
@@ -22,8 +23,10 @@ AGENT_CLS_TO_INST_SUFFIX = {
 
 
 @EvalRegistry.register_agent
-class OpenHandsAgent:
+class OpenHandsAgent(BaseAgent):
     """Agent that uses OpenHands in headless mode."""
+
+    agent_id = 'openhands_agent'
 
     def __init__(
         self,
@@ -59,7 +62,7 @@ class OpenHandsAgent:
         )
         return app_config
 
-    async def _run_task(self, task: Dict[str, Any]) -> Dict[str, Any]:
+    async def _run_task(self, task: str) -> Dict[str, Any]:
         """Run a task using OpenHands controller.
 
         Args:
@@ -76,7 +79,7 @@ class OpenHandsAgent:
         await runtime.connect()
 
         # Create initial message action
-        message = MessageAction(content=task.get('prompt', ''))
+        message = MessageAction(content=task)
 
         # Run the controller
         state: State | None = await run_controller(
@@ -105,12 +108,11 @@ class OpenHandsAgent:
             'error': None,
         }
 
-    def run(self, task: Dict[str, Any], **kwargs: Any) -> Dict[str, Any]:
+    async def run(self, task: str) -> Dict[str, Any]:
         """Run the OpenHands agent on a task.
 
         Args:
             task: The task specification
-            **kwargs: Additional arguments to pass to OpenHands
 
         Returns:
             The result of running the task
@@ -124,3 +126,6 @@ class OpenHandsAgent:
                 'output': None,
                 'error': str(e),
             }
+
+    def uses_litellm(self) -> bool:
+        return True
