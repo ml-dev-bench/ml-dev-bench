@@ -14,8 +14,8 @@ agent_packages:
 # Agent configuration
 agent:
   id: "simple_react"
-  model_name: "gpt-4o-mini"
-  # model_name: "anthropic/claude-3-5-sonnet-20241022"
+  # model_name: "gpt-4o-mini"
+  model_name: "anthropic/claude-3-5-sonnet-20241022"
   recursion_limit: 30
 
 
