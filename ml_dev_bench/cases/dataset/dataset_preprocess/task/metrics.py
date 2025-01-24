@@ -35,16 +35,6 @@ class PreprocessingShapeMetric(FractionMetric):
 
 
 @MetricsRegistry.register
-class PreprocessingRangeMetric(FractionMetric):
-    name = 'preprocessing_range'
-    description = 'Fraction of samples with values in the expected range'
-    unit = 'fraction'
-
-    def __init__(self):
-        super().__init__(name=self.name, description=self.description, unit=self.unit)
-
-
-@MetricsRegistry.register
 class AugmentationVarianceMetric(FractionMetric):
     name = 'augmentation_variance'
     description = 'Fraction of samples showing sufficient variation after augmentation'
