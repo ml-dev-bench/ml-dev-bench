@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from typing import Tuple
 
 from calipers.metrics import BaseMetric, MetricsRegistry
 
@@ -12,7 +13,8 @@ class FractionMetric(BaseMetric):
     unit: str = 'fraction'
     _value: float = field(default=0.0, init=False)
 
-    def update(self, numerator: int, denominator: int) -> None:
+    def update(self, num_denom: Tuple[int, int]) -> None:
+        numerator, denominator = num_denom
         self._value = numerator / denominator if denominator > 0 else 0.0
 
     def get_value(self) -> float:

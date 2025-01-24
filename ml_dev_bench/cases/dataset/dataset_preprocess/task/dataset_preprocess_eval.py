@@ -101,9 +101,10 @@ class DatasetPreprocessTask(BaseEvaluationTask):
             if 'augmented_data_path' not in dataset_info:
                 raise ValueError('augmented_data_path not found in dataset_info')
 
-            data_path = Path(dataset_info['preprocessed_data_path'])
-            aug_path = Path(dataset_info['augmented_data_path'])
-
+            data_path = Path(
+                self.workspace_dir / dataset_info['preprocessed_data_path']
+            )
+            aug_path = Path(self.workspace_dir / dataset_info['augmented_data_path'])
             if not data_path.exists() or not aug_path.exists():
                 raise ValueError('Data paths do not exist')
 
@@ -204,16 +205,14 @@ class DatasetPreprocessTask(BaseEvaluationTask):
 
             # Update metrics
             self.update_metric(
-                'preprocessing_shape',
-                correct_shapes,
+                'preprocessing_shape', (correct_shapes, self.NUM_SAMPLES_TO_CHECK)
             )
             self.update_metric(
-                'preprocessing_range',
-                correct_ranges,
+                'preprocessing_range', (correct_ranges, self.NUM_SAMPLES_TO_CHECK)
             )
             self.update_metric(
                 'augmentation_variance',
-                correct_augmentations,
+                (correct_augmentations, self.NUM_SAMPLES_TO_CHECK),
             )
 
             # Calculate success based on all metrics
