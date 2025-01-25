@@ -37,7 +37,7 @@ class TrainShapeDebugTask(BaseEvaluationTask):
             content = f.read()
             return hashlib.sha256(content).hexdigest()
 
-    def initialize_task(self) -> None:
+    def initialize(self) -> None:
         # Calculate and store hash of run_training.py
         training_script = self.workspace_dir / 'run_training.py'
         self.training_script_hash = self._compute_file_hash(training_script)

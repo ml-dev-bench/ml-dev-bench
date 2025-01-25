@@ -22,7 +22,7 @@ class CIFAR10ImprovementTask(BaseEvaluationTask):
 
     TARGET_ACCURACY = 84.69
 
-    def initialize_task(self) -> None:
+    def initialize(self) -> None:
         """No initialization needed"""
         pass
 

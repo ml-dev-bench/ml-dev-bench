@@ -3,13 +3,13 @@ num_runs: 1
 fail_fast: false
 log_level: "INFO"
 output_dir: "./results"
-workspace_dir: "./evaluation/ml_debugging/normalization_bug/setup_workspace"
+workspace_dir: "./ml_dev_bench/cases/debugging/normalization_bug/setup_workspace"
 langchain_project: "ml-dev-bench-evaluation-normalization-debug"
 clone_workspace: true  # clones workspace to a temporary directory
 
 # Task package imports
 task_packages:
-  - "ml_debugging.normalization_bug"
+  - "ml_dev_bench.cases.debugging.normalization_bug"
 
 # Agent configuration
 agent_packages:
@@ -18,9 +18,8 @@ agent_packages:
 # Agent configuration
 agent:
   id: "simple_react"
-  model_name: "gpt-4o-mini"
-  executor_recursion_limit: 25
-  workflow_recursion_limit: 30
+  model_name: "anthropic/claude-3-5-sonnet-20241022"
+  recursion_limit: 30
 
 # Task configurations
 tasks:
