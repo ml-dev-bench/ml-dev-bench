@@ -109,6 +109,7 @@ class PretrainedBertBaseUncasedTask(BaseEvaluationTask):
             # Check all files in model directory
             if model_path.exists():
                 for file in model_path.glob('**/*'):
+                    print(f'Validating file {file}')
                     if file.is_file() and file.stat().st_size > 0:
                         fname = file.name.lower()
                         if 'tokenizer' in fname:
