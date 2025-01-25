@@ -183,10 +183,13 @@ class EvaluationFramework:
                 evaluation_runtime = self.get_eval_runtime(task.workspace_dir)
                 logger.info(f'Running task {task_id} with agent {agent_id}')
                 agent_output = await task.run(agent)
-                logger.info(f'Validating task {task_id}')
+                logger.info(
+                    f'Validating task {task_id} and working-dir {task.workspace_dir}'
+                )
                 validation_results = await task.validate(
                     agent_output, evaluation_runtime
                 )
+                logger.info(f'Run validation results {validation_results}')
                 end_time = datetime.now()
 
                 metrics = task.metrics.get_all()
