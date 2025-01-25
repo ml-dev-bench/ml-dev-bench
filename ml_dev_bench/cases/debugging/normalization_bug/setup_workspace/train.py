@@ -75,10 +75,10 @@ def get_model(num_classes):
     # Initialize the model
     model = mobilenet_v2(pretrained=False)
     # Modify the last layer for CIFAR-10 (10 classes)
-    model.classifier[1] = nn.Linear(model.classifier[1].in_features, 10)
+    model.classifier[1] = nn.Linear(model.classifier[1].in_features, num_classes)
 
-    # Move model to GPU if available
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    # Use cpu
+    device = 'cpu'
     model = model.to(device)
     return model
 
@@ -134,7 +134,7 @@ def run_training(num_epochs=2, iterations_per_epoch=100):
     best_val_acc = 0
     # Set random seed for reproducibility
     torch.manual_seed(42)
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    device = 'cpu'
 
     train_loader, val_loader = get_dataloaders(iterations_per_epoch)
     model = get_model(10)

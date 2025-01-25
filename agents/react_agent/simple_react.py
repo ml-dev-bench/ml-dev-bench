@@ -90,7 +90,7 @@ class SimpleReactAgent(BaseAgent):
             result = await self.agent.ainvoke(
                 {'messages': [('user', task)]},
                 config={
-                    'recursion_limit': self.config.config.get('recursion_limit', 25)
+                    'recursion_limit': self.config.config.get('recursion_limit', 30)
                 },
             )
 

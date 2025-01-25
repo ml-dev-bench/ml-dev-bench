@@ -34,10 +34,14 @@ class NormalizationDebugTask(BaseEvaluationTask):
             str: Hex digest of file hash
         """
         with open(filepath, 'rb') as f:
-            content = f.read()
+            # Normalize line endings to \n before hashing
+            content = f.read().replace(b'\r\n', b'\n')
+            print(
+                f'Computing hash for {filepath}: {hashlib.sha256(content).hexdigest()}'
+            )  # Debug line
             return hashlib.sha256(content).hexdigest()
 
-    def initialize_task(self) -> None:
+    def initialize(self) -> None:
         # Calculate and store hash of run_training.py
         training_script = self.workspace_dir / 'run_training.py'
         self.training_script_hash = self._compute_file_hash(training_script)
@@ -56,6 +60,9 @@ class NormalizationDebugTask(BaseEvaluationTask):
             # Verify run_training.py hasn't been modified
             training_script = self.workspace_dir / 'run_training.py'
             current_hash = self._compute_file_hash(training_script)
+
+            print(f'Original hash: {self.training_script_hash}')  # Debug line
+            print(f'Current hash: {current_hash}')  # Debug line
 
             if current_hash != self.training_script_hash:
                 return {
