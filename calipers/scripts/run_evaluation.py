@@ -24,11 +24,25 @@ def save_results(
     commit_hash: str,
 ) -> None:
     """Save evaluation results to JSON file"""
+    import numpy as np
+
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     output_file = output_dir / f'eval_results_{timestamp}.json'
+
+    class NumpyEncoder(json.JSONEncoder):
+        def default(self, obj):
+            if isinstance(obj, np.bool_):
+                return bool(obj)
+            if isinstance(obj, np.integer):
+                return int(obj)
+            if isinstance(obj, np.floating):
+                return float(obj)
+            if isinstance(obj, np.ndarray):
+                return obj.tolist()
+            return super().default(obj)
 
     # Convert results to serializable format
     results_dict = {
@@ -63,7 +77,7 @@ def save_results(
     }
 
     with open(output_file, 'w') as f:
-        json.dump(results_dict, f, indent=2)
+        json.dump(results_dict, f, indent=2, cls=NumpyEncoder)
 
     logger.info('Results saved to %s', output_file)
 
@@ -269,7 +283,7 @@ async def main():
     parser.add_argument(
         '--debug',
         action='store_true',
-        default=True,
+        default=False,
         help='Enable debug mode - preserves cloned workspace',
     )
     args = parser.parse_args()
