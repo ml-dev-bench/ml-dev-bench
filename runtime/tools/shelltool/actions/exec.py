@@ -71,9 +71,6 @@ class ExecCommand(LocalAction[ShellExecRequest, ShellExecResponse]):
     However, the environment does NOT support interactive session commands (e.g. python,
     vim), so please do not invoke them. Never issue a find command against "/"
     directory, instead find files within the base directory in the task.
-
-    Inspecting large files like logs using `cat` can timeout,
-    instead use `tail -n` to get content from the end
     """
 
     _tags = ['workspace', 'shell']

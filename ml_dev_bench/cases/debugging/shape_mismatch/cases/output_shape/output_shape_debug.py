@@ -37,7 +37,7 @@ class OutputShapeDebugTask(BaseEvaluationTask):
             content = f.read()
             return hashlib.sha256(content).hexdigest()
 
-    def initialize_task(self) -> None:
+    def initialize(self) -> None:
         # Calculate and store hash of run_model.py
         model_script = self.workspace_dir / 'run_model.py'
         self.model_script_hash = self._compute_file_hash(model_script)

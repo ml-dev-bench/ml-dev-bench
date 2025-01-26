@@ -25,9 +25,8 @@ class DatasetPreprocessTask(BaseEvaluationTask):
     EXPECTED_SHAPE = (3, 32, 32)  # CIFAR10 shape
     NUM_SAMPLES_TO_CHECK = 10
     VALUE_RANGE = (-1, 1)  # Expected range after normalization
-    AUGMENTATION_SAMPLES = 5  # Number of augmented versions to generate per sample
-    VARIANCE_THRESHOLD = 0.1  # Minimum pixel-wise variance for augmentation check
-    AUGMENTATION_SUCCESS_THRESHOLD = 0.9  # Required success rate for augmentations
+    VARIANCE_THRESHOLD = 0.01  # Minimum pixel-wise variance for augmentation check
+    AUGMENTATION_SUCCESS_THRESHOLD = 1  # Required success rate for augmentations
 
     def __init__(self, config: TaskConfig):
         super().__init__(config)
@@ -107,6 +106,27 @@ class DatasetPreprocessTask(BaseEvaluationTask):
             if not data_path.exists() or not aug_path.exists():
                 raise ValueError('Data paths do not exist')
 
+            # Check if we have enough preprocessed samples
+            data_files = list(data_path.glob('*.npy'))
+            if len(data_files) != self.NUM_SAMPLES_TO_CHECK:
+                raise ValueError(
+                    f'Not enough preprocessed samples. Found {len(data_files)} files, '
+                    f'expected {self.NUM_SAMPLES_TO_CHECK}'
+                )
+
+            # Check augmented files
+            aug_files = list(aug_path.glob('*.npy'))
+            if len(aug_files) % self.NUM_SAMPLES_TO_CHECK != 0:
+                raise ValueError(
+                    f'Number of augmented files ({len(aug_files)}) is not a multiple of '
+                    f'the number of samples to check ({self.NUM_SAMPLES_TO_CHECK}). '
+                    'Each sample should have the same number of augmented versions.'
+                )
+
+            # Get sorted lists of files
+            data_files = sorted(data_files)
+            aug_files = sorted(aug_files)
+
             # Load and validate samples
             correct_shapes = 0
             correct_ranges = 0
@@ -114,11 +134,7 @@ class DatasetPreprocessTask(BaseEvaluationTask):
             samples_checked = 0
             validation_details = {'samples': []}
 
-            # Get list of files
-            data_files = sorted(data_path.glob('*.npy'))[: self.NUM_SAMPLES_TO_CHECK]
-            aug_files = sorted(aug_path.glob('*.npy'))[: self.NUM_SAMPLES_TO_CHECK]
-
-            for data_file, aug_file in zip(data_files, aug_files, strict=False):
+            for data_file in data_files:
                 # Load preprocessed sample
                 sample = np.load(data_file)
 
@@ -138,16 +154,24 @@ class DatasetPreprocessTask(BaseEvaluationTask):
 
                 # Check augmentation variance
                 aug_samples = []
-                aug_base = np.load(aug_file)
-                aug_samples.append(aug_base)
+                # Get all augmented versions for this sample
+                aug_pattern = f'{data_file.stem}_v*.npy'
+                aug_versions = list(aug_path.glob(aug_pattern))
 
-                # Load additional augmented versions if they exist
-                aug_versions = sorted(aug_path.glob(f'{aug_file.stem}_v*.npy'))[
-                    : self.AUGMENTATION_SAMPLES - 1
-                ]
+                # Load base augmented file (without _v suffix)
+                base_aug_file = aug_path / f'{data_file.stem}.npy'
+                if base_aug_file.exists():
+                    aug_samples.append(np.load(base_aug_file))
+
+                # Load additional augmented versions
                 for aug_version in aug_versions:
                     aug_samples.append(np.load(aug_version))
 
+                if len(aug_samples) != 3:
+                    raise ValueError(
+                        f'Num augementations should be three found {len(aug_samples)}'
+                    )
+                aug_variance_sufficient = False
                 aug_variance_sufficient = self._check_augmentation_variance(aug_samples)
                 if aug_variance_sufficient:
                     correct_augmentations += 1

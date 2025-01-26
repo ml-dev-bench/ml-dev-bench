@@ -23,12 +23,12 @@ from ..utils import create_message_content
 AGENT_TOOLS = [
     Action.ML_DEV_BENCH_FILE_TOOL_CREATE_AND_WRITE_FILE,
     Action.ML_DEV_BENCH_FILE_TOOL_GET_DIRECTORY_TREE,
+    Action.ML_DEV_BENCH_FILE_TOOL_CWD,
     Action.ML_DEV_BENCH_SHELL_TOOL_EXEC_COMMAND,
     Action.ML_DEV_BENCH_SHELL_TOOL_SPAWN_PROCESS,
     Action.ML_DEV_BENCH_SHELL_TOOL_SLEEP_AND_EXECUTE,
     Action.FILETOOL_LIST_FILES,
     Action.FILETOOL_EDIT_FILE,
-    Action.FILETOOL_CHANGE_WORKING_DIRECTORY,
 ]
 
 
@@ -90,7 +90,7 @@ class SimpleReactAgent(BaseAgent):
             result = await self.agent.ainvoke(
                 {'messages': [('user', task)]},
                 config={
-                    'recursion_limit': self.config.config.get('recursion_limit', 25)
+                    'recursion_limit': self.config.config.get('recursion_limit', 30)
                 },
             )
 

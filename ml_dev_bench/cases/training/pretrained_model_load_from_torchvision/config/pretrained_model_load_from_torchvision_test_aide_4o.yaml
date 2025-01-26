@@ -3,7 +3,7 @@ num_runs: 1
 fail_fast: false
 log_level: "INFO"
 output_dir: "./results"
-workspace_dir: "./test_workspace"
+workspace_dir: "./workspace"
 langchain_project: "ml-dev-bench-evaluation-pretrained-model-load-from-torchvision"
 
 # Task package imports
@@ -11,14 +11,13 @@ task_packages:
   - "ml_dev_bench.cases.training.pretrained_model_load_from_torchvision"
 
 # Agent configuration
-agent_packages:
-  - "agents.react_agent"
-
 # Agent configuration
+agent_packages:
+  - "agents.aide_ml_agent"
+
 agent:
-  id: "simple_react"
-  model_name: "anthropic/claude-3-5-sonnet-20241022"
-  recursion_limit: 30
+  id: "aide_ml_agent"
+  model_name: "gpt-4o"
 
 # Task configurations
 tasks:

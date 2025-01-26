@@ -1,6 +1,9 @@
 import json
 import os
+import subprocess
 from typing import Any, Dict
+
+from composio import Action
 
 from calipers.framework.base import (
     BaseAgent,
@@ -8,6 +11,7 @@ from calipers.framework.base import (
     BaseRuntime,
 )
 from calipers.framework.registry import EvalRegistry
+from calipers.runtime.ml_dev_bench_runtime import MLDevBenchRuntime
 
 
 @EvalRegistry.register_task
@@ -37,15 +41,36 @@ class SmallDatasetOverfitEvaluationTask(BaseEvaluationTask):
     ) -> Dict[str, Any]:
         try:
             # Check if the training script exists
-            script_path = os.path.join(
-                self.workspace_dir, 'training', 'training_script_mnist.py'
-            )
+            script_path = os.path.join(self.workspace_dir, 'training_script_mnist.py')
             if not os.path.exists(script_path):
                 return {'success': False, 'error': 'Training script not found'}
 
             # Run the training script
             try:
-                exec_result = await runtime.execute_python_script(script_path)
+                if isinstance(runtime, MLDevBenchRuntime):
+                    result = runtime.execute_action(
+                        action=Action.ML_DEV_BENCH_SHELL_TOOL_EXEC_COMMAND,
+                        request_data={'cmd': f'python {script_path}'},
+                        metadata={},
+                    )
+                    exec_result = {
+                        'success': result['data']['exit_code'] == 0,
+                        'error': result['data']['stderr']
+                        if result['data']['exit_code'] != 0
+                        else None,
+                    }
+                else:
+                    result = subprocess.run(
+                        ['python', str(script_path)],
+                        capture_output=True,
+                        text=True,
+                        cwd=self.workspace_dir,
+                    )
+                    exec_result = {
+                        'success': result.returncode == 0,
+                        'error': result.stderr if result.returncode != 0 else None,
+                    }
+
                 if not exec_result['success']:
                     return {
                         'success': False,

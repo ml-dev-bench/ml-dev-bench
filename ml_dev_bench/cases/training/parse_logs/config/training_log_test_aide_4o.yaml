@@ -9,12 +9,11 @@ task_packages:
   - "ml_dev_bench.cases.training.parse_logs"
 
 agent_packages:
-  - "agents.react_agent"
+  - "agents.aide_ml_agent"
 
-# Agent configuration
 agent:
-  id: "simple_react"
-  model_name: "anthropic/claude-3-5-haiku-20241022"
+  id: "aide_ml_agent"
+  model_name: "gpt-4o"
 
 tasks:
   - id: parse_logs
