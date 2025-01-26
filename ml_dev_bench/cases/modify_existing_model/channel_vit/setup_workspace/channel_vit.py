@@ -1,3 +1,5 @@
+from typing import Optional
+
 import torch
 import torch.nn as nn
 from vit import VisionTransformer
@@ -75,14 +77,20 @@ class ChannelViT(VisionTransformer):
 
         self.pos_drop = nn.Dropout(p=drop_rate)
 
-    def prepare_tokens(self, x, extra_tokens=None):
+    def prepare_tokens(self, x, current_channel_indices=None):
         """
         Implement this method for ChannelViT.
         """
         raise NotImplementedError('ChannelViT is not implemented')
 
-    def forward(self, x, extra_tokens=None):
-        x = self.prepare_tokens(x, extra_tokens)
+    def forward(self, x, current_channel_indices: Optional[torch.Tensor] = None):
+        """
+        Args:
+            x: (B, num_chans, H, W)
+            current_channel_indices: (B, num_chans)
+            num_chans is <= in_chans and current_channel_indices contains the indices of the channels to use
+        """
+        x = self.prepare_tokens(x, current_channel_indices)
         for blk in self.blocks:
             x = blk(x)
         x = self.norm(x)
