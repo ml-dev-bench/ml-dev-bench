@@ -81,7 +81,27 @@ class BasicVisionFinetuningTask(BaseEvaluationTask):
         try:
             validation_results = {'checks': {}}
 
-            # 1. Check if model was adapted for CIFAR-10
+            # 1. Check model parameter count
+            param_count = None
+            for key in ['num_parameters', 'parameter_count', 'params']:
+                val = self._find_in_dict(model_info, key)
+                if isinstance(val, (int, float)):
+                    param_count = val
+                    break
+
+            if param_count is None:
+                return {
+                    'success': False,
+                    'error': 'Could not find model parameter count in model_info.json',
+                }
+
+            if param_count >= 30_000_000:  # 30M parameter limit
+                return {
+                    'success': False,
+                    'error': f'Model has {param_count:,} parameters, exceeding the 30M parameter limit',
+                }
+
+            # 2. Check if model was adapted for CIFAR-10
             output_dim = None
             for key in ['num_classes', 'output_dimension', 'output_size']:
                 val = self._find_in_dict(model_info, key)
@@ -95,11 +115,11 @@ class BasicVisionFinetuningTask(BaseEvaluationTask):
                     'error': 'Model not adapted for CIFAR-10 (10 classes)',
                 }
 
-            # 2. Check for saved model
+            # 3. Check for saved model
             if not model_path.exists() or model_path.stat().st_size == 0:
                 return {'success': False, 'error': 'No saved model found'}
 
-            # 3. Check for loss improvement
+            # 4. Check for loss improvement
             initial_loss, final_loss = self._get_loss_values(model_info)
 
             if initial_loss is None or final_loss is None:
@@ -113,6 +133,15 @@ class BasicVisionFinetuningTask(BaseEvaluationTask):
                     'success': False,
                     'error': 'Loss did not change during training',
                 }
+
+            validation_results['checks'].update(
+                {
+                    'parameter_count': param_count,
+                    'output_dimension': output_dim,
+                    'initial_loss': initial_loss,
+                    'final_loss': final_loss,
+                }
+            )
 
             return {'success': True, 'validation_details': validation_results}
 

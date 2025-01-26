@@ -84,7 +84,22 @@ class AIDEAgent(BaseAgent):
                 shutil.copy(src_path, dst_path)
                 logger.info(f'Copied file {file} to {self.config.workspace_dir}')
             else:  # is directory
-                shutil.copytree(src_path, dst_path, dirs_exist_ok=True)
+                # if name of directory is 'working', copy all files in it
+                if file == 'working':
+                    # check if this is a file or directory and use appropriate shutil function
+                    for item in os.listdir(src_path):
+                        if os.path.isfile(os.path.join(src_path, item)):
+                            shutil.copy(
+                                os.path.join(src_path, item),
+                                os.path.join(self.config.workspace_dir, item),
+                            )
+                        else:
+                            shutil.copytree(
+                                os.path.join(src_path, item),
+                                os.path.join(self.config.workspace_dir, item),
+                            )
+                else:
+                    shutil.copytree(src_path, dst_path, dirs_exist_ok=True)
                 logger.info(f'Copied directory {file} to {self.config.workspace_dir}')
 
     async def _execute_solution(self, output_path: str) -> Dict[str, Any]:

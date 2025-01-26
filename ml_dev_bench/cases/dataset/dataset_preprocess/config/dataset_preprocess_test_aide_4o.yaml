@@ -13,7 +13,7 @@ agent_packages:
 
 agent:
   id: "aide_ml_agent"
-  model_name: "gpt-4o-mini"
+  model_name: "gpt-4o"
 
 
 tasks:
