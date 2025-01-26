@@ -58,6 +58,11 @@ class AIDEAgent(BaseAgent):
         data_dir = os.path.join(self.config.workspace_dir, 'data')
         exp_dir = os.path.join(self.config.workspace_dir, 'aide_working_dir')
 
+        if data_dir.exists():
+            shutil.rmtree(data_dir)
+        if exp_dir.exists():
+            shutil.rmtree(exp_dir)
+
         # Copy data and create experiment directory
         shutil.copytree(self.config.workspace_dir, data_dir)
         os.makedirs(exp_dir, exist_ok=True)
