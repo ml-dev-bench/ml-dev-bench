@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Any, Dict, Optional, TypedDict
 
 from openhands.controller.state.state import State
-from openhands.core.config import AppConfig, LLMConfig, SandboxConfig
+from openhands.core.config import AppConfig, LLMConfig, SandboxConfig, finalize_config
 from openhands.core.main import create_runtime, run_controller
 from openhands.events.action import MessageAction
 from openhands.runtime.base import Runtime
@@ -94,8 +94,6 @@ class OpenHandsAgent(BaseAgent):
             run_as_openhands=False,
             runtime='docker',
             workspace_base=self.config.workspace_dir,
-            # This is needed since the default is None
-            workspace_mount_path=self.config.workspace_dir,
             max_iterations=self.config.config.get(
                 'max_iterations', DEFAULT_MAX_ITERATIONS
             ),
@@ -104,6 +102,8 @@ class OpenHandsAgent(BaseAgent):
         )
 
         app_config.set_llm_config(name='llm', value=self._create_llm_config())
+        # Finalize config
+        finalize_config(app_config)
         return app_config
 
     async def _setup_runtime(self) -> Runtime:
@@ -139,11 +139,27 @@ class OpenHandsAgent(BaseAgent):
                 success=False, error='Failed to initialize OpenHands state'
             )
 
+        # Convert MessageAction objects to serializable format
+        history = []
+        if state.history:
+            for action in state.history:
+                if isinstance(action, MessageAction):
+                    history.append(
+                        {
+                            'type': 'message',
+                            'content': action.content,
+                            'role': action.role if hasattr(action, 'role') else None,
+                        }
+                    )
+                else:
+                    # For other action types, just store their string representation
+                    history.append(str(action))
+
         return TaskResult(
             success=True,
             output={
                 'metrics': state.metrics.get() if state.metrics else {},
-                'history': state.history.get_all() if state.history else [],
+                'history': history,
             },
         )
 
