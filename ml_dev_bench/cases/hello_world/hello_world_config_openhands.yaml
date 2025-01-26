@@ -12,11 +12,11 @@ task_packages:
   - "ml_dev_bench.cases.hello_world"
 
 agent_packages:
-  - "agents.aide_ml_agent"
+  - "agents.openhands_agent"
 
 # Agent configuration
 agent:
-  id: "aide_ml_agent"
+  id: "openhands_agent"
   model_name: "gpt-4o-mini"
 
 
