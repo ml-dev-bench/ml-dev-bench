@@ -1,4 +1,4 @@
-workspace_dir: ./ml_dev_bench/cases/training/small_dataset_overfit/setup_workspace
+workspace_dir: ./test_workspace
 output_dir: ./ml_dev_bench/cases/training/small_dataset_overfit/results
 fail_fast: false
 log_level: "INFO"
@@ -14,7 +14,8 @@ agent_packages:
 # Agent configuration
 agent:
   id: "simple_react"
-  model_name: "anthropic/claude-3-5-haiku-20241022"
+  model_name: "anthropic/claude-3-5-sonnet-20241022"
+  recursion_limit: 30
 
 tasks:
   - id: small_dataset_overfit
