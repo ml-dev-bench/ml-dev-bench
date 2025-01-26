@@ -15,8 +15,8 @@ from calipers.runtime.ml_dev_bench_runtime import MLDevBenchRuntime
 
 
 @EvalRegistry.register_task
-class ChannelViTImplementTask(BaseEvaluationTask):
-    task_id = 'channel_vit_implementation'
+class ChannelViTImplementTaskEasy(BaseEvaluationTask):
+    task_id = 'channel_vit_implementation_easy'
     description = 'Implement ChannelViT based on existing ViT implementation'
     categories = {'ml', 'model-architecture', 'extend_existing_model'}
 
