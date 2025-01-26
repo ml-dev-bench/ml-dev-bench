@@ -15,7 +15,7 @@ from calipers.framework.config import AgentConfig
 from calipers.framework.registry import EvalRegistry
 from calipers.logger import logger
 
-DEFAULT_RUNTIME_IMAGE = 'ghcr.io/all-hands-ai/runtime:0.21-nikolaik'
+DEFAULT_RUNTIME_IMAGE = 'ml-dev-bench-runtime:latest'
 DEFAULT_MAX_ITERATIONS = 100
 DEFAULT_AGENT_CLASS = 'CodeActAgent'
 

@@ -52,7 +52,7 @@ composio-langchain = "^0.6.10"
 optional = true
 
 [tool.poetry.group.openhands-agent.dependencies]
-openhands-ai = { git = "https://github.com/All-Hands-AI/OpenHands", tag = "0.20.0" }
+openhands-ai = { git = "https://github.com/ml-dev-bench/OpenHands", tag = "ml-dev-bench-v0.21.1" }
 playwright = "^1.41.0"
 
 [tool.poetry.group.dev.dependencies]
