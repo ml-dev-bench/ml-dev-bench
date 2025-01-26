@@ -1,25 +1,39 @@
 """OpenHands agent implementation."""
 
-import asyncio
-from typing import Any, Dict
+from dataclasses import dataclass
+from typing import Any, Dict, Optional, TypedDict
 
 from openhands.controller.state.state import State
-from openhands.core.config import AppConfig, LLMConfig
+from openhands.core.config import AppConfig, LLMConfig, SandboxConfig
 from openhands.core.main import create_runtime, run_controller
 from openhands.events.action import MessageAction
+from openhands.runtime.base import Runtime
 
-from agents.openhands_agent.utils import codeact_user_response
+from agents.openhands_agent.utils import codeact_user_response, initialize_runtime
 from calipers.framework.base import BaseAgent
 from calipers.framework.config import AgentConfig
 from calipers.framework.registry import EvalRegistry
+from calipers.logger import logger
 
-AGENT_CLS_TO_FAKE_USER_RESPONSE_FN = {
-    'CodeActAgent': codeact_user_response,
-}
+DEFAULT_RUNTIME_IMAGE = 'ghcr.io/all-hands-ai/runtime:0.21-nikolaik'
+DEFAULT_MAX_ITERATIONS = 100
+DEFAULT_AGENT_CLASS = 'CodeActAgent'
 
-AGENT_CLS_TO_INST_SUFFIX = {
-    'CodeActAgent': 'When you think you have completed the task, please finish the interaction using the "finish" tool.\n'
-}
+
+@dataclass
+class TaskResult:
+    """Result of running a task."""
+
+    success: bool
+    output: Optional[Dict[str, Any]] = None
+    error: Optional[str] = None
+
+
+class AgentOutput(TypedDict):
+    """Type definition for agent output."""
+
+    metrics: Dict[str, Any]
+    history: list[Any]
 
 
 @EvalRegistry.register_agent
@@ -28,85 +42,136 @@ class OpenHandsAgent(BaseAgent):
 
     agent_id = 'openhands_agent'
 
-    def __init__(
-        self,
-        config: AgentConfig,
-    ):
+    def __init__(self, config: AgentConfig) -> None:
         """Initialize the OpenHands agent.
 
         Args:
-            config: The agent configuration
+            config: The agent configuration containing model and runtime settings
         """
         super().__init__(config)
         self.config = config
+        self._runtime: Optional[Runtime] = None
+
+    def _create_sandbox_config(self) -> SandboxConfig:
+        """Create sandbox configuration for the runtime.
+
+        Returns:
+            Configured SandboxConfig instance
+        """
+        return SandboxConfig(
+            enable_auto_lint=False,
+            use_host_network=True,
+            runtime_container_image=DEFAULT_RUNTIME_IMAGE,
+        )
+
+    def _create_llm_config(self) -> LLMConfig:
+        """Create LLM configuration from agent config.
+
+        Returns:
+            Configured LLMConfig instance
+        """
+        if not self.config.model_name:
+            raise ValueError('Model name must be specified in agent config')
+
+        return LLMConfig(
+            model=self.config.model_name, **self.config.config.get('model_config', {})
+        )
 
     def _get_config(self) -> AppConfig:
         """Get OpenHands configuration using agent config.
 
         Returns:
-            OpenHands AppConfig
+            Configured AppConfig instance
+
+        Raises:
+            ValueError: If required configuration is missing
         """
+        if not self.config.workspace_dir:
+            raise ValueError('Workspace directory must be specified in agent config')
+
         app_config = AppConfig(
-            default_agent='CodeActAgent',
+            default_agent=DEFAULT_AGENT_CLASS,
+            run_as_openhands=False,
             runtime='docker',
             workspace_base=self.config.workspace_dir,
-            max_iterations=self.config.config.get('max_iterations', 100),
-            **self.config.config.get('openhands', {}),  # Additional OpenHands config
-        )
-        app_config.set_llm_config(
-            name=self.config.model_name,
-            value=LLMConfig(
-                model=self.config.model_name,
-                **self.config.config.get('model_config', {}),
+            # This is needed since the default is None
+            workspace_mount_path=self.config.workspace_dir,
+            max_iterations=self.config.config.get(
+                'max_iterations', DEFAULT_MAX_ITERATIONS
             ),
+            sandbox=self._create_sandbox_config(),
+            **self.config.config.get('openhands', {}),
         )
+
+        app_config.set_llm_config(name='llm', value=self._create_llm_config())
         return app_config
 
-    async def _run_task(self, task: str) -> Dict[str, Any]:
+    async def _setup_runtime(self) -> Runtime:
+        """Set up and initialize the OpenHands runtime.
+
+        Returns:
+            Initialized Runtime instance
+
+        Raises:
+            RuntimeError: If runtime setup fails
+        """
+        try:
+            runtime = create_runtime(self._get_config())
+            await runtime.connect()
+            initialize_runtime(runtime)
+            self._runtime = runtime
+            return runtime
+        except Exception as e:
+            logger.error(f'Failed to setup runtime: {str(e)}')
+            raise RuntimeError(f'Runtime setup failed: {str(e)}') from e
+
+    def _extract_state_output(self, state: Optional[State]) -> TaskResult:
+        """Extract output from OpenHands state.
+
+        Args:
+            state: The OpenHands state to extract output from
+
+        Returns:
+            TaskResult containing success status and output/error
+        """
+        if state is None:
+            return TaskResult(
+                success=False, error='Failed to initialize OpenHands state'
+            )
+
+        return TaskResult(
+            success=True,
+            output={
+                'metrics': state.metrics.get() if state.metrics else {},
+                'history': state.history.get_all() if state.history else [],
+            },
+        )
+
+    async def _run_task(self, task: str) -> TaskResult:
         """Run a task using OpenHands controller.
 
         Args:
             task: The task specification
 
         Returns:
-            Task results
+            TaskResult containing success status and output/error
         """
-        # Set up OpenHands config
-        config = self._get_config()
+        try:
+            runtime = await self._setup_runtime()
+            message = MessageAction(content=task)
 
-        # Create and connect runtime
-        runtime = create_runtime(config)
-        await runtime.connect()
+            state = await run_controller(
+                config=self._get_config(),
+                initial_user_action=message,
+                runtime=runtime,
+                fake_user_response_fn=codeact_user_response,
+            )
 
-        # Create initial message action
-        message = MessageAction(content=task)
+            return self._extract_state_output(state)
 
-        # Run the controller
-        state: State | None = await run_controller(
-            config=config,
-            initial_user_action=message,
-            runtime=runtime,
-        )
-
-        if state is None:
-            return {
-                'success': False,
-                'output': None,
-                'error': 'Failed to initialize OpenHands state',
-            }
-
-        # Get metrics and history
-        metrics = state.metrics.get() if state.metrics else {}
-        history = state.history.get_all() if state.history else []
-
-        return {
-            'success': True,
-            'output': {
-                'metrics': metrics,
-                'history': history,
-            },
-            'error': None,
-        }
+        except Exception as e:
+            logger.error('Task execution failed', exc_info=True)
+            return TaskResult(success=False, error=str(e))
 
     async def run(self, task: str) -> Dict[str, Any]:
         """Run the OpenHands agent on a task.
@@ -115,17 +180,19 @@ class OpenHandsAgent(BaseAgent):
             task: The task specification
 
         Returns:
-            The result of running the task
+            Dictionary containing task results with success status and output/error
         """
-        try:
-            # Run OpenHands task
-            return asyncio.run(self._run_task(task))
-        except Exception as e:
-            return {
-                'success': False,
-                'output': None,
-                'error': str(e),
-            }
+        result = await self._run_task(task)
+        return {
+            'success': result.success,
+            'output': result.output,
+            'error': result.error,
+        }
 
     def uses_litellm(self) -> bool:
+        """Whether this agent uses litellm for model calls.
+
+        Returns:
+            True as OpenHands uses litellm
+        """
         return True
