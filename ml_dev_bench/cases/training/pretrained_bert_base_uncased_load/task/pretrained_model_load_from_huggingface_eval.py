@@ -106,7 +106,7 @@ class PretrainedBertBaseUncasedTask(BaseEvaluationTask):
             has_tokenizer = False
             has_model = False
 
-            # Check all files in model directory
+            # Check model_path first
             if model_path.exists():
                 for file in model_path.glob('**/*'):
                     print(f'Validating file {file}')
@@ -119,6 +119,16 @@ class PretrainedBertBaseUncasedTask(BaseEvaluationTask):
                             for x in ['model', 'weights', '.bin', '.safetensors']
                         ):
                             has_model = True
+
+            # If tokenizer is not found in model_path, check working_dir
+            if not has_tokenizer and self.workspace_dir.exists():
+                for file in self.workspace_dir.glob('**/*'):
+                    print(f'Validating file {file}')
+                    if file.is_file() and file.stat().st_size > 0:
+                        fname = file.name.lower()
+                        if 'tokenizer' in fname:
+                            has_tokenizer = True
+                            break
 
             validation_results['checks']['has_tokenizer'] = {
                 'success': has_tokenizer,
