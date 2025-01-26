@@ -3,12 +3,13 @@ num_runs: 1
 fail_fast: false
 log_level: "INFO"
 output_dir: "./results"
-workspace_dir: "./workspace"
-langchain_project: "ml-dev-bench-evaluation-basic-vision-finetuning"
+workspace_dir: "./ml_dev_bench/cases/debugging/nan_losses/setup_workspace"
+langchain_project: "ml-dev-bench-evaluation-nan-losses"
+clone_workspace: true  # clones workspace to a temporary directory
 
 # Task package imports
 task_packages:
-  - "ml_dev_bench.cases.training.basic_vision_finetuning"
+  - "ml_dev_bench.cases.debugging.nan_losses"
 
 # Agent configuration
 agent_packages:
@@ -20,4 +21,4 @@ agent:
 
 # Task configurations
 tasks:
-  - id: basic_vision_finetuning
+  - id: "nan_loss_debug"
