@@ -125,7 +125,6 @@ install-aide-agent-dependencies:
 	@echo "$(YELLOW)Creating new virtual environment for aide-agent...$(RESET)"
 	@rm -rf .venv-aide
 	@mkdir -p .venv-aide
-	@poetry config installer.parallel true
 	POETRY_VIRTUALENVS_CREATE=true \
 	POETRY_VIRTUALENVS_IN_PROJECT=false \
 	POETRY_VIRTUALENVS_PATH="$(PWD)/.venv-aide" \
@@ -133,7 +132,6 @@ install-aide-agent-dependencies:
 	POETRY_VIRTUALENVS_CREATE=true \
 	POETRY_VIRTUALENVS_IN_PROJECT=false \
 	POETRY_VIRTUALENVS_PATH="$(PWD)/.venv-aide" \
-	POETRY_REQUESTS_TIMEOUT=120 \
 	poetry install --with aide
 	@echo "$(GREEN)Python dependencies with aide-agent installed successfully in .venv-aide$(RESET)"
 	@echo "$(BLUE)To activate this environment, run: POETRY_VIRTUALENVS_PATH='$(PWD)/.venv-aide' poetry shell$(RESET)"
@@ -147,6 +145,39 @@ install-runtime-dependencies:
 	cd runtime/dependencies && poetry env use python$(PYTHON_VERSION)
 	@cd runtime/dependencies && poetry install --no-root
 	@echo "$(GREEN)Runtime dependencies installed successfully.$(RESET)"
+
+install-gcloud-key:
+	@echo "$(YELLOW)Installing Google Cloud SDK repository key...$(RESET)"
+	@sudo apt-get install apt-transport-https ca-certificates gnupg -y
+	@sudo rm -f /usr/share/keyrings/cloud.google.gpg
+	@curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+	@echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list
+	@curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+	@sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C0BA5CE6DC6315A3
+	@sudo apt-get update
+	@echo "$(GREEN)Google Cloud SDK repository key installed successfully.$(RESET)"
+
+install-openhands-agent-dependencies:
+	@echo "$(GREEN)Installing Python dependencies with openhands-agent in new environment...$(RESET)"
+	@if [ -z "${TZ}" ]; then \
+		echo "Defaulting TZ (timezone) to UTC"; \
+		export TZ="UTC"; \
+	fi
+	@echo "$(YELLOW)Creating new virtual environment for openhands-agent...$(RESET)"
+	@rm -rf .venv-openhands
+	@mkdir -p .venv-openhands
+	POETRY_VIRTUALENVS_CREATE=true \
+	POETRY_VIRTUALENVS_IN_PROJECT=false \
+	POETRY_VIRTUALENVS_PATH="$(PWD)/.venv-openhands" \
+	poetry env use python$(PYTHON_VERSION)
+	POETRY_VIRTUALENVS_CREATE=true \
+	POETRY_VIRTUALENVS_IN_PROJECT=false \
+	POETRY_VIRTUALENVS_PATH="$(PWD)/.venv-openhands" \
+	poetry install --with openhands-agent || ($(MAKE) -s install-gcloud-key && POETRY_VIRTUALENVS_PATH="$(PWD)/.venv-openhands" poetry install --with openhands-agent)
+	POETRY_VIRTUALENVS_PATH="$(PWD)/.venv-openhands" \
+	poetry run playwright install --with-deps chromium
+	@echo "$(GREEN)Python dependencies with openhands-agent installed successfully in .venv-openhands$(RESET)"
+	@echo "$(BLUE)To activate this environment, run: POETRY_VIRTUALENVS_PATH='$(PWD)/.venv-openhands' poetry shell$(RESET)"
 
 install-pre-commit-hooks:
 	@echo "$(YELLOW)Installing pre-commit hooks...$(RESET)"
