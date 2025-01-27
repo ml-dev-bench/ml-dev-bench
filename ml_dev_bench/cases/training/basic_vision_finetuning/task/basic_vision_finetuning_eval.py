@@ -46,33 +46,18 @@ class BasicVisionFinetuningTask(BaseEvaluationTask):
 
     def _get_loss_values(self, model_info: Dict[str, Any]) -> tuple[float, float]:
         """Extract initial and final loss values from model info."""
-        # Look in common locations for loss values
-        training_info = (
-            self._find_in_dict(model_info, 'training')
-            or self._find_in_dict(model_info, 'loss')
-            or model_info
-        )
+        # Look for loss values in the training section
+        training_info = model_info.get('training', {})
 
-        initial_loss = None
-        final_loss = None
+        initial_loss = training_info.get('initial_loss')
+        final_loss = training_info.get('final_loss')
 
-        # Try different common keys
-        initial_keys = ['initial_loss', 'start_loss', 'first_loss', 'loss_start']
-        final_keys = ['final_loss', 'end_loss', 'last_loss', 'loss_end']
+        if not isinstance(initial_loss, (int, float)) or not isinstance(
+            final_loss, (int, float)
+        ):
+            return None, None
 
-        for key in initial_keys:
-            val = self._find_in_dict(training_info, key)
-            if isinstance(val, (int, float)):
-                initial_loss = float(val)
-                break
-
-        for key in final_keys:
-            val = self._find_in_dict(training_info, key)
-            if isinstance(val, (int, float)):
-                final_loss = float(val)
-                break
-
-        return initial_loss, final_loss
+        return float(initial_loss), float(final_loss)
 
     def _validate_model_info(
         self, model_info: Dict[str, Any], model_path: Path
@@ -82,12 +67,8 @@ class BasicVisionFinetuningTask(BaseEvaluationTask):
             validation_results = {'checks': {}}
 
             # 1. Check model parameter count
-            param_count = None
-            for key in ['num_parameters', 'parameter_count', 'params']:
-                val = self._find_in_dict(model_info, key)
-                if isinstance(val, (int, float)):
-                    param_count = val
-                    break
+            model_info_section = model_info.get('model', {})
+            param_count = model_info_section.get('parameters')
 
             if param_count is None:
                 return {
@@ -95,21 +76,19 @@ class BasicVisionFinetuningTask(BaseEvaluationTask):
                     'error': 'Could not find model parameter count in model_info.json',
                 }
 
-            if param_count >= 30_000_000:  # 30M parameter limit
+            if (
+                not isinstance(param_count, (int, float)) or param_count >= 30_000_000
+            ):  # 30M parameter limit
                 return {
                     'success': False,
                     'error': f'Model has {param_count:,} parameters, exceeding the 30M parameter limit',
                 }
 
             # 2. Check if model was adapted for CIFAR-10
-            output_dim = None
-            for key in ['num_classes', 'output_dimension', 'output_size']:
-                val = self._find_in_dict(model_info, key)
-                if isinstance(val, int):
-                    output_dim = val
-                    break
+            arch_info = model_info.get('architecture', {})
+            output_dim = arch_info.get('output_size')
 
-            if output_dim != 10:  # CIFAR-10 classes
+            if not isinstance(output_dim, int) or output_dim != 10:  # CIFAR-10 classes
                 return {
                     'success': False,
                     'error': 'Model not adapted for CIFAR-10 (10 classes)',
@@ -125,7 +104,7 @@ class BasicVisionFinetuningTask(BaseEvaluationTask):
             if initial_loss is None or final_loss is None:
                 return {
                     'success': False,
-                    'error': 'Could not find initial and final loss values',
+                    'error': 'Could not find initial and final loss values in training section',
                 }
 
             if initial_loss == final_loss:
@@ -136,6 +115,8 @@ class BasicVisionFinetuningTask(BaseEvaluationTask):
 
             validation_results['checks'].update(
                 {
+                    'model_name': model_info_section.get('name'),
+                    'model_source': model_info_section.get('source'),
                     'parameter_count': param_count,
                     'output_dimension': output_dim,
                     'initial_loss': initial_loss,
