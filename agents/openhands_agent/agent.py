@@ -9,7 +9,7 @@ from openhands.core.main import create_runtime, run_controller
 from openhands.events.action import MessageAction
 from openhands.runtime.base import Runtime
 
-from agents.openhands_agent.utils import codeact_user_response, initialize_runtime
+from agents.openhands_agent.utils import codeact_user_response
 from calipers.framework.base import BaseAgent
 from calipers.framework.config import AgentConfig
 from calipers.framework.registry import EvalRegistry
@@ -118,7 +118,12 @@ class OpenHandsAgent(BaseAgent):
         try:
             runtime = create_runtime(self._get_config())
             await runtime.connect()
-            initialize_runtime(runtime)
+
+            if not runtime.container:
+                raise RuntimeError(
+                    'Container failed to initialize. Check sandbox configuration.'
+                )
+
             self._runtime = runtime
             return runtime
         except Exception as e:

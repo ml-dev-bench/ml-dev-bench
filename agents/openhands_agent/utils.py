@@ -3,9 +3,6 @@ from typing import Callable
 from openhands.controller.state.state import State
 from openhands.events.action import Action
 from openhands.events.action.message import MessageAction
-from openhands.runtime.base import Runtime
-
-from calipers.logger import logger
 
 
 def codeact_user_response(
@@ -56,13 +53,3 @@ def codeact_user_response(
                 + 'If you want to give up, use the "finish" tool to finish the interaction.\n'
             )
     return msg
-
-
-def initialize_runtime(runtime: Runtime):
-    """Initialize the runtime environment for the test case."""
-    logger.info(f'{"-" * 50} BEGIN Runtime Initialization {"-" * 50}')
-
-    if not runtime.container:
-        raise RuntimeError(
-            'Container failed to initialize. Check sandbox configuration.'
-        )
