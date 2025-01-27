@@ -11,16 +11,9 @@ You are working on a simple PyTorch training verification task. Create a minimal
    - validation_loss: 0.4
    - epoch: 0
 
-3. Read the run_id from wandb_info.json again and use it to retrieve the metrics via API.
-   Compare the retrieved metrics with the expected values to verify:
-   - training_loss == 0.5
-   - validation_loss == 0.4
-   - epoch == 0
-   Dump the retrieved metrics to wandb_metrics.json
+3. Read the run_id from wandb_info.json again and use it to retrieve only the following metrics via API:
+   - training_loss
+   - validation_loss
+   - epoch
 
-Success criteria:
-- wandb_info.json is created with run initialization info
-- All specified metrics are logged using run_id from the json file
-- Metrics are correctly retrieved and verified using run_id from the json file
-
-Note: This approach ensures proper tracking of the run_id through a file, making the workflow more robust and verifiable.
+   Save the retrieved metrics to wandb_metrics.json. Proceed with implementation till task is complete, do not request for additional user input or clarification.
