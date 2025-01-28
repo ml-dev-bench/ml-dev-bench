@@ -191,7 +191,13 @@ async def run_evaluation(
 
         # Clone if debug mode is enabled or clone_workspace is specified
         if debug_mode or config.get('clone_workspace'):
-            workspace_temp_dir = tempfile.mkdtemp(prefix='workspace_clone_')
+            if config.get('clone_workspace_to'):
+                workspace_temp_dir = config['clone_workspace_to']
+                # clear workspace_temp_dir
+                shutil.rmtree(workspace_temp_dir, ignore_errors=True)
+                os.makedirs(workspace_temp_dir, exist_ok=True)
+            else:
+                workspace_temp_dir = tempfile.mkdtemp(prefix='workspace_clone_')
             logger.info(
                 f'Cloning workspace to temporary directory: {workspace_temp_dir}'
             )
@@ -203,6 +209,16 @@ async def run_evaluation(
                 logger.info(
                     'Debug mode: Workspace clone will be preserved at '
                     f'{workspace_temp_dir}'
+                )
+        else:
+            if config.get('clear_workspace', False):
+                shutil.rmtree(config['workspace_dir'], ignore_errors=True)
+                os.makedirs(config['workspace_dir'], exist_ok=True)
+
+            # Check if workspace directory is not empty
+            if os.listdir(config['workspace_dir']) > 0:
+                raise ValueError(
+                    'Workspace directory is not empty. Set clear_workspace=True or enable debug / clone_workspace mode.'
                 )
 
         logger.info(f'Workspace dir: {config["workspace_dir"]}')

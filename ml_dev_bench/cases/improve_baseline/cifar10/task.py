@@ -1,6 +1,5 @@
 import json
 import os
-import subprocess
 from typing import Any, Dict
 
 from composio import Action
@@ -66,15 +65,7 @@ class CIFAR10ImprovementTask(BaseEvaluationTask):
                 exit_code = result['data']['exit_code']
                 stderr = result['data']['stderr']
             else:
-                result = subprocess.run(
-                    ['python', test_script, '--checkpoint', latest_checkpoint],
-                    capture_output=True,
-                    text=True,
-                    cwd=self.workspace_dir,
-                )
-                exit_code = result.returncode
-                stderr = result.stderr
-
+                raise ValueError('Invalid runtime')
             if exit_code != 0:
                 return {
                     'success': False,

@@ -1,6 +1,5 @@
 import json
 import os
-import subprocess
 from typing import Any, Dict
 
 from composio import Action
@@ -60,17 +59,7 @@ class SmallDatasetOverfitEvaluationTask(BaseEvaluationTask):
                         else None,
                     }
                 else:
-                    result = subprocess.run(
-                        ['python', str(script_path)],
-                        capture_output=True,
-                        text=True,
-                        cwd=self.workspace_dir,
-                    )
-                    exec_result = {
-                        'success': result.returncode == 0,
-                        'error': result.stderr if result.returncode != 0 else None,
-                    }
-
+                    raise ValueError('Invalid runtime')
                 if not exec_result['success']:
                     return {
                         'success': False,

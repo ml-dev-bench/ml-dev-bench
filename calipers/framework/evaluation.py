@@ -6,6 +6,7 @@ import litellm
 
 from calipers.framework.base import BaseRuntime
 from calipers.logger import logger
+from calipers.runtime.ml_dev_bench_runtime import MLDevBenchRuntime
 from runtime.environments import LocalConfig, RuntimeConfig
 from runtime.runtime import (
     MLDevBenchRuntimeManager,
@@ -89,7 +90,7 @@ class EvaluationFramework:
         runtime_context = runtime_manager.get_runtime(
             runtime_type=RuntimeEnvironmentType.LOCAL, config=runtime_config
         )
-        return runtime_context.runtime
+        return MLDevBenchRuntime(runtime_context.runtime)
 
     def get_tasks_by_category_filter(
         self, category_filter: List[List[str]]

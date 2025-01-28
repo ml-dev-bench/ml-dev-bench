@@ -1,6 +1,5 @@
 import hashlib
 import os
-import subprocess
 from typing import Any, Dict
 
 from composio import Action
@@ -103,36 +102,7 @@ class NormalizationDebugTask(BaseEvaluationTask):
                     }
 
             else:
-                result = subprocess.run(
-                    ['python', str(run_script)],
-                    capture_output=True,
-                    text=True,
-                    cwd=self.workspace_dir,
-                )
-                exit_code = result.returncode
-
-                if exit_code == 0:
-                    return {
-                        'success': True,
-                        'validation_results': {
-                            'training_execution': {
-                                'status': 'valid',
-                                'output': result.stdout,
-                            }
-                        },
-                    }
-                else:
-                    return {
-                        'success': False,
-                        'validation_results': {
-                            'training_execution': {
-                                'status': 'invalid',
-                                'error': result.stderr,
-                                'output': result.stdout,
-                            }
-                        },
-                    }
-
+                raise ValueError('Invalid runtime')
         except Exception as e:
             return {
                 'success': False,

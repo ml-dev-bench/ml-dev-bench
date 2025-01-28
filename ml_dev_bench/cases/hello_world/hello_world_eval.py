@@ -49,18 +49,7 @@ class HelloWorldTask(BaseEvaluationTask):
                 stdout = result['data']['stdout']
                 stderr = result['data']['stderr']
             else:
-                # Fallback for other runtimes
-                import subprocess
-
-                result = subprocess.run(
-                    ['python', hello_path],
-                    capture_output=True,
-                    text=True,
-                    cwd=self.workspace_dir,
-                )
-                exit_code = result.returncode
-                stdout = result.stdout
-                stderr = result.stderr
+                raise ValueError('Invalid runtime')
 
             if exit_code != 0:
                 return {

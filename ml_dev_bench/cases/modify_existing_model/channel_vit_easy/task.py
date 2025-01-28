@@ -1,6 +1,5 @@
 import hashlib
 import os
-import subprocess
 from typing import Any, Dict
 
 from composio import Action
@@ -101,33 +100,7 @@ class ChannelViTImplementTaskEasy(BaseEvaluationTask):
                     }
 
             else:
-                result = subprocess.run(
-                    ['python', str(test_script)],
-                    capture_output=True,
-                    text=True,
-                    cwd=self.workspace_dir,
-                )
-                exit_code = result.returncode
-
-                validation_results['implementation']['status'] = (
-                    'valid' if exit_code == 0 else 'invalid'
-                )
-                validation_results['tests']['status'] = (
-                    'valid' if exit_code == 0 else 'invalid'
-                )
-
-                if exit_code == 0:
-                    return {
-                        'success': True,
-                        'validation_results': validation_results,
-                    }
-                else:
-                    return {
-                        'success': False,
-                        'validation_results': validation_results,
-                        'error': f'Test failures:\n{result.stderr}\n{result.stdout}',
-                    }
-
+                raise ValueError('Invalid runtime')
         except Exception as e:
             return {
                 'success': False,
