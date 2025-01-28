@@ -53,14 +53,14 @@ make install-runtime-dependencies
 1. Run evaluations using the command-line interface:
 
 ```bash
-./scripts/eval.sh --config path/to/eval_config.yaml
+./scripts/eval.sh path/to/eval_config.yaml
 
 ```
 
 To run the hello world evaluation:
 
 ```bash
-./scripts/eval.sh --config ml_dev_bench/cases/hello_world/hello_world_config.yaml
+./scripts/eval.sh ml_dev_bench/cases/hello_world/hello_world_config.yaml
 ```
 
 To run the array-generation evaluation:
