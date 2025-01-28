@@ -3,6 +3,7 @@
 import os
 import shutil
 import subprocess
+from pathlib import Path
 from typing import Any, Dict
 
 from calipers.framework.base import BaseAgent
@@ -58,9 +59,9 @@ class AIDEAgent(BaseAgent):
         data_dir = os.path.join(self.config.workspace_dir, 'data')
         exp_dir = os.path.join(self.config.workspace_dir, 'aide_working_dir')
 
-        if data_dir.exists():
+        if Path(data_dir).exists():
             shutil.rmtree(data_dir)
-        if exp_dir.exists():
+        if Path(exp_dir).exists():
             shutil.rmtree(exp_dir)
 
         # Copy data and create experiment directory
