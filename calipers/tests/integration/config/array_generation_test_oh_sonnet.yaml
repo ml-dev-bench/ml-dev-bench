@@ -1,0 +1,27 @@
+# Core evaluation settings
+num_runs: 1
+fail_fast: false
+log_level: "INFO"
+output_dir: "./results"
+workspace_dir: "./test_workspace"
+
+# Agent configuration
+agent_packages:
+  - "agents.openhands_agent"
+
+# Agent configuration
+agent:
+  id: "openhands_agent"
+  model_name: "anthropic/claude-3-5-sonnet-20241022"
+
+
+task_packages:
+  - "calipers.tests.integration.tasks.array_generation"
+
+# Task configurations
+tasks:
+  - id: "random_array_generation"
+    categories:
+      - "array"
+      - "generation"
+      - "numpy"

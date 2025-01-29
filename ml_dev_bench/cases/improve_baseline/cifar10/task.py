@@ -86,13 +86,13 @@ class CIFAR10ImprovementTask(BaseEvaluationTask):
             val_accuracy = metrics['validation_accuracy']
 
             # Check if validation accuracy improved
-            if val_accuracy > self.TARGET_ACCURACY:
+            if val_accuracy > self.TARGET_ACCURACY + 1.0:
                 return {
                     'success': True,
                     'validation_results': {
                         'improved_accuracy': val_accuracy,
-                        'baseline_accuracy': self.TARGET_ACCURACY,
-                        'improvement': val_accuracy - self.TARGET_ACCURACY,
+                        'baseline_accuracy': self.TARGET_ACCURACY + 1.0,
+                        'improvement': val_accuracy - self.TARGET_ACCURACY - 1.0,
                     },
                 }
             else:

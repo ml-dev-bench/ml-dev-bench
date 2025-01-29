@@ -193,9 +193,13 @@ async def run_evaluation(
         if debug_mode or config.get('clone_workspace'):
             if config.get('clone_workspace_to'):
                 workspace_temp_dir = config['clone_workspace_to']
-                # clear workspace_temp_dir
-                shutil.rmtree(workspace_temp_dir, ignore_errors=True)
-                os.makedirs(workspace_temp_dir, exist_ok=True)
+                # Remove contents of directory without deleting the directory itself
+                for item in os.listdir(workspace_temp_dir):
+                    item_path = os.path.join(workspace_temp_dir, item)
+                    if os.path.isfile(item_path) or os.path.islink(item_path):
+                        os.unlink(item_path)
+                    elif os.path.isdir(item_path):
+                        shutil.rmtree(item_path)
             else:
                 workspace_temp_dir = tempfile.mkdtemp(prefix='workspace_clone_')
             logger.info(
@@ -216,7 +220,7 @@ async def run_evaluation(
                 os.makedirs(config['workspace_dir'], exist_ok=True)
 
             # Check if workspace directory is not empty
-            if os.listdir(config['workspace_dir']) > 0:
+            if len(os.listdir(config['workspace_dir'])) > 0:
                 raise ValueError(
                     'Workspace directory is not empty. Set clear_workspace=True or enable debug / clone_workspace mode.'
                 )

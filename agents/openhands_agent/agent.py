@@ -14,8 +14,9 @@ from calipers.framework.base import BaseAgent
 from calipers.framework.config import AgentConfig
 from calipers.framework.registry import EvalRegistry
 from calipers.logger import logger
+
 DEFAULT_RUNTIME_IMAGE = 'ml-dev-bench-runtime:latest'
-DEFAULT_MAX_ITERATIONS = 100
+DEFAULT_MAX_ITERATIONS = 10
 DEFAULT_AGENT_CLASS = 'CodeActAgent'
 
 
@@ -90,7 +91,7 @@ class OpenHandsAgent(BaseAgent):
 
         app_config = AppConfig(
             default_agent=DEFAULT_AGENT_CLASS,
-            run_as_openhands=False,
+            run_as_openhands=True,
             runtime='docker',
             workspace_base=str(self.config.workspace_dir),
             max_iterations=self.config.config.get(
