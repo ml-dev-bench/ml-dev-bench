@@ -11,10 +11,10 @@ from calipers.framework.registry import EvalRegistry
 
 
 @EvalRegistry.register_task
-class FullTrainWorkflowTask(BaseEvaluationTask):
-    task_id = 'full_train_workflow_scratch'
+class FullTrainWorkflowSetupTestTask(BaseEvaluationTask):
+    task_id = 'full_train_workflow_setup_test'
     description = 'Create complete ML training workflow from scratch'
-    categories = {'ml', 'training', 'workflow'}
+    categories = {'ml', 'training', 'workflow', 'setup_test'}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -151,6 +151,9 @@ class FullTrainWorkflowTask(BaseEvaluationTask):
                 total_params = 0
                 for param in model_state['model_state_dict'].values():
                     total_params += param.numel()
+                if total_params < 22_000_000:  # 22M parameters
+                    return False
+
             except ImportError:
                 # If torch not available, check file size as a rough proxy
                 # Most >22M param models will be >80MB
@@ -158,9 +161,6 @@ class FullTrainWorkflowTask(BaseEvaluationTask):
                 if last_checkpoint.stat().st_size < min_checkpoint_size:
                     return False
                 return True
-
-            if total_params < 22_000_000:  # 22M parameters
-                return False
 
             return True
         except Exception:
