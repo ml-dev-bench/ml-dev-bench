@@ -1,0 +1,25 @@
+Create a complete machine learning training workflow from scratch.
+
+Requirements:
+
+1. Dataset Setup:
+- Download the noisy_imagenette dataset 160px version from the official source https://github.com/fastai/imagenette
+- Use the 5% noisy labels version of the dataset and the provided train and validation splits
+
+2. Training Setup:
+- Use a pretrained ViT-S/14 dinov2 model for training, see https://github.com/facebookresearch/dinov2 for instructions loading and using
+
+3. Training Execution:
+- Train the model for four epochs
+- Save the checkpoints in the checkpoints directory
+- Generate and save training and validation metrics to training_metrics.json
+- Capture the best validation accuracy (in percentage) and add it as 'best_val_acc' key to the metrics json
+
+Expected Directory Structure:
+workspace/
+├── dataset/
+│   ├── train/
+│   └── val/
+├── checkpoints/
+│   └── *.pt (checkpoint files)
+└── training_metrics.json

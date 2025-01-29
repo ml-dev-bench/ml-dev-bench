@@ -1,0 +1,26 @@
+# Core evaluation settings
+num_runs: 1
+fail_fast: false
+log_level: "INFO"
+output_dir: "./results"
+workspace_dir: "./test_workspace"
+langchain_project: "ml-dev-bench-evaluation-full-train-workflow-scratch-setup"
+
+# Task package imports
+task_packages:
+  - "ml_dev_bench.cases.full_train_workflow_scratch.setup_test"
+
+# Agent configuration
+agent_packages:
+  - "agents.react_agent"
+
+# Agent configuration
+agent:
+  id: "simple_react"
+  model_name: "gpt-4o-mini"
+  executor_recursion_limit: 25
+  workflow_recursion_limit: 60
+
+# Task configurations
+tasks:
+  - id: full_train_workflow_setup_test
