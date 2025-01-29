@@ -89,7 +89,7 @@ install-deploy-python-dependencies:
 		export TZ="UTC"; \
 	fi
 	poetry env use python$(PYTHON_VERSION)
-	@poetry install --without dev,test
+	@poetry install --without dev
 	@echo "$(GREEN)Python dependencies installed successfully.$(RESET)"
 
 install-python-dependencies:

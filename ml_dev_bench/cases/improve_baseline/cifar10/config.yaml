@@ -18,9 +18,7 @@ agent_packages:
 # Agent configuration
 agent:
   id: "simple_react"
-  model_name: "gpt-4o-mini"
-  executor_recursion_limit: 25
-  workflow_recursion_limit: 30
+  model_name: "anthropic/claude-3-5-sonnet-20241022"
 
 # Task configurations
 tasks:

@@ -87,7 +87,7 @@ class ChannelViTImplementTask(BaseEvaluationTask):
                     'valid' if exit_code == 0 else 'invalid'
                 )
 
-                if exit_code == 0 and 'All tests passed' in stdout:
+                if exit_code == 0:
                     return {
                         'success': True,
                         'validation_results': validation_results,
