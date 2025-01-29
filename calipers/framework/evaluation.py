@@ -1,3 +1,5 @@
+import os
+import stat
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
@@ -176,6 +178,13 @@ class EvaluationFramework:
 
             if run_idx == 0:
                 task.initialize()
+
+                # Set permissions for the workspace directory
+                try:
+                    os.chmod(task.workspace_dir, stat.S_IRWXU | stat.S_IRWXG)
+                    logger.info(f'Set permissions for workspace {task.workspace_dir}')
+                except Exception as e:
+                    logger.warning(f'Failed to set permissions for workspace: {e}')
 
             agent_output = None
             try:
