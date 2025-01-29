@@ -72,7 +72,7 @@ class TrainShapeDebugTask(BaseEvaluationTask):
                 )
                 exit_code = result['data']['exit_code']
                 stdout = result['data']['stdout']
-                if exit_code == 0 and 'Training completed successfully' in stdout:
+                if exit_code == 0 and 'Training ran successfully' in stdout:
                     return {
                         'success': True,
                         'validation_results': {
