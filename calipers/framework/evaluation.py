@@ -179,13 +179,6 @@ class EvaluationFramework:
             if run_idx == 0:
                 task.initialize()
 
-                # Set permissions for the workspace directory
-                try:
-                    os.chmod(task.workspace_dir, stat.S_IRWXU | stat.S_IRWXG)
-                    logger.info(f'Set permissions for workspace {task.workspace_dir}')
-                except Exception as e:
-                    logger.warning(f'Failed to set permissions for workspace: {e}')
-
             agent_output = None
             try:
                 start_time = datetime.now()
@@ -196,6 +189,12 @@ class EvaluationFramework:
                 logger.info(
                     f'Validating task {task_id} and working-dir {task.workspace_dir}'
                 )
+                                # Set permissions for the workspace directory
+                try:
+                    os.chmod(task.workspace_dir, stat.S_IRWXU | stat.S_IRWXG)
+                    logger.info(f'Set permissions for workspace {task.workspace_dir}')
+                except Exception as e:
+                    logger.warning(f'Failed to set permissions for workspace: {e}')
                 validation_results = await task.validate(
                     agent_output, evaluation_runtime
                 )

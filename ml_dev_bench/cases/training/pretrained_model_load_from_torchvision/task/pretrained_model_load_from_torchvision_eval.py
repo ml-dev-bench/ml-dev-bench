@@ -74,9 +74,10 @@ class PretrainedModelLoadFromTorchvisionTask(BaseEvaluationTask):
 
                 # Validate field values if they exist
                 if 'input_shape' in arch:
+                    # Get the last 3 dimensions to handle leading batch/sequence dims
+                    got_shape = arch['input_shape'][-3:] if len(arch['input_shape']) > 3 else arch['input_shape']
                     validation_results['checks']['input_shape_value'] = {
-                        'success': arch['input_shape']
-                        == self.EXPECTED_MODEL['input_shape'],
+                        'success': got_shape == self.EXPECTED_MODEL['input_shape'],
                         'expected': self.EXPECTED_MODEL['input_shape'],
                         'got': arch['input_shape'],
                     }

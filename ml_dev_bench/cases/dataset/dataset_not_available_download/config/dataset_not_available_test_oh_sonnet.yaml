@@ -1,0 +1,25 @@
+output_dir: "./results"
+workspace_dir: "./workspace"
+fail_fast: false
+log_level: "INFO"
+num_runs: 1
+langchain_project: "ml-dev-bench-evaluation-dataset-not-available-download"
+clone_workspace: true  # clones workspace to a temporary directory
+clone_workspace_to: "/workspace"
+clear_workspace: true
+
+task_packages:
+  - "ml_dev_bench.cases.dataset.dataset_not_available_download"
+
+# Agent configuration
+agent_packages:
+  - "agents.openhands_agent"
+
+# Agent configuration
+agent:
+  id: "openhands_agent"
+  model_name: "anthropic/claude-3-5-sonnet-20241022"
+
+
+tasks:
+  - id: "dataset_not_available_download"
