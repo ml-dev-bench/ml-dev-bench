@@ -3,8 +3,9 @@ num_runs: 1
 fail_fast: false
 log_level: "INFO"
 output_dir: "./results"
-workspace_dir: "./test_workspace"
+workspace_dir: "./workspace"
 langchain_project: "ml-dev-bench-evaluation-full-train-workflow-scratch-performance"
+clear_workspace: True
 
 # Task package imports
 task_packages:
@@ -18,6 +19,7 @@ agent_packages:
 agent:
   id: "simple_react"
   model_name: "anthropic/claude-3-5-sonnet-20241022"
+  recursion_limit: 50
 
 # Task configurations
 tasks:

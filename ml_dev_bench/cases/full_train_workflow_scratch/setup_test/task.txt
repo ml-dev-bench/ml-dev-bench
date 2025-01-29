@@ -1,4 +1,4 @@
-Create a complete machine learning training workflow from scratch.
+Create and run a machine learning training workflow from scratch until completion.
 
 Requirements:
 
@@ -23,3 +23,5 @@ workspace/
 ├── checkpoints/
 │   └── *.pt (checkpoint files)
 └── training_metrics.json
+
+Note: Proceed with implementation and execution until task is complete, do not request for additional user input or give instructions to users.

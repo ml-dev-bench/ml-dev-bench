@@ -216,7 +216,7 @@ async def run_evaluation(
                 os.makedirs(config['workspace_dir'], exist_ok=True)
 
             # Check if workspace directory is not empty
-            if os.listdir(config['workspace_dir']) > 0:
+            if len(os.listdir(config['workspace_dir'])) > 0:
                 raise ValueError(
                     'Workspace directory is not empty. Set clear_workspace=True or enable debug / clone_workspace mode.'
                 )
