@@ -16,7 +16,7 @@ from calipers.framework.registry import EvalRegistry
 from calipers.logger import logger
 
 DEFAULT_RUNTIME_IMAGE = 'ml-dev-bench-runtime:latest'
-DEFAULT_MAX_ITERATIONS = 10
+DEFAULT_MAX_ITERATIONS = 50
 DEFAULT_AGENT_CLASS = 'CodeActAgent'
 
 
