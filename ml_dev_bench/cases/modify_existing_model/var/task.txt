@@ -61,20 +61,6 @@ Progressive Training:
 - When prog_si < 0: Train on all resolution levels
 - Enables curriculum learning by gradually increasing resolution during training
 
-3. Implementation Notes:
-- Use the existing VQVAE and VectorQuantizer2 implementations (imported from vqvae.py)
-- Do not modify any other files in the var folder
-- Maintain compatibility with the existing model architecture and hyperparameters
-- Ensure proper handling of attention masking for autoregressive property
-- Support classifier-free guidance during inference
-
-4. Testing:
-- A test file will verify both methods:
-  * forward(): Will test training flow with teacher forcing
-  * autoregressive_infer_cfg(): Will test generation with different CFG settings
-- Tests will check output shapes, value ranges, and basic functionality
-- Both methods must pass all tests for successful implementation
-
 The implementation should follow the VAR architecture where:
 - Images are encoded into multi-scale token maps using VQVAE
 - Generation starts from 1×1 token map (lowest resolution)
@@ -83,4 +69,16 @@ The implementation should follow the VAR architecture where:
 - Uses adaptive layer normalization (AdaLN) for class conditioning
 - Supports class-conditional synthesis through class embeddings
 
-Use the existing model components (attention blocks, embeddings, etc.) defined in the VAR class. Focus only on implementing the forward and autoregressive_infer_cfg methods.
+3. Implementation Notes:
+- All required modules (VQVAE, VectorQuantizer2, etc.) are already implemented and available in the directory
+- Do not modify any other files in the var folder
+- The interface for both methods is provided in var.py
+- Your implementation will be tested using test_var.py
+- Ensure proper handling of attention masking for autoregressive property
+- Support classifier-free guidance during inference
+
+Rules:
+1. Only implement the autoregressive_infer_cfg and forward methods in var.py
+2. Do not modify test_var.py or any other files
+3. Maintain compatibility with existing model architecture and hyperparameters
+4. You can verify your implementation by running test_var.py
