@@ -26,4 +26,4 @@ workspace/
 │   └── *.pt (checkpoint files)
 └── training_metrics.json
 
-Note: Proceed with implementation and execution until task is complete, do not request for additional user input or give instructions to users.
+Note: Proceed with implementation and execution until training is complete, do not request for additional user input or give instructions to users.
