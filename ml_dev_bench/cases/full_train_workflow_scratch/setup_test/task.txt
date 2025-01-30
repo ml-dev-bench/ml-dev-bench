@@ -3,8 +3,9 @@ Create and run a machine learning training workflow from scratch until completio
 Requirements:
 
 1. Dataset Setup:
-- Download the noisy_imagenette dataset 160px version from the official source https://github.com/fastai/imagenette
-- Use the 5% noisy labels version of the dataset and the provided train and validation splits
+- Download the noisy_imagenette dataset 160px version from the official source https://s3.amazonaws.com/fast-ai-imageclas/imagenette2-160.tgz
+- The dataset comes with a CSV file with 1%, 5%, 25%, and 50% noisy labels, use the 50% noisy labels version of the dataset and the provided train and validation splits
+- Save the 50% noisy labels in noisy_labels_50.csv, with two columns one for the image path and its corresponding noisy labe;
 
 2. Training Setup:
 - Use a pretrained ViT-S/14 dinov2 model for training, see https://github.com/facebookresearch/dinov2 for instructions loading and using
@@ -20,6 +21,7 @@ workspace/
 ├── dataset/
 │   ├── train/
 │   └── val/
+|   └── noisy_labels_50.csv
 ├── checkpoints/
 │   └── *.pt (checkpoint files)
 └── training_metrics.json

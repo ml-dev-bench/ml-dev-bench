@@ -37,6 +37,7 @@ class FullTrainWorkflowSetupTestTask(BaseEvaluationTask):
             ├── dataset/
             │   ├── train/
             │   └── val/
+            |   └── noisy_labels_50.csv
             ├── checkpoints/
             │   └── *.pt (checkpoint files)
             └── training_metrics.json
