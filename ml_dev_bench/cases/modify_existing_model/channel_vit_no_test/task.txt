@@ -14,11 +14,11 @@ Note:
 - You need to implement the prepare_tokens method of the ChannelViT model.
 - You need to implement the PatchEmbedPerChannel class.
 - Intialize weights randomly
-- Use bias in the patch-embedprojection layer
+- Use bias in the patch-embed projection layer
 
 Rules:
-- Only modify the specified parts in channel_vit.py
-- The model code will be tested against hidden test cases so verify implementation
-- Maintain compatibility with existing ViT usage
+- Only modify the specified parts in channel_vit.py and maintain compatibility with existing ChannelViT interface
+- The model code will be tested against hidden test cases so verify your implementation
+
 
 Proceed with implementation till task is complete, do not request for additional user input or clarification.
