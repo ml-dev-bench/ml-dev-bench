@@ -51,11 +51,13 @@ class FullTrainWorkflowPerformanceTestTask(BaseEvaluationTask):
 
         try:
             # Check dataset download and structure
-            if not self._validate_dataset_setup():
+            dataset_valid, dataset_error = self._validate_dataset_setup()
+            if not dataset_valid:
+                validation_results['dataset_setup']['error'] = dataset_error
                 return {
                     'success': False,
                     'validation_results': validation_results,
-                    'error': 'Dataset setup validation failed',
+                    'error': f'Dataset setup validation failed: {dataset_error}',
                 }
             validation_results['dataset_setup']['status'] = 'valid'
 
@@ -69,11 +71,13 @@ class FullTrainWorkflowPerformanceTestTask(BaseEvaluationTask):
             validation_results['training_setup']['status'] = 'valid'
 
             # Validate model checkpoints
-            if not self._validate_checkpoints():
+            checkpoints_valid, checkpoints_error = self._validate_checkpoints()
+            if not checkpoints_valid:
+                validation_results['model_checkpoints']['error'] = checkpoints_error
                 return {
                     'success': False,
                     'validation_results': validation_results,
-                    'error': 'Model checkpoint validation failed',
+                    'error': f'Model checkpoint validation failed: {checkpoints_error}',
                 }
             validation_results['model_checkpoints']['status'] = 'valid'
 
@@ -100,29 +104,54 @@ class FullTrainWorkflowPerformanceTestTask(BaseEvaluationTask):
                 'error': f'Validation error: {str(e)}',
             }
 
-    def _validate_dataset_setup(self) -> bool:
+    def _validate_dataset_setup(self) -> tuple[bool, str]:
         """Validate dataset download and structure."""
         # Check if dataset directory exists
         if not self.dataset_dir.exists():
-            return False
+            return False, 'Dataset directory does not exist'
 
-        # Check for noisy_imagenette file
-        noisy_files = list(self.dataset_dir.glob('noisy_imagenette*'))
-        if not noisy_files:
-            return False
+        # Check for noisy_labels_50.csv file
+        noisy_labels_file = self.dataset_dir / 'noisy_labels_50.csv'
+        if not noisy_labels_file.exists():
+            return False, 'noisy_labels_50.csv file not found'
+
+        # Load the CSV and check for specific path-label pairs
+        try:
+            import pandas as pd
+
+            df = pd.read_csv(noisy_labels_file)
+            if not {'path', 'label'}.issubset(df.columns):
+                return False, 'CSV does not contain required columns: path, label'
+
+            # Check specific path-label pairs
+            path_label_checks = {
+                'train/n02979186/n02979186_11957.JPEG': 'n03000684',
+                'train/n02979186/n02979186_10756.JPEG': 'n03445777',
+            }
+
+            for path, expected_label in path_label_checks.items():
+                actual_label = df.loc[df['path'] == path, 'label'].values
+                if not actual_label or actual_label[0] != expected_label:
+                    return (
+                        False,
+                        f'Label mismatch for {path}: expected {expected_label}, found {actual_label[0] if actual_label else "None"}',
+                    )
+
+        except Exception as e:
+            return False, f'Error processing CSV: {str(e)}'
 
         # Check train and val directories
         train_dir = self.dataset_dir / 'train'
         val_dir = self.dataset_dir / 'val'
 
         if not (train_dir.exists() and val_dir.exists()):
-            return False
+            return False, 'Train or validation directory does not exist'
 
         # Check if directories are non-empty
         if not (any(train_dir.iterdir()) and any(val_dir.iterdir())):
-            return False
+            return False, 'Train or validation directory is empty'
 
-        return True
+        return True, ''
 
     def _validate_training_setup(self) -> bool:
         """Validate training directory structure."""
@@ -131,12 +160,15 @@ class FullTrainWorkflowPerformanceTestTask(BaseEvaluationTask):
             return False
         return True
 
-    def _validate_checkpoints(self) -> bool:
+    def _validate_checkpoints(self) -> tuple[bool, str]:
         """Validate model checkpoints."""
         try:
             checkpoint_files = list(self.checkpoint_dir.glob('*.pt'))
             if len(checkpoint_files) <= 20:
-                return False
+                return (
+                    False,
+                    f'Expected at least 20 checkpoint files, found {len(checkpoint_files)}',
+                )
 
             # Load last checkpoint and verify parameters
             checkpoints = sorted(checkpoint_files)
@@ -151,19 +183,19 @@ class FullTrainWorkflowPerformanceTestTask(BaseEvaluationTask):
                 for param in model_state['model_state_dict'].values():
                     total_params += param.numel()
                 if total_params > 30_000_000:  # 30M parameters
-                    return False
+                    return False, 'Total parameters in model exceed 30M'
 
             except ImportError:
                 # If torch not available, check file size as a rough proxy
                 # Most >22M param models will be >80MB
                 min_checkpoint_size = 100 * 1024 * 1024  # 100MB in bytes
                 if last_checkpoint.stat().st_size > min_checkpoint_size:
-                    return False
-                return True
+                    return False, 'Last checkpoint file size exceeds 100MB'
+                return True, ''
 
-            return True
-        except Exception:
-            return False
+            return True, ''
+        except Exception as e:
+            return False, f'Error during checkpoint validation: {str(e)}'
 
     def _validate_training_metrics(self) -> tuple[bool, str]:
         """Validate training metrics file.
