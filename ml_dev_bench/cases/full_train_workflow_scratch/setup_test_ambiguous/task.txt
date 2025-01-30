@@ -5,7 +5,7 @@ Requirements:
 1. Dataset Setup:
 - Download the noisy_imagenette dataset 160px version from the official source https://s3.amazonaws.com/fast-ai-imageclas/imagenette2-160.tgz
 - The dataset comes with a CSV file with 1%, 5%, 25%, and 50% noisy labels
-- Extract and save the 50% noisy labels from above csv in noisy_labels_50.csv, with two columns (path, label) one for the image path and its corresponding noisy label;
+- Extract and save the 50% nois labels from above csv in noisy_labels_50.csv, with two columns (path, label) one for the image path and its corresponding noisy label;
 - Use the 50% noisy labels from the saved noisy_labels_50.csv and the provided train and validation splits
 
 2. Training Setup:
@@ -26,4 +26,4 @@ Expected Directory Structure:
 │   └── *.pt (checkpoint files)
 └── training_metrics.json
 
-Note: Proceed with implementation and execution until training is complete, do not request for additional user input or give instructions to users.
+Note: Proceed with implementation and execution until task is complete, do not request for additional user input or give instructions to users.

@@ -1,0 +1,37 @@
+
+# Core evaluation settings
+num_runs: 1
+fail_fast: false
+log_level: "INFO"
+output_dir: "./results"
+workspace_dir: "./workspace"
+langchain_project: "ml-dev-bench-evaluation-full-train-workflow-scratch-setup"
+clear_workspace: True
+
+# Task package imports
+task_packages:
+  - "ml_dev_bench.cases.full_train_workflow_scratch.setup_test_ambiguous"
+
+clone_workspace: true  # clones workspace to a temporary directory
+clone_workspace_to: "/workspace"
+clear_workspace: true
+
+# Agent configuration
+agent_packages:
+  - "agents.openhands_agent"
+
+# Agent configuration
+agent:
+  id: "openhands_agent"
+  model_name: "anthropic/claude-3-5-sonnet-20241022"
+  max_iterations: 50
+
+# Task configurations
+tasks:
+  - id: full_train_workflow_setup_test_ambiguous
+
+
+
+
+
+
