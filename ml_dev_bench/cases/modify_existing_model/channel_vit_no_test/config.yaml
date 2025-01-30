@@ -1,0 +1,26 @@
+# Core evaluation settings
+num_runs: 1
+fail_fast: true
+log_level: "INFO"
+output_dir: "./results"
+workspace_dir: "./ml_dev_bench/cases/modify_existing_model/channel_vit_no_test/setup_workspace"
+langchain_project: "ml-dev-bench-evaluation-channel-vit"
+clone_workspace: true
+
+# Task package imports
+task_packages:
+  - "ml_dev_bench.cases.modify_existing_model.channel_vit_no_test"
+
+# Agent configuration
+agent_packages:
+  - "agents.react_agent"
+
+# Agent configuration
+agent:
+  id: "simple_react"
+  model_name: "anthropic/claude-3-5-sonnet-20241022"
+  recursion_limit: 50
+
+# Task configurations
+tasks:
+  - id: "channel_vit_implementation_no_test"
