@@ -56,5 +56,8 @@ results/*
 workspace/*
 workspaces/*
 
+# Hydra
+multirun/*
+
 # Secrets
 .secrets

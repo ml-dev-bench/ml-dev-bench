@@ -195,13 +195,20 @@ async def run_evaluation(
                 workspace_temp_dir = config['clone_workspace_to']
                 if not os.path.isabs(workspace_temp_dir):
                     workspace_temp_dir = str(root_dir / workspace_temp_dir)
+                    logger.warning(
+                        'Relative path provided for clone_workspace_to, using absolute path: %s',
+                        workspace_temp_dir,
+                    )
                 # Remove contents of directory without deleting the directory itself
-                for item in os.listdir(workspace_temp_dir):
-                    item_path = os.path.join(workspace_temp_dir, item)
-                    if os.path.isfile(item_path) or os.path.islink(item_path):
-                        os.unlink(item_path)
-                    elif os.path.isdir(item_path):
-                        shutil.rmtree(item_path)
+                if os.path.exists(workspace_temp_dir):
+                    for item in os.listdir(workspace_temp_dir):
+                        item_path = os.path.join(workspace_temp_dir, item)
+                        if os.path.isfile(item_path) or os.path.islink(item_path):
+                            os.unlink(item_path)
+                        elif os.path.isdir(item_path):
+                            shutil.rmtree(item_path)
+                else:
+                    os.makedirs(workspace_temp_dir)
             else:
                 workspace_temp_dir = tempfile.mkdtemp(prefix='workspace_clone_')
             logger.info(
