@@ -16,7 +16,7 @@ Requirements:
 - Record the best validation loss, balanced accuracy (in percentage) with key 'best_loss', 'best_balanced_acc' in the metrics json
 
 3. Model Evaluation:
-- Implement the get_best_model() function in utils.py to load your best performing model
+- Once training is done implement the get_best_model() function in utils.py to load your best performing model
 - The model will be evaluated using the provided evaluate.py script
 - Do not modify the evaluate.py file
 
