@@ -2,8 +2,9 @@
 
 # Core evaluation settings
 defaults:
-  - agent: react  # Default agent config
   - _self_
+  - agent: react
+  - task: hello_world
 
 hydra:
   run:
@@ -13,6 +14,7 @@ hydra:
     subdir: ${hydra.job.num}
 
 # Common settings
+debug: true
 num_runs: 1
 fail_fast: false
 log_level: "INFO"
@@ -20,13 +22,6 @@ output_dir: "./results"
 workspace_dir: "./workspace"
 langchain_project: "ml-dev-bench-evaluation"
 
-# Default agent packages
-agent_packages:
-  - "agents.react_agent"
-  - "agents.openhands_agent"
-
-# Default task packages - will be extended by task configs
-task_packages: []
-
-# Tasks will be specified by task configs or command line
-tasks: [] 
+clone_workspace: true  # clones workspace to a temporary directory
+clone_workspace_to: "workspace_temp"
+clear_workspace: true

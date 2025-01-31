@@ -171,8 +171,9 @@ async def run_evaluation(
 
     # Set output_dir
     output_dir_path = Path(output_dir) if output_dir else Path('./results')
+
+    root_dir = Path(calipers.__path__[0]).parent
     if not output_dir_path.is_absolute():
-        root_dir = Path(calipers.__path__[0]).parent
         output_dir_path = root_dir / output_dir_path
 
     # Validate config
@@ -186,13 +187,14 @@ async def run_evaluation(
     workspace_temp_dir = None
     if 'workspace_dir' in config:
         if not os.path.isabs(config['workspace_dir']):
-            root_dir = Path(calipers.__path__[0]).parent
             config['workspace_dir'] = str(root_dir / config['workspace_dir'])
 
         # Clone if debug mode is enabled or clone_workspace is specified
         if debug_mode or config.get('clone_workspace'):
             if config.get('clone_workspace_to'):
                 workspace_temp_dir = config['clone_workspace_to']
+                if not os.path.isabs(workspace_temp_dir):
+                    workspace_temp_dir = str(root_dir / workspace_temp_dir)
                 # Remove contents of directory without deleting the directory itself
                 for item in os.listdir(workspace_temp_dir):
                     item_path = os.path.join(workspace_temp_dir, item)

@@ -4,6 +4,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import List, Optional, Dict, Any, Union
 import json
+import yaml
+import tempfile
+import shutil
 
 import hydra
 from hydra.core.config_store import ConfigStore
@@ -12,12 +15,10 @@ import calipers
 
 from calipers.framework import EvaluationFramework, EvaluationResult
 from calipers.logger import logger, setup_logger
+from calipers.scripts.run_evaluation import run_evaluation
 
 # Get the project root directory
 PROJECT_ROOT = Path(calipers.__file__).parent.parent
-
-cs = ConfigStore.instance()
-cs.store(name="config", node=DictConfig)
 
 
 def save_results(
@@ -117,84 +118,53 @@ def print_results(results: List[EvaluationResult]) -> None:
     config_name="config",
 )
 def main(cfg: DictConfig) -> None:
-    """Run evaluation with Hydra config"""
+    """Entry point for Hydra"""
+    print(OmegaConf.to_yaml(cfg))
 
     # Convert to regular dict for compatibility with existing code
     config = OmegaConf.to_container(cfg, resolve=True)
 
-    # Setup logging
-    setup_logger(level=getattr(logging, config.get('log_level', 'INFO')))
+    # Get output directory from hydra config
+    output_dir = config.get('output_dir', './results')
 
-    # Import task packages
-    if config.get('task_packages'):
-        for package in config['task_packages']:
-            try:
-                logger.info(f'Importing task package: {package}')
-                __import__(package)
-            except ImportError as e:
-                logger.warning(f'Failed to import task package {package}: {e}')
+    # Get langchain project from config
+    langchain_project = config.get('langchain_project')
 
-    # Import agent packages
-    if config.get('agent_packages'):
-        for package in config['agent_packages']:
-            try:
-                logger.info(f'Importing agent package: {package}')
-                __import__(package)
-            except ImportError as e:
-                logger.warning(f'Failed to import agent package {package}: {e}')
+    # Get debug mode from config
+    debug_mode = config.get('debug', False)
 
-    # Set LANGCHAIN_PROJECT if provided
-    if config.get('langchain_project'):
-        os.environ['LANGCHAIN_PROJECT'] = config['langchain_project']
-        logger.info(f'Set LANGCHAIN_PROJECT to {config["langchain_project"]}')
-
-    # Create framework
-    framework = EvaluationFramework(config)
-
-    # Get tasks to evaluate
-    task_ids = set()
-    if config.get('tasks'):
-        task_ids.update(t['id'] for t in config['tasks'])
-    else:
-        logger.warning('No tasks selected for evaluation')
-        return
-
-    logger.info('Selected tasks: %s', task_ids)
-
-    # Get commit hash
+    # Get commit hash if possible
     try:
         import git
 
         repo = git.Repo(search_parent_directories=True)
         commit_hash = repo.head.object.hexsha
     except (ImportError, git.InvalidGitRepositoryError):
-        commit_hash = 'unknown'
+        commit_hash = None
         logger.warning('Could not determine git commit hash')
 
-    # Run evaluations
-    results = []
-    for task_id in task_ids:
-        try:
-            result = framework.evaluate(
-                task_id=task_id,
-                agent_id=config['agent']['id'],
-                num_runs=config.get('num_runs', 1),
+    # Create temporary directory for config
+    temp_dir = tempfile.mkdtemp(prefix='hydra_config_')
+    try:
+        # Save config to temporary file
+        config_path = Path(temp_dir) / "config.yaml"
+        with open(config_path, "w") as f:
+            yaml.dump(config, f)
+
+        import asyncio
+
+        asyncio.run(
+            run_evaluation(
+                config_path=str(config_path),
+                output_dir=output_dir,
+                commit_hash=commit_hash,
+                langchain_project=langchain_project,
+                debug_mode=debug_mode,
             )
-            results.append(result)
-        except Exception as e:
-            logger.error('Error evaluating task %s: %s', task_id, e)
-            if config.get('fail_fast', False):
-                raise
-
-    # Print and save results
-    logger.info('Running %d tasks', len(results))
-    print_results(results)
-    save_results(results, config['output_dir'], config, commit_hash)
-
-    # Exit with error if any test had 0% success rate
-    if any(result.success_rate == 0 for result in results):
-        logger.error('One or more tests had 0% success rate')
-        exit(1)
+        )
+    finally:
+        # Clean up temporary directory
+        shutil.rmtree(temp_dir)
 
 
 if __name__ == '__main__':

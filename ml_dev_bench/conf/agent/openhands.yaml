@@ -1,4 +1,8 @@
-# @package agent
+# @package _global_
 
-id: "openhands_agent"
-model_name: "anthropic/claude-3-5-sonnet-20241022" 
+agent:
+  id: "openhands_agent"
+  model_name: "anthropic/claude-3-5-sonnet-20241022" 
+
+agent_packages:
+  - "agents.openhands_agent"

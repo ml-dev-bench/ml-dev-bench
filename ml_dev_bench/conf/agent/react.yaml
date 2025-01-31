@@ -1,5 +1,9 @@
-# @package agent
+# @package _global_
 
-id: "simple_react"
-model_name: "anthropic/claude-3-5-sonnet-20241022"
-recursion_limit: 50 
+agent:
+  id: "simple_react"
+  model_name: "anthropic/claude-3-5-sonnet-20241022"
+  recursion_limit: 50 
+
+agent_packages:
+  - "agents.react_agent"
