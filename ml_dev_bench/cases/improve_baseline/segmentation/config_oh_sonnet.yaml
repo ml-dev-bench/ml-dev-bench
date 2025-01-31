@@ -4,7 +4,7 @@ fail_fast: false
 log_level: "INFO"
 output_dir: "./results"
 workspace_dir: "./workspace"
-langchain_project: "cityscapes-segmentation"
+langchain_project: "pascalvoc-segmentation"
 
 # Task package imports
 task_packages:
@@ -21,9 +21,9 @@ agent_packages:
 # Agent configuration
 agent:
   id: "openhands_agent"
-  #model_name: "anthropic/claude-3-5-sonnet-20241022"
-  model_name: "gpt-4o-mini"
+  model_name: "anthropic/claude-3-5-sonnet-20241022"
+
 
 # Task configurations
 tasks:
-  - id: "improve_cityscapes_baseline"
+  - id: "improve_segmentation_baseline"
