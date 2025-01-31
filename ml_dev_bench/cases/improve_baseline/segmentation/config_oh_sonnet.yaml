@@ -11,17 +11,18 @@ task_packages:
   - "ml_dev_bench.cases.improve_baseline.segmentation"
 
 clone_workspace: true  # clones workspace to a temporary directory
+clone_workspace_to: "/workspace"
+clear_workspace: true
 
 # Agent configuration
 agent_packages:
-  - "agents.react_agent"
+  - "agents.openhands_agent"
 
 # Agent configuration
 agent:
-  id: "simple_react"
+  id: "openhands_agent"
   model_name: "anthropic/claude-3-5-sonnet-20241022"
-  recursion_limit: 50
-
+  #model_name: "gpt-4o"
 
 # Task configurations
 tasks:
