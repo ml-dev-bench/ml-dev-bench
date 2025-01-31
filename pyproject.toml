@@ -21,6 +21,7 @@ composio-core = { git = "https://github.com/Deduction-Dev/composio/", branch = "
 GitPython = "^3.1.0"
 pandas = "*"
 Pillow = "*"
+hydra-core = "^1.3.2"
 
 [tool.poetry.group.aide]
 optional = true

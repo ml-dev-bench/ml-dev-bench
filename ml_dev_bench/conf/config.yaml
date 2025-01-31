@@ -1,0 +1,32 @@
+# @package _global_
+
+# Core evaluation settings
+defaults:
+  - agent: react  # Default agent config
+  - _self_
+
+hydra:
+  run:
+    dir: ${output_dir}/${now:%Y-%m-%d_%H-%M-%S}
+  sweep:
+    dir: multirun/${now:%Y-%m-%d_%H-%M-%S}
+    subdir: ${hydra.job.num}
+
+# Common settings
+num_runs: 1
+fail_fast: false
+log_level: "INFO"
+output_dir: "./results"
+workspace_dir: "./workspace"
+langchain_project: "ml-dev-bench-evaluation"
+
+# Default agent packages
+agent_packages:
+  - "agents.react_agent"
+  - "agents.openhands_agent"
+
+# Default task packages - will be extended by task configs
+task_packages: []
+
+# Tasks will be specified by task configs or command line
+tasks: [] 

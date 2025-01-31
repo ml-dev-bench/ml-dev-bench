@@ -1,0 +1,5 @@
+# @package agent
+
+id: "simple_react"
+model_name: "anthropic/claude-3-5-sonnet-20241022"
+recursion_limit: 50 

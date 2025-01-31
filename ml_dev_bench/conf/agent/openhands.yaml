@@ -1,0 +1,4 @@
+# @package agent
+
+id: "openhands_agent"
+model_name: "anthropic/claude-3-5-sonnet-20241022" 
