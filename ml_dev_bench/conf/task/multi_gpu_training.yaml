@@ -1,0 +1,13 @@
+# @package _global_
+
+# Task-specific settings
+task_packages:
+  - "ml_dev_bench.cases.training.multi_gpu_training"
+
+tasks:
+  - id: "multi_gpu_training"
+
+# Task-specific overrides
+workspace_dir: "./ml_dev_bench/cases/training/multi_gpu_training/setup_workspace"
+output_dir: "./ml_dev_bench/cases/training/multi_gpu_training/results"
+langchain_project: "ml-dev-bench-evaluation-multi-gpu-training" 

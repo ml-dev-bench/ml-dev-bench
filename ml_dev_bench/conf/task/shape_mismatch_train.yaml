@@ -1,0 +1,12 @@
+# @package _global_
+
+# Task-specific settings
+task_packages:
+  - "ml_dev_bench.cases.debugging.shape_mismatch.cases.train_shape_error"
+
+tasks:
+  - id: "shape_mismatch_train"
+
+# Task-specific overrides
+workspace_dir: "./ml_dev_bench/cases/debugging/shape_mismatch/cases/train_shape_error/setup_workspace"
+langchain_project: "ml-dev-bench-evaluation-shape-debug-train" 
