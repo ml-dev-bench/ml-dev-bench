@@ -3,14 +3,14 @@ num_runs: 1
 fail_fast: false
 log_level: "INFO"
 output_dir: "./results"
-workspace_dir: "./workspace"
-langchain_project: "pascalvoc-segmentation"
+workspace_dir: "./ml_dev_bench/cases/full_train_workflow_scratch/cifar_10_lt_performance/setup_workspace"
+langchain_project: "ml-dev-bench-evaluation-full-train-workflow-scratch-cifar-10-lt-performance"
 
 # Task package imports
 task_packages:
-  - "ml_dev_bench.cases.improve_baseline.segmentation"
+  - "ml_dev_bench.cases.full_train_workflow_scratch.cifar_10_lt_performance"
 
-clone_workspace: true  # clones workspace to a temporary directory
+clone_workspace: True
 clone_workspace_to: "/workspace"
 clear_workspace: true
 
@@ -22,8 +22,9 @@ agent_packages:
 agent:
   id: "openhands_agent"
   model_name: "anthropic/claude-3-5-sonnet-20241022"
+  recursion_limit: 50
 
 
 # Task configurations
 tasks:
-  - id: "improve_segmentation_baseline"
+  - id: cifar_10_lt_performance
