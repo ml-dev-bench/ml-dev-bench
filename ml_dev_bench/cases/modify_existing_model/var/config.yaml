@@ -1,16 +1,15 @@
 # Core evaluation settings
 num_runs: 1
-fail_fast: false
+fail_fast: true
 log_level: "INFO"
 output_dir: "./results"
-workspace_dir: "./workspace"
-langchain_project: "pascalvoc-segmentation"
+workspace_dir: "./ml_dev_bench/cases/modify_existing_model/var/setup_workspace"
+langchain_project: "ml-dev-bench-evaluation-var"
+clone_workspace: true
 
 # Task package imports
 task_packages:
-  - "ml_dev_bench.cases.improve_baseline.segmentation"
-
-clone_workspace: true  # clones workspace to a temporary directory
+  - "ml_dev_bench.cases.modify_existing_model.var"
 
 # Agent configuration
 agent_packages:
@@ -22,7 +21,6 @@ agent:
   model_name: "anthropic/claude-3-5-sonnet-20241022"
   recursion_limit: 50
 
-
 # Task configurations
 tasks:
-  - id: "improve_segmentation_baseline"
+  - id: "var_implementation"

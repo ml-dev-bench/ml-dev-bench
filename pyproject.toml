@@ -20,6 +20,7 @@ langchain-community = "^0.3.8"
 composio-core = { git = "https://github.com/Deduction-Dev/composio/", branch = "deduction_master", subdirectory = "python" }
 GitPython = "^3.1.0"
 pandas = "*"
+Pillow = "*"
 
 [tool.poetry.group.aide]
 optional = true
