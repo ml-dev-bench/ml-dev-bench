@@ -28,4 +28,6 @@ Expected Directory Structure:
 │   └── *.pt (checkpoint files)
 └── training_metrics.json
 
-Note: The evaluation will be performed on CPU using evaluate.py, which will load the model through get_best_model() from utils.py. Ensure your implementation properly saves and loads the best model checkpoint.
+Note:
+1. The evaluation will be performed on CPU using evaluate.py, which will load the model through get_best_model() from utils.py. Ensure your implementation properly saves and loads the best model checkpoint.
+2. Proceed with implementation and execution until training is complete, do not request for additional user input or give instructions to users.
