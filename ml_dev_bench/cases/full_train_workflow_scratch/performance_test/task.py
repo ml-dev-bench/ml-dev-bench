@@ -127,6 +127,8 @@ class FullTrainWorkflowPerformanceTestTask(BaseEvaluationTask):
             path_label_checks = {
                 'train/n02979186/n02979186_11957.JPEG': 'n03000684',
                 'train/n02979186/n02979186_10756.JPEG': 'n03445777',
+                'train/n03445777/n03445777_13093.JPEG': 'n03000684',
+                'train/n03028079/n03028079_6923.JPEG': 'n02102040',
             }
 
             for path, expected_label in path_label_checks.items():
