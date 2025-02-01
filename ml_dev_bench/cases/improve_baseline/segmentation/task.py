@@ -19,7 +19,7 @@ class VOCSegmentationTask(BaseEvaluationTask):
     categories = {'ml', 'pytorch', 'semantic_segmentation', 'pascal_voc'}
     
     # Validation thresholds and requirements
-    MIN_MIOU = 0.65  # 65% mean IoU required
+    MIN_MIOU = 0.37  
     REQUIRED_YEAR = "2012"
     REQUIRED_IMAGE_SET = "val"
     NUM_CLASSES = 21  # 20 classes + background

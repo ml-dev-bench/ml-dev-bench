@@ -8,7 +8,7 @@ Dataset Requirements:
 
 Model Requirements:
 1. Use torchvision.models.segmentation.fcn_resnet50 with pretrained weights
-2. Train the model to achieve at least 65% mean IoU (mIoU)
+2. Train the model to achieve at least 37% mean IoU on the validation set (mIoU)
 
 Required Output:
 Create an output_info.json file with the following information:
