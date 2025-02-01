@@ -26,6 +26,7 @@ Pillow = "*"
 optional = true
 
 [tool.poetry.group.aide.dependencies]
+accelerate = "*"
 aideml = { git = "https://github.com/ml-dev-bench/aideml/", branch = "ml_dev_bench_compat", rev = "d72c265d1574c56e4326a37a93ac3c521141c665" }
 streamlit = ">=1.24.0"
 openai = ">=1.0.0"
@@ -43,6 +44,7 @@ fastai = "<3.0.0"
 datasets = "*"
 
 [tool.poetry.group.react-agent.dependencies]
+accelerate = "*"
 langgraph = "^0.2.53"
 langgraph-checkpoint-sqlite = "^2.0.1"
 langchain-openai = "^0.2.10"
@@ -57,7 +59,7 @@ optional = true
 [tool.poetry.group.openhands-agent.dependencies]
 openhands-ai = { git = "https://github.com/ml-dev-bench/OpenHands", branch = "ml-dev-bench-v0.21.1" }
 playwright = "^1.41.0"
-datasets = "*"
+
 
 [tool.poetry.group.dev.dependencies]
 ruff = "0.9.2"
