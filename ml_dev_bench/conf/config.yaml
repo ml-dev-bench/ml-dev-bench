@@ -24,7 +24,8 @@ log_level: "INFO"
 output_dir: "./results"
 workspace_dir: "./workspace"
 langchain_project: "ml-dev-bench-evaluation"
-
-clone_workspace: true  # clones workspace to a temporary directory
-clone_workspace_to: "/workspace"
 clear_workspace: true
+
+ # clones workspace to a temporary directory
+clone_workspace: false
+clone_workspace_to: "/workspace"

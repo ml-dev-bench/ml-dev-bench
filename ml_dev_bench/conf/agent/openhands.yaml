@@ -6,3 +6,5 @@ agent:
 
 agent_packages:
   - "agents.openhands_agent"
+
+clone_workspace: true
