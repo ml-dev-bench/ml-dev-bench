@@ -9,7 +9,8 @@ ML-Dev-Bench features:
 - Support for multiple runtime environments (Local, Docker, E2B)
 - Comprehensive metrics tracking and reporting
 - Integration with LiteLLM and LangChain
-- Configurable task-based evaluation system
+- Configurable task-based evaluation system using Hydra
+- Support for parameter sweeps and multi-run evaluations
 
 ## Features
 
@@ -50,23 +51,40 @@ make install-runtime-dependencies
 
 ## Usage
 
-1. Run evaluations using the command-line interface:
+The evaluation framework uses Hydra for configuration management, allowing flexible task and agent configurations.
 
+### Basic Usage
+
+Run a single task with a specific agent:
 ```bash
-./scripts/eval.sh path/to/eval_config.yaml
-
+./scripts/eval.sh task=hello_world agent=openhands
 ```
 
-To run the hello world evaluation:
-
+Run with configuration overrides:
 ```bash
-./scripts/eval.sh ml_dev_bench/cases/hello_world/hello_world_config.yaml
+./scripts/eval.sh task=hello_world agent=openhands num_runs=3
 ```
 
-To run the array-generation evaluation:
+### Multi-run Evaluations
 
+Run multiple tasks with multiple agents:
 ```bash
-./scripts/eval.sh calipers/tests/integration/config/array_generation_test.yaml
+./scripts/eval.sh --multirun task=hello_world,shape_mismatch_train agent=openhands,react
+```
+
+Run all available tasks with a specific agent:
+```bash
+./scripts/eval.sh --multirun "task=glob(*)" agent=openhands
+```
+
+Run a specific task with all agents:
+```bash
+./scripts/eval.sh --multirun task=hello_world "agent=glob(*)"
+```
+
+Run all tasks with all agents:
+```bash
+./scripts/eval.sh --multirun "task=glob(*)" "agent=glob(*)"
 ```
 
 ## Development
@@ -127,6 +145,7 @@ This creates a dedicated environment at `.venv-react` with all react-agent speci
 1. Create a new directory under `agents/` with your agent name (e.g., `agents/my_agent/`)
 2. Add your agent implementation files in this directory
 3. Create a `Dockerfile` in your agent directory that extends the base image
+4. Add agent configuration in `ml_dev_bench/conf/agent/`
 
 Example structure:
 ```
@@ -196,3 +215,4 @@ MIT License - see the [LICENSE](LICENSE) file for details
 
 - LiteLLM for LLM integration
 - Composio for runtime management
+- Hydra for configuration management
