@@ -9,5 +9,5 @@ tasks:
 
 # Task-specific overrides
 workspace_dir: "./test_workspace"
-output_dir: "./ml_dev_bench/cases/training/small_dataset_overfit/results"
+output_dir: "./results"
 langchain_project: "ml-dev-bench-evaluation-small-dataset-overfit" 

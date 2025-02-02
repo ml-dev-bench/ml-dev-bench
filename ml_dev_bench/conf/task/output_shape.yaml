@@ -5,8 +5,9 @@ task_packages:
   - "ml_dev_bench.cases.debugging.shape_mismatch.cases.output_shape"
 
 tasks:
-  - id: "output_shape"
+  - id: "shape_mismatch_output"
 
 # Task-specific overrides
 workspace_dir: "./ml_dev_bench/cases/debugging/shape_mismatch/cases/output_shape/setup_workspace"
 langchain_project: "ml-dev-bench-evaluation-shape-debug-output" 
+
