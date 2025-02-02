@@ -1,0 +1,13 @@
+# @package _global_
+
+# Task-specific settings
+# Task package imports
+task_packages:
+  - "ml_dev_bench.cases.debugging.bert_eval_debug"
+
+tasks:
+  - id: "bert_eval_debug"
+
+# Task-specific overrides
+workspace_dir: "./ml_dev_bench/cases/debugging/bert_eval_debug/setup_workspace"
+langchain_project: "ml-dev-bench-evaluation-bert-eval-debug"

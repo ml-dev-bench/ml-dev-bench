@@ -1,0 +1,12 @@
+# @package _global_
+
+# Task-specific settings
+task_packages:
+  - "ml_dev_bench.cases.improve_baseline.cifar10"
+
+tasks:
+  - id: "improve_cifar10_baseline"
+
+# Task-specific overrides
+workspace_dir: "./ml_dev_bench/cases/improve_baseline/cifar10/setup_workspace"
+langchain_project: "cifar10-improvement" 

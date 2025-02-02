@@ -1,0 +1,12 @@
+# @package _global_
+
+# Task-specific settings
+task_packages:
+  - "ml_dev_bench.cases.training.pretrained_model_load_from_torchvision"
+
+tasks:
+  - id: "pretrained_model_load_from_torchvision"
+
+# Task-specific overrides
+workspace_dir: "./test_workspace"
+langchain_project: "ml-dev-bench-evaluation-pretrained-model-load-from-torchvision" 
