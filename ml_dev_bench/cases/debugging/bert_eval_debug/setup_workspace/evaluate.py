@@ -4,6 +4,7 @@ import torch
 import json
 from datasets import load_dataset
 from torch.utils.data import DataLoader
+from utils import load_boolq_datasets
 
 # Use the same data collator as training
 from transformers import (
@@ -23,28 +24,7 @@ def evaluate(checkpoint_dir):
     tokenizer = AutoTokenizer.from_pretrained(model_name)
 
     # Load validation dataset
-    dataset = load_dataset('boolq', split='validation')
-
-    def preprocess_function(examples):
-        questions = examples['question']
-        passages = examples['passage']
-        tokenized = tokenizer(
-            questions,
-            passages,
-            padding='max_length',
-            truncation=True,
-            max_length=256,
-        )
-        tokenized['labels'] = [int(a) for a in examples['answer']]
-        return tokenized
-
-    # Preprocess validation data
-    val_dataset = dataset.map(
-        preprocess_function,
-        batched=True,
-        remove_columns=dataset.column_names,
-    )
-    val_dataset.set_format('torch')
+    val_dataset = load_boolq_datasets(splits=['validation'], tokenizer=tokenizer)
 
     # Create validation dataloader
     val_loader = DataLoader(

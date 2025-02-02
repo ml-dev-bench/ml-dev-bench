@@ -1,7 +1,6 @@
 import logging
 
 import numpy as np
-from datasets import load_dataset
 from sklearn.metrics import accuracy_score, f1_score
 from transformers import (
     AutoModelForSequenceClassification,
@@ -10,6 +9,7 @@ from transformers import (
     TrainingArguments,
     default_data_collator,
 )
+from utils import load_boolq_datasets
 
 # Set up logging
 logging.basicConfig(
@@ -25,18 +25,6 @@ def compute_metrics(eval_pred):
     f1 = f1_score(labels, predictions)
     logger.info(f'Evaluation metrics - Accuracy: {acc:.4f}, F1: {f1:.4f}')
     return {'accuracy': acc, 'f1': f1}
-
-
-def tokenize_function(examples, tokenizer):
-    tokenized = tokenizer(
-        examples['question'],
-        examples['passage'],
-        truncation=True,
-        padding='max_length',
-        max_length=256,
-    )
-    tokenized['labels'] = [int(a) for a in examples['answer']]
-    return tokenized
 
 
 class CustomTrainer(Trainer):
@@ -75,15 +63,7 @@ def main():
     model.config.problem_type = 'single_label_classification'
 
     # Tokenize datasets
-    logger.info('Tokenizing datasets...')
-    tokenized_datasets = dataset.map(
-        lambda examples: tokenize_function(examples, tokenizer),
-        batched=True,
-        remove_columns=['question', 'passage', 'answer'],
-    )
-
-    train_dataset = tokenized_datasets['train']
-    eval_dataset = tokenized_datasets['validation']
+    train_dataset, eval_dataset = load_boolq_datasets(splits=['train', 'validation'], tokenizer=tokenizer)
 
     logger.info(f'Training samples: {len(train_dataset)}')
     logger.info(f'Validation samples: {len(eval_dataset)}')

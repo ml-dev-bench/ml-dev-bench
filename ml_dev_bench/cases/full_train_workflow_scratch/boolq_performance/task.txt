@@ -15,6 +15,7 @@ Requirements:
 
 Directory Structure:
 ├── evaluate.py            # Evaluation script provided (do not modify)
+├── utils.py            # Dataset loading file.
 ├── checkpoints/          # Training checkpoints
 ├── best_checkpoint/      # Best model checkpoint with files:
 │   ├── config.json
@@ -26,6 +27,6 @@ Directory Structure:
 
 Notes:
 - Evaluation (evaluate.py) will load model from best_checkpoint/ directory to verify claimed performance
-- Do not modify the evaluate.py file
+- Do not modify the evaluate.py and utils.py files
 - W&B logs will be used to verify claimed performance
 - Proceed until training is complete, dont ask for user feedback
