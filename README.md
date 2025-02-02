@@ -66,25 +66,20 @@ Run with configuration overrides:
 ```
 
 ### Multi-run Evaluations
+Create a .env file to store the API keys for the agents you are using.
 
-Run multiple tasks with multiple agents:
+Activate the virtual environment for that agent from the root directory (e.g. for OpenHands):
 ```bash
-./scripts/eval.sh --multirun task=hello_world,shape_mismatch_train agent=openhands,react
+source .venv-openhands/<ml-dev-bench-version>/bin/activate
 ```
 
 Run all available tasks with a specific agent:
 ```bash
 ./scripts/eval.sh --multirun "task=glob(*)" agent=openhands
 ```
-
-Run a specific task with all agents:
+Run a list of tasks with a specific agent:
 ```bash
-./scripts/eval.sh --multirun task=hello_world "agent=glob(*)"
-```
-
-Run all tasks with all agents:
-```bash
-./scripts/eval.sh --multirun "task=glob(*)" "agent=glob(*)"
+./scripts/eval.sh --multirun task=hello_world,shape_mismatch_train agent=react
 ```
 
 ## Development
