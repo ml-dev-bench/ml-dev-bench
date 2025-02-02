@@ -5,7 +5,7 @@ task_packages:
   - "ml_dev_bench.cases.full_train_workflow_scratch.setup_test"
 
 tasks:
-  - id: "setup_test"
+  - id: "full_train_workflow_setup_test"
 
 # Task-specific overrides
 workspace_dir: "./test_workspace"
