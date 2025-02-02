@@ -9,7 +9,7 @@ INFO:__main__:Tokenizing datasets...
 Map: 100%|██████████| 3270/3270 [00:00<00:00, 4353.56 examples/s]
 INFO:__main__:Training samples: 9427
 INFO:__main__:Validation samples: 3270
-/home/harshith2794/.cache/pypoetry/virtualenvs/ml-dev-bench-runtime-GS9Zd61O-py3.12/lib/python3.12/site-packages/transformers/training_args.py:1575: FutureWarning: `evaluation_strategy` is deprecated and will be removed in version 4.46 of 🤗 Transformers. Use `eval_strategy` instead
+/home/user/.cache/pypoetry/virtualenvs/ml-dev-bench-runtime-GS9Zd61O-py3.12/lib/python3.12/site-packages/transformers/training_args.py:1575: FutureWarning: `evaluation_strategy` is deprecated and will be removed in version 4.46 of 🤗 Transformers. Use `eval_strategy` instead
   warnings.warn(
 /tmp/ipykernel_55838/1805845259.py:108: FutureWarning: `tokenizer` is deprecated and will be removed in version 5.0.0 for `CustomTrainer.__init__`. Use `processing_class` instead.
   trainer = CustomTrainer(

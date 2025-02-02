@@ -1,6 +1,7 @@
 import os
 
 import torch
+import json
 from datasets import load_dataset
 from torch.utils.data import DataLoader
 
@@ -97,8 +98,8 @@ def evaluate(checkpoint_dir):
 
     print(f'Accuracy: {accuracy:.2f}')
     # Write result to file
-    with open('accuracy.txt', 'w') as f:
-        f.write(f'Accuracy: {accuracy:.2f}')
+    with open('eval_metrics.json', 'w') as f:
+        json.dump({'final_val_acc': accuracy}, f)
 
 
 evaluate('./best_checkpoint')

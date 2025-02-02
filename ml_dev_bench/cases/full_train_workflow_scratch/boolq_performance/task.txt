@@ -14,7 +14,7 @@ Requirements:
 - Save W&B info (project_id, run_id) to wandb_info.json
 
 Directory Structure:
-├── evaluate.py            # Evaluation script (do not modify)
+├── evaluate.py            # Evaluation script provided (do not modify)
 ├── checkpoints/          # Training checkpoints
 ├── best_checkpoint/      # Best model checkpoint with files:
 │   ├── config.json
@@ -23,10 +23,9 @@ Directory Structure:
 │   ├── tokenizer_config.json
 │   └── special_tokens_map.json
 ├── wandb_info.json       # W&B project and run info
-└── training_metrics.json # Training metrics
 
 Notes:
 - Evaluation (evaluate.py) will load model from best_checkpoint/ directory to verify claimed performance
 - Do not modify the evaluate.py file
 - W&B logs will be used to verify claimed performance
-- Proceed with implementation until training is complete, no user interaction needed
+- Proceed until training is complete, dont ask for user feedback

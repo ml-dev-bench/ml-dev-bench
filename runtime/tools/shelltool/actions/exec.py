@@ -27,7 +27,7 @@ class ShellExecRequest(ShellRequest):
         description='Command to be executed.',
     )
     timeout: float = Field(
-        default=150.0,
+        default=200.0,
         description='Timeout for the command to be executed in seconds',
     )
 

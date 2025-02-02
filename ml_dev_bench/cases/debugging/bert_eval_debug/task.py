@@ -1,4 +1,7 @@
 import os
+import json
+import requests
+
 from typing import Any, Dict
 
 from composio import Action
@@ -24,6 +27,32 @@ class BertEvalDebugTask(BaseEvaluationTask):
         """Setup metrics for BERT evaluation debug task"""
         super()._setup_metrics()
 
+    def initialize(self):
+        
+        model_name = "harshith2794/tinybert-boolq"
+        model_dir = os.path.join(self.workspace_dir, "best_checkpoint")
+
+        # Create the directory if it doesn't exist
+        os.makedirs(model_dir, exist_ok=True)
+
+        # Files to download from Hugging Face based on actual repository contents
+        files_to_download = [
+            "config.json",
+            "model.safetensors",
+            "tokenizer.json",
+            "tokenizer_config.json",
+            "vocab.txt",
+            "special_tokens_map.json"
+        ]
+
+        # Download each file from Hugging Face
+        for filename in files_to_download:
+            url = f"https://huggingface.co/{model_name}/resolve/main/{filename}"
+            response = requests.get(url)
+            if response.status_code == 200:
+                with open(os.path.join(model_dir, filename), 'wb') as f:
+                    f.write(response.content)
+
     async def run(self, agent: BaseAgent) -> Dict[str, Any]:
         task_path = os.path.join(os.path.dirname(__file__), 'task.txt')
         with open(task_path, 'r') as f:
@@ -36,7 +65,7 @@ class BertEvalDebugTask(BaseEvaluationTask):
     ) -> Dict[str, Any]:
         try:
             # Run the evaluation script to check if accuracy matches training
-            eval_script = self.workspace_dir / 'setup_workspace/evaluate.py'
+            eval_script = self.workspace_dir / 'evaluate.py'
             if isinstance(runtime, MLDevBenchRuntime):
                 result = runtime.execute_action(
                     action=Action.ML_DEV_BENCH_SHELL_TOOL_EXEC_COMMAND,
@@ -46,13 +75,16 @@ class BertEvalDebugTask(BaseEvaluationTask):
                 exit_code = result['data']['exit_code']
 
                 # Read the accuracy from the file
-                accuracy_file = self.workspace_dir / 'accuracy.txt'
+                accuracy_file = self.workspace_dir / 'eval_metrics.json'
                 with open(accuracy_file, 'r') as f:
-                    accuracy_str = f.read()
-                    accuracy = float(accuracy_str.split(':')[1].strip())
+                    metrics = json.load(f)
 
-                # Check if accuracy matches training accuracy (within 0.5%)
-                if exit_code == 0 and abs(accuracy - 72.23) <= 0.5:
+                # Verify accuracy meets target
+                accuracy = metrics['final_val_acc']
+
+
+                # Check if accuracy matches training accuracy (within 0.05%)
+                if exit_code == 0 and abs(accuracy - 72.23) <= 0.05:
                     return {
                         'success': True,
                         'validation_results': {

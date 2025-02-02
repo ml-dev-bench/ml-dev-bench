@@ -28,10 +28,9 @@ def evaluate():
             passages,
             padding='max_length',
             truncation=True,
-            max_length=512,
-            return_tensors='pt',
+            max_length=256,
         )
-        tokenized['labels'] = examples['answer']
+        tokenized['labels'] = [int(sample) for sample in examples['answer']]
         return tokenized
 
     # Preprocess validation data
@@ -46,7 +45,7 @@ def evaluate():
     val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
 
     # Load model from best_checkpoint directory
-    checkpoint_dir = 'best_checkpoint'
+    checkpoint_dir = './best_checkpoint'
     if not os.path.exists(checkpoint_dir):
         raise FileNotFoundError('best_checkpoint directory not found')
 
@@ -76,22 +75,19 @@ def evaluate():
 
     with torch.no_grad():
         for batch in val_loader:
-            input_ids = batch['input_ids'].to(device)
-            attention_mask = batch['attention_mask'].to(device)
-            labels = batch['labels'].to(device)
-
-            outputs = model(input_ids=input_ids, attention_mask=attention_mask)
+            outputs = model(**batch)
+            labels = batch['labels'].cpu().numpy()
             logits = outputs.logits
-            predictions = torch.argmax(logits, dim=1)
-
+            predictions = torch.argmax(logits, dim=1).cpu().numpy()
             correct += (predictions == labels).sum().item()
-            total += labels.size(0)
+            total += len(labels)
 
     accuracy = (correct / total) * 100
 
+    print(f'Accuracy: {accuracy:.2f}')
     # Write accuracy result to file
-    with open('accuracy.txt', 'w') as f:
-        f.write(f'Accuracy: {accuracy:.2f}')
+    with open('eval_metrics.json', 'w') as f:
+        json.dump({'final_val_acc': accuracy}, f)
 
     # Extract and verify W&B metrics
     try:
@@ -114,11 +110,14 @@ def evaluate():
         if len(history.columns) == 0:
             raise ValueError('No metrics found in W&B run')
 
+        if len(history) == 0:
+            raise ValueError('No metrics found in W&B run')
+
     except Exception as e:
         # Write error to file but don't fail evaluation
         with open('wandb_metrics_error.txt', 'w') as f:
             f.write(f'Error extracting W&B metrics: {str(e)}')
-
+    print('Evaluation complete!')
 
 if __name__ == '__main__':
     evaluate()

@@ -1,6 +1,7 @@
 import json
 import os
 from typing import Any, Dict
+import hashlib
 
 from composio import Action
 
@@ -23,6 +24,24 @@ class BoolQPerformanceTask(BaseEvaluationTask):
         super().__init__(*args, **kwargs)
         self.checkpoint_dir = self.workspace_dir / 'checkpoints'
         self.best_checkpoint_dir = self.workspace_dir / 'best_checkpoint'
+
+    def _compute_file_hash(self, filepath) -> str:
+        """Compute SHA256 hash of a file.
+
+        Args:
+            filepath: Path to the file to hash
+
+        Returns:
+            str: Hex digest of file hash
+        """
+        with open(filepath, 'rb') as f:
+            content = f.read()
+            return hashlib.sha256(content).hexdigest()
+
+    def initialize(self) -> None:
+        # Calculate and store hash of evaluate.py
+        evaluate_script = self.workspace_dir / 'evaluate.py'
+        self.evaluate_script_hash = self._compute_file_hash(evaluate_script)
 
     async def run(self, agent: BaseAgent) -> Dict[str, Any]:
         task_path = os.path.join(os.path.dirname(__file__), 'task.txt')
@@ -131,7 +150,6 @@ class BoolQPerformanceTask(BaseEvaluationTask):
         required_files = [
             'evaluate.py',
             'wandb_info.json',
-            'training_metrics.json',
         ]
         for file in required_files:
             if not (self.workspace_dir / file).exists():
@@ -166,17 +184,6 @@ class BoolQPerformanceTask(BaseEvaluationTask):
                     'pytorch_model.bin)',
                 )
 
-            # Check if training checkpoints directory has any checkpoints
-            glob_pattern = '**/*.pt'
-            checkpoint_files = list(self.checkpoint_dir.glob(glob_pattern)) + list(
-                self.checkpoint_dir.glob('**/*.ckpt')
-            )
-            if not checkpoint_files:
-                return (
-                    False,
-                    'No checkpoint files found in checkpoints directory',
-                )
-
             return True, ''
         except Exception as e:
             return False, f'Error during checkpoint validation: {str(e)}'
@@ -209,6 +216,13 @@ class BoolQPerformanceTask(BaseEvaluationTask):
         try:
             # Run evaluation script using MLDevBenchRuntime
             eval_script = self.workspace_dir / 'evaluate.py'
+            current_hash = self._compute_file_hash(eval_script)
+            if current_hash != self.evaluate_script_hash:
+                return (
+                    False,
+                    'evaluate.py has been modified!',
+                    {},
+                )
 
             if isinstance(runtime, MLDevBenchRuntime):
                 result = runtime.execute_action(
