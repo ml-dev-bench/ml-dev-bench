@@ -41,11 +41,6 @@ class BertEvalDebugTask(BaseEvaluationTask):
             content = f.read()
             return hashlib.sha256(content).hexdigest()
 
-    def initialize(self) -> None:
-        # Calculate and store hash of train.py
-        train_script = self.workspace_dir / 'train.py'
-        self.train_script_hash = self._compute_file_hash(train_script)
-
     def initialize(self):
         
         model_name = "harshith2794/tinybert-boolq"
@@ -71,6 +66,9 @@ class BertEvalDebugTask(BaseEvaluationTask):
             if response.status_code == 200:
                 with open(os.path.join(model_dir, filename), 'wb') as f:
                     f.write(response.content)
+        # Calculate and store hash of train.py
+        train_script = self.workspace_dir / 'train.py'
+        self.train_script_hash = self._compute_file_hash(train_script)
 
     async def run(self, agent: BaseAgent) -> Dict[str, Any]:
         task_path = os.path.join(os.path.dirname(__file__), 'task.txt')
