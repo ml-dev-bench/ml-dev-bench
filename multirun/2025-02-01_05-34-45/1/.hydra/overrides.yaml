@@ -1,0 +1,3 @@
+- agent=aide
+- task=performance_test
+- clone_workspace=False

@@ -1,7 +1,0 @@
-Write a training script for the MNIST dataset (do not download the dataset) using PyTorch. The script should:
-1. Implement the training loop (without running it) with appropriate loss function and optimizer.
-2. Save the training script at the specified location: training/training_script_mnist.py
-3. Save the following details in 'training/training_spec.json':
-    - 'Dataset': <dataset_name>
-    - 'Devices': <list of devices used for training>
-    - 'Loss Function': <loss_function_name>

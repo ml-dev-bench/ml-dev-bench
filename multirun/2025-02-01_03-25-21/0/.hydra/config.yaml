@@ -1,0 +1,19 @@
+debug: true
+num_runs: 1
+fail_fast: false
+log_level: INFO
+output_dir: ./results
+workspace_dir: ./test_workspace
+langchain_project: ml-dev-bench-evaluation-setup-test
+clone_workspace: false
+clone_workspace_to: /workspace
+clear_workspace: true
+agent_packages:
+- agents.aide_ml_agent
+agent:
+  id: aide_ml_agent
+  model_name: gpt-4o
+task_packages:
+- ml_dev_bench.cases.full_train_workflow_scratch.setup_test
+tasks:
+- id: setup_test

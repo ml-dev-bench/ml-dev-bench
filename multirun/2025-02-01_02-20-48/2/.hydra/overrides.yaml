@@ -1,0 +1,3 @@
+- agent=aide
+- task=improve_segmentation_baseline
+- clone_workspace=False

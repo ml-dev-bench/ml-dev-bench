@@ -1,5 +1,0 @@
-Download the Imagenette dataset (160px version) from https://github.com/fastai/imagenette and prepare it for use:
-
-1. Download the Imagenette dataset 160px version from the official source
-2. Extract/uncompress the downloaded dataset
-3. Save the path to the uncompressed dataset directory in a JSON file named 'dataset_info.json' with the key 'dataset_path'
