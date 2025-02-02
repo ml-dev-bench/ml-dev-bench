@@ -15,7 +15,8 @@ Important notes:
 Files available:
 - train.py: The training script
 - train_logs.txt: Training logs showing validation accuracy
-- evaluate.py: The evaluation script that needs to be fixed
+- evaluate.py: The evaluation script that needs to be fixed. You are not allowed to import or use huggingface Trainer.
+- Also do not change the writing of metrics to eval_metrics.json with keys final_val_accuracy
 - best_checkpoint: The best checkpoint saved during training. The checkpoint is correct!
 
 Success criteria:

@@ -99,7 +99,7 @@ def evaluate(checkpoint_dir):
     print(f'Accuracy: {accuracy:.2f}')
     # Write result to file
     with open('eval_metrics.json', 'w') as f:
-        json.dump({'final_val_acc': accuracy}, f)
+        json.dump({'final_val_accuracy': accuracy}, f)
 
 
 evaluate('./best_checkpoint')

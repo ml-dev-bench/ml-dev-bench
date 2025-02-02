@@ -92,6 +92,14 @@ class BertEvalDebugTask(BaseEvaluationTask):
                 )
 
             eval_script = self.workspace_dir / 'evaluate.py'
+            # check Trainer is not present in evaluate.py
+            with open(eval_script, 'r') as f:
+                if 'Trainer' in f.read():
+                    return (
+                        False,
+                        'Trainer object is present in evaluate.py',
+                        {},
+                    )
             if isinstance(runtime, MLDevBenchRuntime):
                 result = runtime.execute_action(
                     action=Action.ML_DEV_BENCH_SHELL_TOOL_EXEC_COMMAND,
@@ -106,7 +114,7 @@ class BertEvalDebugTask(BaseEvaluationTask):
                     metrics = json.load(f)
 
                 # Verify accuracy meets target
-                accuracy = metrics['final_val_acc']
+                accuracy = metrics['final_val_accuracy']
 
 
                 # Check if accuracy matches training accuracy (within 0.05%)
