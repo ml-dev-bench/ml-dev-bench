@@ -107,6 +107,10 @@ make lint
 
 ```
 
+## Adding new Evaluation Cases
+Use the structure of the existing cases in the `ml_dev_bench/cases` directory.
+You need to create a new directory in the `ml_dev_bench/cases` directory and add the new case files. 
+A case includes a task.txt file that lists the tasks to be run, a config.yaml file that lists the configuration for the case, and a python file that evaluates the case. Optionally, you can add a setup_workspace directory that will be cloned into the workspace for the case.
 
 ## Adding New Agents
 
