@@ -1,0 +1,12 @@
+# @package _global_
+
+# Task-specific settings
+task_packages:
+  - "ml_dev_bench.cases.debugging.multi_file_fixes"
+
+tasks:
+  - id: "training_files_debug"
+
+# Task-specific overrides
+workspace_dir: "./ml_dev_bench/cases/debugging/multi_file_fixes/setup_workspace"
+langchain_project: "ml-dev-bench-evaluation-training-debug" 
