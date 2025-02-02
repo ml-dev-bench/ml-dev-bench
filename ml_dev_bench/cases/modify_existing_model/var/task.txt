@@ -82,3 +82,5 @@ Rules:
 2. Do not modify test_var.py or any other files
 3. Maintain compatibility with existing model architecture and hyperparameters
 4. You can verify your implementation by running test_var.py
+
+Please proceed until task completion without requesting any clarification from user.
