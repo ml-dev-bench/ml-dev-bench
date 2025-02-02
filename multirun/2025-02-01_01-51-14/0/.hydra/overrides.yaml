@@ -1,0 +1,3 @@
+- agent=aide
+- task=normalization_bug
+- clone_workspace=False

@@ -1,0 +1,3 @@
+- agent=react
+- task=hello_world
+- clone_workspace=False

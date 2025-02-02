@@ -1,0 +1,3 @@
+- agent=aide
+- task=cifar_10_lt_performance
+- clone_workspace=False

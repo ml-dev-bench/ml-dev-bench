@@ -1,0 +1,3 @@
+- agent=aide
+- task=noisy_dataset_download
+- clone_workspace=False

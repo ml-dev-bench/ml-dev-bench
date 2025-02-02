@@ -1,0 +1,3 @@
+- agent=aide
+- task=setup_test
+- clone_workspace=False

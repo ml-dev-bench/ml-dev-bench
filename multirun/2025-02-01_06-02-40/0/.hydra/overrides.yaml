@@ -1,0 +1,3 @@
+- agent=aide
+- task=channel_vit_implementation_no_test
+- clone_workspace=False

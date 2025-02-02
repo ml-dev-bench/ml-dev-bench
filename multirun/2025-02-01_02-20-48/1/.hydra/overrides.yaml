@@ -1,0 +1,3 @@
+- agent=aide
+- task=var_implementation
+- clone_workspace=False

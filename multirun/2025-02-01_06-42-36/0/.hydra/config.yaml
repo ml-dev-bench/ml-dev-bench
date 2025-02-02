@@ -1,0 +1,20 @@
+debug: true
+num_runs: 1
+fail_fast: false
+log_level: INFO
+output_dir: ./results
+workspace_dir: ./workspace
+langchain_project: ml-dev-bench-evaluation-hello-world
+clone_workspace: false
+clone_workspace_to: /workspace
+clear_workspace: true
+agent:
+  id: simple_react
+  model_name: together_ai/deepseek-ai/DeepSeek-R1
+  recursion_limit: 50
+agent_packages:
+- agents.react_agent
+task_packages:
+- ml_dev_bench.cases.hello_world
+tasks:
+- id: hello_world
