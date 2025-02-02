@@ -4,9 +4,9 @@ ML-Dev-Bench is an evaluation bench for evaluating AI agents against various ML 
 
 Calipers is a framework for evaluating AI agents, providing tools and infrastructure for systematic assessment of AI model performance.
 
+[Technical report](https://github.com/ml-dev-bench/ml-dev-bench/blob/main/ml_dev_bench.pdf)
 ML-Dev-Bench features:
 - Flexible evaluation framework for AI agents
-- Support for multiple runtime environments (Local, Docker, E2B)
 - Comprehensive metrics tracking and reporting
 - Integration with LiteLLM and LangChain
 - Configurable task-based evaluation system using Hydra
