@@ -207,6 +207,10 @@ CMD ["poetry", "shell"]
 4. Run linters and tests
 5. Submit a pull request
 
+## Evaluation Traces
+
+Coming Soon
+
 ## License
 
 MIT License - see the [LICENSE](LICENSE) file for details
