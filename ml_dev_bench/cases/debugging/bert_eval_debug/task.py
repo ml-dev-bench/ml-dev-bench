@@ -3,6 +3,7 @@ import json
 import requests
 
 from typing import Any, Dict
+import hashlib
 
 from composio import Action
 
@@ -26,6 +27,24 @@ class BertEvalDebugTask(BaseEvaluationTask):
     def _setup_metrics(self) -> None:
         """Setup metrics for BERT evaluation debug task"""
         super()._setup_metrics()
+
+    def _compute_file_hash(self, filepath) -> str:
+        """Compute SHA256 hash of a file.
+
+        Args:
+            filepath: Path to the file to hash
+
+        Returns:
+            str: Hex digest of file hash
+        """
+        with open(filepath, 'rb') as f:
+            content = f.read()
+            return hashlib.sha256(content).hexdigest()
+
+    def initialize(self) -> None:
+        # Calculate and store hash of train.py
+        train_script = self.workspace_dir / 'train.py'
+        self.train_script_hash = self._compute_file_hash(train_script)
 
     def initialize(self):
         
@@ -65,6 +84,15 @@ class BertEvalDebugTask(BaseEvaluationTask):
     ) -> Dict[str, Any]:
         try:
             # Run the evaluation script to check if accuracy matches training
+            train_script = self.workspace_dir / 'train.py'
+            current_hash = self._compute_file_hash(train_script)
+            if current_hash != self.train_script_hash:
+                return (
+                    False,
+                    'train.py has been modified!',
+                    {},
+                )
+
             eval_script = self.workspace_dir / 'evaluate.py'
             if isinstance(runtime, MLDevBenchRuntime):
                 result = runtime.execute_action(
