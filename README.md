@@ -6,7 +6,27 @@ Calipers is a framework for evaluating AI agents, providing tools and infrastruc
 
 [Technical report](https://github.com/ml-dev-bench/ml-dev-bench/blob/main/ml_dev_bench.pdf)
 
-ML-Dev-Bench features:
+## Table of Contents
+- [Features](#features)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Basic Usage](#basic-usage)
+  - [Multi-run Evaluations](#multi-run-evaluations)
+  - [Available Tasks](#available-tasks)
+  - [Available Agents](#available-agents)
+  - [Configuration Structure](#configuration-structure)
+- [Development](#development)
+- [Project Structure](#project-structure)
+- [Adding New Agents](#adding-new-agents)
+  - [Setting up Agent Dependencies](#setting-up-agent-dependencies-using-poetry)
+  - [Adding Agents Code](#adding-agents-code)
+  - [Agent Docker Setup](#agent-docker-setup)
+- [Contributing](#contributing)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
+
+## Features
 - Flexible evaluation framework for AI agents
 - Comprehensive metrics tracking and reporting
 - Integration with LiteLLM and LangChain
@@ -165,8 +185,6 @@ This creates a dedicated environment at `.venv-react` with all react-agent speci
 Example structure:
 ```
 agents/
-├── env/
-│   └── base.Dockerfile    # Base Docker image
 ├── my_agent/
 │   ├── __init__.py
 │   ├── my_agent.py       # Your agent implementation
@@ -182,7 +200,7 @@ The project uses a two-stage Docker build:
 #### Building Images
 1. Build the base image (from project root):
 ```bash
-docker build -t ml-dev-bench-base -f env/base.Dockerfile .
+docker build -t ml-dev-bench-base -f docker_base/base.Dockerfile .
 ```
 
 2. Build your agent's image (from project root):
