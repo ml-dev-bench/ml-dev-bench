@@ -1,0 +1,13 @@
+You need to debug and fix an error in the PyTorch model.
+
+
+Your task:
+1. Run the model using run_model.py to see the error
+2. Analyze the error message and the model architecture in classifier_model.py
+3. Fix the issues in classifier_model.py
+4. Test your fix by running run_model.py again
+
+Rules:
+- Only modify classifier_model.py
+- Do not change the input or output dimensions of the model
+- The model should run without any errors

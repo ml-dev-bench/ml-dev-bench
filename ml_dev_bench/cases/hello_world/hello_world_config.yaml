@@ -1,0 +1,25 @@
+# Core evaluation settings
+num_runs: 1
+fail_fast: true
+log_level: "INFO"
+output_dir: "./results"
+workspace_dir: "./workspace"
+langchain_project: "ml-dev-bench-evaluation-hello-world"
+
+
+# Task package imports
+task_packages:
+  - "ml_dev_bench.cases.hello_world"
+
+agent_packages:
+  - "agents.aide_ml_agent"
+
+# Agent configuration
+agent:
+  id: "aide_ml_agent"
+  model_name: "gpt-4o-mini"
+
+
+# Task configurations
+tasks:
+  - id: "hello_world"

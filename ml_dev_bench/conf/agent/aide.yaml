@@ -1,0 +1,9 @@
+# @package _global_
+
+# Agent configuration
+agent_packages:
+  - "agents.aide_ml_agent"
+
+agent:
+  id: "aide_ml_agent"
+  model_name: "gpt-4o"

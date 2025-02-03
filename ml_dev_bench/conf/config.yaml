@@ -1,0 +1,31 @@
+# @package _global_
+
+# Core evaluation settings
+defaults:
+  - _self_
+  - agent: react
+  - task: hello_world
+
+hydra:
+  run:
+    dir: ${output_dir}/${now:%Y-%m-%d_%H-%M-%S}
+  sweep:
+    dir: multirun/${now:%Y-%m-%d_%H-%M-%S}
+    subdir: ${hydra.job.num}
+  launcher:
+   # Sequential execution by default
+    _target_: hydra._internal.core_plugins.basic_launcher.BasicLauncher
+
+# Common settings
+debug: true
+num_runs: 1
+fail_fast: false
+log_level: "INFO"
+output_dir: "./results"
+workspace_dir: "./workspace"
+langchain_project: "ml-dev-bench-evaluation"
+clear_workspace: true
+
+ # clones workspace to a temporary directory
+clone_workspace: false
+clone_workspace_to: "/workspace"

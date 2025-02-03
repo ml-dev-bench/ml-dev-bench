@@ -1,0 +1,12 @@
+# @package _global_
+
+# Task-specific settings
+task_packages:
+  - "ml_dev_bench.cases.debugging.nan_losses"
+
+tasks:
+  - id: "nan_loss_debug"
+
+# Task-specific overrides
+workspace_dir: "./ml_dev_bench/cases/debugging/nan_losses/setup_workspace"
+langchain_project: "ml-dev-bench-evaluation-nan-losses" 

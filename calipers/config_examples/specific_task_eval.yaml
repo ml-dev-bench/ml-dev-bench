@@ -1,0 +1,54 @@
+# Evaluation configuration for running a set of specified tasks
+
+# Core evaluation settings
+num_runs: 1
+fail_fast: false
+log_level: "INFO"
+output_dir: "evaluation/results"
+env_file: ".env"  # Default environment file path
+langchain_project: "ml-dev-bench-evaluation"
+
+# Agent configuration
+agent_packages:
+  - "agents.react_agent"
+
+# Agent configuration
+agent:
+  id: "simple_react"
+  model_name: "gpt-4o-mini"
+
+# Specify packages containing tasks to import
+task_packages:
+  - ml_dev_bench.cases.dataset_download
+  - ml_dev_bench.cases.dataset_preprocessing
+  - custom_tasks.my_task_package
+
+
+# Task configurations
+tasks:
+  - id: "dataset_download"
+    workspace_dir: "./workspace"
+    dataset_url: "https://test-dataset.com/data.zip"
+    validation:
+      required_files:
+        - "data.zip"
+        - "dataset/"
+      min_size_bytes: 1000
+
+  - id: "dataset_preprocessing"
+    workspace_dir: "./workspace"
+    input_format: "csv"
+    output_format: "parquet"
+    validation:
+      required_files:
+        - "processed_data.parquet"
+      expected_columns:
+        - "feature_1"
+        - "feature_2"
+        - "target"
+
+  - id: "random_array_generation"
+    workspace_dir: "./workspace"
+    validation:
+      required_files:
+        - "random_arrays.npz"

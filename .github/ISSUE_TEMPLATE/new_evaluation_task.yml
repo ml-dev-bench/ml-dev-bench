@@ -1,0 +1,154 @@
+name: New Evaluation Task
+description: Propose a new ML development evaluation task
+title: "[New Task]: "
+labels: ["new-task"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for proposing a new evaluation task! Please refer to our examples:
+        - [hello_world](https://github.com/ml-dev-bench/ml-dev-bench/tree/main/ml_dev_bench/cases/hello_world) for basic task structure
+        - [nan_losses](https://github.com/ml-dev-bench/ml-dev-bench/tree/main/ml_dev_bench/cases/debugging/nan_losses) for tasks requiring setup files and test scripts
+
+        Each evaluation task requires:
+        1. A `task.txt` file with clear instructions
+        2. Setup requirements:
+           - Input files/data (if needed)
+           - Test scripts for validation (if needed)
+           - Environment requirements
+        3. Validation logic that defines success criteria
+
+  - type: input
+    id: task-name
+    attributes:
+      label: Task Name
+      description: A short, descriptive name for the task (will be used as directory name)
+      placeholder: "e.g., hello_world"
+    validations:
+      required: true
+
+  - type: textarea
+    id: task-description
+    attributes:
+      label: Task Instructions (task.txt)
+      description: The instructions that will be given to the AI agent. Be clear and specific.
+      placeholder: |
+        Create a Python script named 'hello.py' that prints exactly "Hello, World!"
+
+        The script should:
+        1. Print the exact string "Hello, World!"
+        2. Not include any additional output
+        3. Be saved as 'hello.py' in the current directory
+    validations:
+      required: true
+
+  - type: textarea
+    id: setup-requirements
+    attributes:
+      label: Setup Requirements
+      description: Describe any files, data, or environment setup needed for this task
+      placeholder: |
+        Example:
+        - Input files needed: None
+        - Test scripts needed: test_model.py to validate changes
+        - Environment requirements: Python 3.x
+        - Additional setup: None
+
+        If your task needs input files or test scripts, please describe their structure and purpose.
+    validations:
+      required: false
+
+  - type: textarea
+    id: validation-criteria
+    attributes:
+      label: Validation Logic
+      description: How will we determine if the agent completed the task successfully? Be specific about success criteria.
+      placeholder: |
+        Success criteria:
+        1. Required files exist in workspace
+        2. Test script runs successfully (if applicable)
+        3. Expected outputs are produced
+        4. No errors in execution
+
+        Failure cases:
+        - Files don't exist
+        - Test script fails
+        - Incorrect output
+        - Script errors
+    validations:
+      required: true
+
+  - type: dropdown
+    id: task-category
+    attributes:
+      label: Primary Category
+      description: Select the main category this task belongs to
+      options:
+        - Dataset Handling
+        - Model Training
+        - Debugging
+        - API Integration
+        - Model Implementation
+        - Model Performance Improvement
+        - other
+    validations:
+      required: true
+
+  - type: input
+    id: suggested-category
+    attributes:
+      label: Suggested Category
+      description: If you selected "other", please suggest a category name for your task
+      placeholder: "e.g., deployment, testing, etc."
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: Additional Information
+      description: Any additional context, requirements, or information about the task that might be helpful
+      placeholder: |
+        Example:
+        - Special considerations for implementation
+        - Related resources or references
+        - Background context
+        - Expected difficulty level
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Confirmation
+      description: Please confirm the following
+      options:
+        - label: I have reviewed the example tasks (hello_world and nan_losses)
+        - label: My task has clear, objective success criteria
+        - label: My task tests a specific ML development skill
+    validations:
+      required: false
+
+  - type: dropdown
+    id: runtime-requirements
+    attributes:
+      label: Runtime Requirements
+      description: What computational resources does this task need?
+      options:
+        - CPU only
+        - GPU recommended
+        - GPU required
+        - Multiple GPUs required
+    validations:
+      required: true
+
+  - type: textarea
+    id: runtime-details
+    attributes:
+      label: Runtime Details
+      description: Provide details about runtime requirements and expected execution time
+      placeholder: |
+        Example:
+        - Estimated runtime: 5-10 minutes
+    validations:
+      required: false

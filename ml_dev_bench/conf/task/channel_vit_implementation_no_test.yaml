@@ -1,0 +1,12 @@
+# @package _global_
+
+# Task-specific settings
+task_packages:
+  - "ml_dev_bench.cases.modify_existing_model.channel_vit_no_test"
+
+tasks:
+  - id: "channel_vit_implementation_no_test"
+
+# Task-specific overrides
+workspace_dir: "./ml_dev_bench/cases/modify_existing_model/channel_vit_no_test/setup_workspace"
+langchain_project: "ml-dev-bench-evaluation-channel-vit-no-test" 

@@ -1,0 +1,13 @@
+# @package _global_
+
+# Task-specific settings
+task_packages:
+  - "ml_dev_bench.cases.training.small_dataset_overfit"
+
+tasks:
+  - id: "small_dataset_overfit"
+
+# Task-specific overrides
+workspace_dir: "./test_workspace"
+output_dir: "./results"
+langchain_project: "ml-dev-bench-evaluation-small-dataset-overfit" 

@@ -1,0 +1,64 @@
+# Environment variables
+.env
+.env.runtime
+.env.*
+!.env.runtime.template
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+
+# Virtual environments
+venv/
+ENV/
+env.bak/
+venv.bak/
+.venv*
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Data files
+*.csv
+*.tsv
+*.xlsx
+*.xls
+*.json
+*.h5
+*.pickle
+
+# Logs
+logs/
+*.log
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
+
+# Working directory
+notebooks/workspace/*
+notebooks/test_workspace/*
+!notebooks/workspace/.gitkeep
+
+# Evaluation workspaces
+evaluation_outputs/*
+test_workspace/*
+results/*
+workspace/*
+workspaces/*
+
+# Hydra
+multirun/
+multirun/*
+
+# Secrets
+.secrets

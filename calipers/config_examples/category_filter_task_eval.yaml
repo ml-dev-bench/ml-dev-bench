@@ -1,0 +1,38 @@
+# Evaluation configuration for running a set of tasks based on category filters
+
+# Core evaluation settings
+num_runs: 1
+fail_fast: false
+log_level: "INFO"
+output_dir: "evaluation/results"
+
+# Category filters for task selection
+# List of lists where:
+# - Inner list: AND condition (tasks must match all categories)
+# - Outer list: OR condition (tasks must match any group)
+category_filters:
+  - # First group: Tasks that are both dataset AND preprocessing related
+    - "dataset"
+    - "preprocessing"
+  - # Second group: Tasks that are download related
+    - "download"
+  # This will select tasks that are either:
+  # - Both dataset AND preprocessing related
+  # OR
+  # - Download related
+
+# If category_filters is all, evaluate all tasks
+# category_filters: ["all"]
+agent_packages:
+  - "agents.react_agent"
+
+# Agent configuration
+agent:
+  id: "simple_react"
+  model_name: "gpt-4o-mini"
+
+# Specify packages containing tasks to import
+task_packages:
+  - ml_dev_bench.cases.array_generation
+  - ml_dev_bench.cases.code_generation
+  - custom_tasks.my_task_package

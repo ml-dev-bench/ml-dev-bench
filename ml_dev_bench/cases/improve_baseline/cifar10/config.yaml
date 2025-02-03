@@ -1,0 +1,25 @@
+# Core evaluation settings
+num_runs: 1
+fail_fast: false
+log_level: "INFO"
+output_dir: "./results"
+workspace_dir: "./ml_dev_bench/cases/improve_baseline/cifar10/setup_workspace"
+langchain_project: "cifar10-improvement"
+clone_workspace: true
+
+# Task package imports
+task_packages:
+  - "ml_dev_bench.cases.improve_baseline.cifar10"
+
+# Agent configuration
+agent_packages:
+  - "agents.react_agent"
+
+# Agent configuration
+agent:
+  id: "simple_react"
+  model_name: "anthropic/claude-3-5-sonnet-20241022"
+
+# Task configurations
+tasks:
+  - id: "improve_cifar10_baseline"

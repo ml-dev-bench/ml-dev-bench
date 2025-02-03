@@ -1,0 +1,5 @@
+Write a Python script that prints "Hello, World!" to the console.
+
+The script should:
+1. Print exactly "Hello, World!" (with this exact capitalization and punctuation)
+2. Be saved as hello.py in the workspace directory
