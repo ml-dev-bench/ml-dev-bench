@@ -1,0 +1,31 @@
+# Core evaluation settings
+num_runs: 1
+fail_fast: false
+log_level: "INFO"
+output_dir: "./results"
+workspace_dir: "./test_workspace"
+
+# Agent configuration
+agent_packages:
+  - "agents.aide_ml_agent"
+
+# Agent configuration
+agent:
+  id: "aide_ml_agent"
+  model_name: "gpt-4o-mini"  # Default fallback model
+  config:
+    default_model: "gpt-4o-mini"  # Model for main AIDE operations
+    code_model: "gpt-4o-mini"     # Model for code generation
+    feedback_model: "gpt-4o-mini"  # Model for feedback
+    report_model: "gpt-4o-mini"    # Model for reports
+
+task_packages:
+  - "calipers.tests.integration.tasks.array_generation"
+
+# Task configurations
+tasks:
+  - id: "random_array_generation"
+    categories:
+      - "array"
+      - "generation"
+      - "numpy"

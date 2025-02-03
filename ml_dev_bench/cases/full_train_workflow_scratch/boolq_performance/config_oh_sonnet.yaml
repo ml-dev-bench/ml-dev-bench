@@ -1,0 +1,27 @@
+# Core evaluation settings
+num_runs: 1
+fail_fast: false
+log_level: "INFO"
+output_dir: "./results"
+workspace_dir: "./ml_dev_bench/cases/full_train_workflow_scratch/boolq_performance/setup_workspace"
+langchain_project: "ml-de v-bench-evaluation-full-train-workflow-scratch-boolq-performance"
+clone_workspace: True
+
+# Task package imports
+task_packages:
+  - "ml_dev_bench.cases.full_train_workflow_scratch.boolq_performance"
+
+# Agent configuration
+agent_packages:
+  - "agents.openhands_agent"
+
+clone_workspace_to: "/workspace"
+clear_workspace: true
+
+agent:
+  id: "openhands_agent"
+  model_name: "anthropic/claude-3-5-sonnet-20241022"
+
+# Task configurations
+tasks:
+  - id: boolq_performance

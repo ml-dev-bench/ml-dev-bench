@@ -1,0 +1,11 @@
+You need to debug and fix an error in model training.
+
+Your task:
+1. Run the training script using run_training.py to see the error
+2. Fix the issues by modifying train.py
+3. Test your fix by running run_training.py again
+
+Rules:
+- Only modify train.py
+- Do not change the model architecture or the dataset
+- The training should run without any errors

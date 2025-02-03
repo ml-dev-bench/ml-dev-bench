@@ -1,0 +1,12 @@
+# @package _global_
+
+# Task-specific settings
+task_packages:
+  - "ml_dev_bench.cases.improve_baseline.segmentation"
+
+tasks:
+  - id: "improve_segmentation_baseline"
+
+# Task-specific overrides
+workspace_dir: "./workspace"
+langchain_project: "pascalvoc-segmentation" 

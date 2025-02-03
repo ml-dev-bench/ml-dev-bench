@@ -1,0 +1,28 @@
+# Core evaluation settings
+num_runs: 1
+fail_fast: false
+log_level: "INFO"
+output_dir: "./results"
+workspace_dir: "./test_workspace"
+langchain_project: "ml-dev-bench-evaluation-noisy-dataset-download"
+clear_workspace: true
+
+# Task package imports
+task_packages:
+  - "ml_dev_bench.cases.dataset.noisy_dataset_download"
+
+
+# Agent configuration
+agent_packages:
+  - "agents.react_agent"
+
+
+# Agent configuration
+agent:
+  id: "simple_react"
+  model_name: "anthropic/claude-3-5-sonnet-20241022"
+  recursion_limit: 50
+
+# Task configurations
+tasks:
+  - id: "noisy_dataset_download"

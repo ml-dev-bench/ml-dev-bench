@@ -1,0 +1,35 @@
+# Ruff configuration
+target-version = "py312"
+
+# Linting rules
+[lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+]
+
+ignore = [
+    "E501",
+    "B003",
+    "B007",
+    "B009",
+    "B010",
+    "B904",
+    "B018",
+]
+
+# Line length configuration
+[lint.pycodestyle]
+max-line-length = 120
+
+[lint.pydocstyle]
+convention = "google"
+
+# Formatting configuration
+[format]
+quote-style = "single"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"

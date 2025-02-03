@@ -1,0 +1,25 @@
+# Core evaluation settings
+num_runs: 1
+fail_fast: false
+log_level: "INFO"
+output_dir: "./results"
+workspace_dir: "./test_workspace"
+langchain_project: "ml-dev-bench-evaluation-pretrained-model-load-from-torchvision"
+
+# Task package imports
+task_packages:
+  - "ml_dev_bench.cases.training.pretrained_model_load_from_torchvision"
+
+# Agent configuration
+agent_packages:
+  - "agents.react_agent"
+
+# Agent configuration
+agent:
+  id: "simple_react"
+  model_name: "anthropic/claude-3-5-sonnet-20241022"
+  recursion_limit: 30
+
+# Task configurations
+tasks:
+  - id: pretrained_model_load_from_torchvision

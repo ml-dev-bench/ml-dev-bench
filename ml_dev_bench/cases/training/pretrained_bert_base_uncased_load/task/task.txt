@@ -1,0 +1,7 @@
+Your task is to download and load a pretrained BERT base uncased model for use in NLP tasks. Follow these steps:
+
+1. Download a pretrained bert base uncased model.
+
+2. Save the loaded model to disk and create a model_info.json file in the root workspace directory containing the model information, file paths (tokenizer, model weight files, etc), and architecture details (model name, path, hidden size, attention heads, layers, vocab size).
+
+The model_info.json file will be used to validate your implementation.
