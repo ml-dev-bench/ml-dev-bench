@@ -8,6 +8,7 @@ Calipers is a framework for evaluating AI agents, providing tools and infrastruc
 
 ## Table of Contents
 - [Features](#features)
+- [Adding New Evaluation Tasks](#adding-new-evaluation-tasks)
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage](#usage)
