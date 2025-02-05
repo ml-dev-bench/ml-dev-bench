@@ -4,28 +4,31 @@ ML-Dev-Bench is an evaluation bench for evaluating AI agents against various ML 
 
 Calipers is a framework for evaluating AI agents, providing tools and infrastructure for systematic assessment of AI model performance.
 
-[Technical report](https://github.com/ml-dev-bench/ml-dev-bench/blob/main/ml_dev_bench.pdf)
+[![arXiv](https://img.shields.io/badge/arXiv-2502.00964-b31b1b.svg)](https://arxiv.org/abs/2502.00964)
 
 ## Table of Contents
-- [Features](#features)
-- [Adding New Evaluation Tasks](#adding-new-evaluation-tasks)
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Usage](#usage)
-  - [Basic Usage](#basic-usage)
-  - [Multi-run Evaluations](#multi-run-evaluations)
-  - [Available Tasks](#available-tasks)
-  - [Available Agents](#available-agents)
-  - [Configuration Structure](#configuration-structure)
-- [Development](#development)
-- [Project Structure](#project-structure)
-- [Adding New Agents](#adding-new-agents)
-  - [Setting up Agent Dependencies](#setting-up-agent-dependencies-using-poetry)
-  - [Adding Agents Code](#adding-agents-code)
-  - [Agent Docker Setup](#agent-docker-setup)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgments](#acknowledgments)
+[ML-Dev-Bench](#ml-dev-bench)
+  * [Features](#features)
+  * [Adding New Evaluation Tasks](#adding-new-evaluation-tasks)
+  * [Requirements](#requirements)
+  * [Installation](#installation)
+  * [Usage](#usage)
+    + [Basic Usage](#basic-usage)
+    + [Multi-run Evaluations](#multi-run-evaluations)
+  * [Development](#development)
+  * [Project Structure](#project-structure)
+  * [Adding new Evaluation Cases](#adding-new-evaluation-cases)
+  * [Adding New Agents](#adding-new-agents)
+    + [Setting up Agent Dependencies using Poetry](#setting-up-agent-dependencies-using-poetry)
+    + [Adding Agents Code](#adding-agents-code)
+    + [Agent Docker Setup](#agent-docker-setup)
+      - [Building Images](#building-images)
+      - [Creating Agent Dockerfile](#creating-agent-dockerfile)
+  * [Contributing](#contributing)
+  * [Evaluation Traces](#evaluation-traces)
+  * [License](#license)
+  * [Acknowledgments](#acknowledgments)
+  * [Citation](#citation)
 
 ## Features
 - Flexible evaluation framework for AI agents
@@ -192,7 +195,6 @@ agents/
 │   └── Dockerfile        # Agent-specific Dockerfile
 └── utils.py              # Shared utilities
 ```
-
 ### Agent Docker Setup
 The project uses a two-stage Docker build:
 1. A base image with core dependencies
@@ -254,3 +256,20 @@ MIT License - see the [LICENSE](LICENSE) file for details
 - LiteLLM for LLM integration
 - Composio for runtime management
 - Hydra for configuration management
+
+## Citation
+
+If you use ML-Dev-Bench in your research, please cite our paper:
+
+```bibtex
+@misc{mldevbench,
+      title={ML-Dev-Bench: Comparative Analysis of AI Agents on ML development workflows}, 
+      author={Harshith Padigela and Chintan Shah and Dinkar Juyal},
+      year={2025},
+      eprint={2502.00964},
+      archivePrefix={arXiv},
+      primaryClass={cs.SE},
+      url={https://arxiv.org/abs/2502.00964}, 
+}
+```
+
