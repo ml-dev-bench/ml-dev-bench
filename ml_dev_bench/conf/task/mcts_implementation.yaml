@@ -1,0 +1,13 @@
+# @package _global_
+
+# Task-specific settings
+task_packages:
+  - "ml_dev_bench.cases.modify_existing_model.mcts"
+
+tasks:
+  - id: "mcts_implementation"
+
+# Task-specific overrides
+workspace_dir: "./ml_dev_bench/cases/modify_existing_model/mcts/setup_workspace"
+langchain_project: "ml-dev-bench-evaluation-mcts" 
+clone_workspace: true

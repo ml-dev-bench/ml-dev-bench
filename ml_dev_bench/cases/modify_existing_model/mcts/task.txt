@@ -1,0 +1,57 @@
+Implement a correct working Monte Carlo Tree Search (MCTS) algorithm by completing the missing components in the provided skeleton code.
+
+The MCTS implementation should include:
+- Node selection using UCB1 formula
+- Node expansion and simulation
+- Backpropagation of rewards
+- Support for both deterministic and stochastic environments
+
+Key implementation requirements:
+1. Node Selection (UCB1):
+   - Implement UCB1 score calculation considering:
+     * Exploitation (average reward)
+     * Exploration (visit count)
+     * Exploration constant
+   - Handle unvisited nodes appropriately
+   - Break ties randomly for equal UCB1 scores
+
+2. Node Expansion:
+   - Create child nodes for all possible actions
+   - Initialize node statistics
+   - Handle terminal states
+   - Support both discrete and continuous action spaces
+
+3. Simulation/Rollout:
+   - Implement default policy for action selection
+   - Support early termination
+   - Handle different reward scales
+   - Maintain simulation depth limit
+
+4. Backpropagation:
+   - Update visit counts
+   - Update reward statistics
+   - Handle discount factor
+   - Support reward transformations
+
+Note:
+- You are provided with a skeleton of the MCTS implementation in mcts.py
+- You need to implement only the marked methods in the MCTS and Node classes
+- The base tree structure and simulation loop are already set up
+- Reference implementations for environment interaction are provided
+
+Requirements:
+- Only modify the marked sections in mcts.py
+- Do not change any other parts of the codebase
+- Do not modify the test file test_mcts.py
+- Maintain compatibility with provided environment interface
+- You can verify implementation by running test_mcts.py
+
+The implementation will be validated against test cases that verify:
+- Correct UCB1 calculation
+- Proper tree growth
+- Reward propagation
+- Performance on benchmark problems
+- Memory efficiency
+- Exploration-exploitation balance
+
+Proceed with implementation till task is complete, do not request for additional user input or clarification. 
