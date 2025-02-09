@@ -1,0 +1,48 @@
+Task: Implement Proximal Policy Optimization (PPO) Algorithm
+
+Background:
+You are given a basic policy gradient implementation for reinforcement learning. Your task is to modify it to implement the PPO algorithm, which improves upon vanilla policy gradients by using a clipped surrogate objective and value function loss.
+
+Requirements:
+1. Implement the PPO-specific components in the provided skeleton code:
+   - Clipped surrogate objective
+   - Value function loss
+   - Advantage estimation
+   - Policy and value network updates
+
+Files to Modify:
+1. ppo.py:
+   - Implement compute_advantages() method
+   - Implement calculate_ppo_loss() method
+   - Complete update_policy() method
+
+2. policy_network.py:
+   - Add entropy bonus calculation in forward()
+   - Implement get_action_and_value() method
+
+Rules:
+1. Only modify the sections marked with # TODO comments
+2. Do not modify any test files
+3. Maintain compatibility with the existing training loop
+4. Use the provided hyperparameters in config.yaml
+5. Ensure your implementation handles both continuous and discrete action spaces
+
+Success Criteria:
+1. All tests in test_ppo.py pass
+2. Implementation matches PPO algorithm specifications:
+   - Correct clipping of policy ratio
+   - Proper advantage normalization
+   - Valid entropy bonus calculation
+   - Stable value function updates
+
+Tips:
+1. Pay attention to advantage normalization
+2. Ensure proper handling of action distributions
+3. Consider numerical stability in loss calculations
+4. Follow the original PPO paper's implementation details
+
+Reference:
+- PPO Paper: "Proximal Policy Optimization Algorithms" (Schulman et al., 2017)
+- Key equation for clipped surrogate objective:
+  L = min(r_t(θ)A_t, clip(r_t(θ), 1-ε, 1+ε)A_t)
+  where r_t(θ) is the probability ratio 
