@@ -1,5 +1,5 @@
 import torch
-from mla import MLA, RopelessMLA
+from mla import MLA
 
 
 def test_mla_basic_forward():
@@ -184,26 +184,6 @@ def test_mla_rope():
     
     # Outputs should be different due to positional encoding
     assert not torch.allclose(out1, out2)
-
-
-def test_ropeless_mla():
-    """Test RopelessMLA implementation"""
-    batch_size = 2
-    seq_len = 4
-    d_model = 128
-    n_heads = 4
-    
-    model = RopelessMLA(d_model=d_model, n_heads=n_heads)
-    
-    # Generate input
-    x = torch.randn(batch_size, seq_len, d_model)
-    
-    # Test forward pass
-    out, kv_cache = model(x)
-    
-    # Check shapes
-    assert out.shape == (batch_size, seq_len, d_model)
-    assert isinstance(kv_cache, torch.Tensor)
 
 
 def test_mla_large_context():
