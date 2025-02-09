@@ -1,48 +1,67 @@
-Task: Implement Proximal Policy Optimization (PPO) Algorithm
+Implement a correct working Proximal Policy Optimization (PPO) algorithm based on the provided skeleton implementation.
 
-Background:
-You are given a basic policy gradient implementation for reinforcement learning. Your task is to modify it to implement the PPO algorithm, which improves upon vanilla policy gradients by using a clipped surrogate objective and value function loss.
+Key implementation requirements:
+
+1. Policy Network Architecture:
+   - Actor network: state -> action probabilities/means
+   - Critic network: state -> value estimates
+   - Handle both continuous actions (Pendulum-v1) and discrete actions (CartPole-v1)
+   - For continuous actions: use Gaussian distribution with learned mean
+   - For discrete actions: use Categorical distribution over action space
+
+2. Core Functions:
+   a) ActorCritic.act(state):
+      - Convert state to tensor
+      - Get action distribution from actor
+      - Sample action and compute log probability
+      - Get state value from critic
+      - Return (action, log_prob, state_value)
+
+   b) ActorCritic.evaluate(state, action):
+      - Get action distribution and state values
+      - Compute log probabilities of actions
+      - Compute distribution entropy
+      - Return (log_probs, state_values, entropy)
+
+   c) PPO.select_action(state):
+      - Use policy_old to get action, log_prob, state_value
+      - Store in buffer: state, action, log_prob, state_value
+      - Return action (numpy array for continuous, int for discrete)
+
+   d) PPO.update():
+      - Calculate returns and advantages
+      - For K epochs:
+         * Get action log probs, state values, entropy
+         * Compute surrogate loss with clipping
+         * Compute value function loss
+         * Update actor and critic networks
+      - Clear buffer after update
+
+3. Implementation Details:
+   - Use separate learning rates for actor (0.0003) and critic (0.001)
+   - Policy clipping parameter: 0.2
+   - Discount factor (gamma): 0.99
+   - K epochs for updates: 4
+   - For continuous actions: handle action variance/std
 
 Requirements:
-1. Implement the PPO-specific components in the provided skeleton code:
-   - Clipped surrogate objective
-   - Value function loss
-   - Advantage estimation
-   - Policy and value network updates
+- Only modify the specified functions in the PPO class
+- Do not change any other parts of ppo.py
+- Do not modify the test file test_ppo.py
+- Implementation must pass all test cases:
+  * test_ppo_initialization: Verify correct parameter initialization
+  * test_continuous_action_selection: Test Pendulum-v1 action sampling
+  * test_discrete_action_selection: Test CartPole-v1 action sampling
+  * test_policy_update: Verify policy improvement and buffer management
+  * test_save_load: Check model serialization
+  * test_action_distribution: Verify reasonable action distributions
 
-Files to Modify:
-1. ppo.py:
-   - Implement compute_advantages() method
-   - Implement calculate_ppo_loss() method
-   - Complete update_policy() method
+The implementation will be validated against test cases that verify:
+- Correct initialization of parameters and buffer
+- Proper action selection for both continuous and discrete spaces
+- Policy updates that improve the network parameters
+- Proper buffer management (storing and clearing)
+- Model saving and loading functionality
+- Reasonable action distributions (mean near 0, sufficient variance)
 
-2. policy_network.py:
-   - Add entropy bonus calculation in forward()
-   - Implement get_action_and_value() method
-
-Rules:
-1. Only modify the sections marked with # TODO comments
-2. Do not modify any test files
-3. Maintain compatibility with the existing training loop
-4. Use the provided hyperparameters in config.yaml
-5. Ensure your implementation handles both continuous and discrete action spaces
-
-Success Criteria:
-1. All tests in test_ppo.py pass
-2. Implementation matches PPO algorithm specifications:
-   - Correct clipping of policy ratio
-   - Proper advantage normalization
-   - Valid entropy bonus calculation
-   - Stable value function updates
-
-Tips:
-1. Pay attention to advantage normalization
-2. Ensure proper handling of action distributions
-3. Consider numerical stability in loss calculations
-4. Follow the original PPO paper's implementation details
-
-Reference:
-- PPO Paper: "Proximal Policy Optimization Algorithms" (Schulman et al., 2017)
-- Key equation for clipped surrogate objective:
-  L = min(r_t(θ)A_t, clip(r_t(θ), 1-ε, 1+ε)A_t)
-  where r_t(θ) is the probability ratio 
+Proceed with implementation till task is complete, do not request for additional user input or clarification.
