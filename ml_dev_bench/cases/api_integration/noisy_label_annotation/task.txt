@@ -9,7 +9,7 @@ You are working on a label collection task for misclassified images. Create a mi
 3. Initialize Labelbox (https://docs.labelbox.com/) project with:
    - Project name: "mnist_annotation_{timestamp}"
    - Dataset name: "high_confidence_errors"
-   You must save the project details (including project_id) to labelbox_run_id.json
+   You must save the project details (including project_id) to labelbox_run_id.json in the root directory of the project.
 
 4. Upload these 5 images to Labelbox and create a labeling task.
    You must save the following fields to labelbox_run_id.json:
@@ -20,7 +20,7 @@ You are working on a label collection task for misclassified images. Create a mi
    - task_id
 
 5. Read the project_id from labelbox_run_id.json and log these metrics.
-   You must save the following metrics to labelbox_metrics.json:
+   You must save the following metrics to labelbox_metrics.json in the root directory of the project:
    - num_images_uploaded
    - avg_confidence: <calculated from the 5 images>
    - task_status: "created"

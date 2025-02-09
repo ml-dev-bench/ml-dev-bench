@@ -13,10 +13,10 @@ from dotenv import load_dotenv
 
 def load_env():
     """Load environment variables from .env file"""
-    # Look for .env file in parent directories until found
+    # Look for .env.runtime file in parent directories until found
     current_dir = Path(__file__).resolve().parent
     while current_dir != current_dir.parent:
-        env_file = current_dir / '.env'
+        env_file = current_dir / '.env.runtime'
         if env_file.exists():
             load_dotenv(env_file)
             return True

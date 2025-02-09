@@ -2,11 +2,11 @@
 
 # Task-specific settings
 task_packages:
-  - "ml_dev_bench.cases.wandb_logging"
+  - "ml_dev_bench.cases.api_integration.wandb_logging"
 
 tasks:
   - id: "wandb_logging"
 
 # Task-specific overrides
 workspace_dir: "./test_workspace"
-langchain_project: "ml-dev-bench-evaluation-wandb-logging" 
+langchain_project: "ml-dev-bench-evaluation-wandb-logging"
