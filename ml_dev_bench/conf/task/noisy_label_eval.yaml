@@ -1,0 +1,12 @@
+# @package _global_
+
+# Task-specific settings
+task_packages:
+  - "ml_dev_bench.cases.api_integration.noisy_label_annotation"
+
+tasks:
+  - id: "noisy_label_annotation"
+
+# Task-specific overrides
+workspace_dir: "/workspace"
+langchain_project: "ml-dev-bench-evaluation-noisy-label-annotation"

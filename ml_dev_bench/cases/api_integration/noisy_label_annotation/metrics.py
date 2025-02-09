@@ -2,9 +2,9 @@ from calipers.metrics import CounterMetric, MetricsRegistry
 
 
 @MetricsRegistry.register
-class WandBFileMetric(CounterMetric):
-    name = 'wandb_files'
-    description = 'Number of correctly created WandB files'
+class LabelboxFileMetric(CounterMetric):
+    name = 'labelbox_files'
+    description = 'Number of correctly created Labelbox files'
     unit = 'files'
 
     def __init__(self):
