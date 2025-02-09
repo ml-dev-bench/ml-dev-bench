@@ -6,7 +6,7 @@ agent:
   model_name: "vertex_ai/claude-3-5-sonnet-v2"
   #model_name: "together_ai/deepseek-ai/DeepSeek-R1"
   #model_name: "gpt-4o"
-  recursion_limit: 50 
+  recursion_limit: 50
 
 agent_packages:
   - "agents.react_agent"
