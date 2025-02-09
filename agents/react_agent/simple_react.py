@@ -1,9 +1,9 @@
-from typing import Any, Dict
+from typing import Any, Dict, Sequence
 
 from composio import Action
 from composio_langchain import ComposioToolSet
 from langchain_community.chat_models import ChatLiteLLM
-from langchain_core.messages import SystemMessage
+from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 from langgraph.prebuilt import create_react_agent
 
 from calipers.framework.base import BaseAgent, BaseRuntime
@@ -30,6 +30,7 @@ AGENT_TOOLS = [
     Action.FILETOOL_LIST_FILES,
     Action.FILETOOL_EDIT_FILE,
 ]
+VERTEX_AI_PROMPT_CACHE_LIMIT = 4
 
 
 @EvalRegistry.register_agent
@@ -70,13 +71,44 @@ class SimpleReactAgent(BaseAgent):
         self.tool_set = ComposioToolSet(**tool_config)
         self.tool_set.set_workspace_id(workspace.id)
         self.tools = self.tool_set.get_tools(actions=AGENT_TOOLS)
-        system_message = SystemMessage(
-            content=create_message_content('You are a helpful assistant.')
-        )
 
-        # Create the React agent
+        def add_cache_control_to_messages(
+            state: Dict[str, Any],
+        ) -> Sequence[BaseMessage]:
+            """Add cache control to all messages in the state."""
+            messages = state['messages']
+            modified_messages = []
+
+            # Add system message with cache control
+            system_msg = SystemMessage(
+                content=create_message_content('You are a helpful assistant.')
+            )
+            modified_messages.append(system_msg)
+
+            # Process other messages
+            for idx, msg in enumerate(messages):
+                if isinstance(msg, (tuple, list)):
+                    # Convert tuple messages to proper Message objects
+                    role, content = msg
+                    if role == 'user':
+                        msg = HumanMessage(content=content)
+
+                # Add cache control to first messages (since system takes 1 slot)
+                if idx < (VERTEX_AI_PROMPT_CACHE_LIMIT - 1):
+                    if not isinstance(msg.content, list):
+                        msg.content = create_message_content(msg.content)
+                else:
+                    # For later messages, ensure content is a string
+                    if isinstance(msg.content, list):
+                        msg.content = msg.content[0]['text']
+
+                modified_messages.append(msg)
+
+            return modified_messages
+
+        # Create the React agent with the state modifier
         self.agent = create_react_agent(
-            self.llm, tools=self.tools, state_modifier=system_message
+            self.llm, tools=self.tools, state_modifier=add_cache_control_to_messages
         )
 
     def uses_litellm(self) -> bool:
@@ -87,8 +119,9 @@ class SimpleReactAgent(BaseAgent):
         """Run the agent on a task."""
         try:
             # Execute the agent
+            messages = [HumanMessage(content=create_message_content(task))]
             result = await self.agent.ainvoke(
-                {'messages': [('user', task)]},
+                {'messages': messages},
                 config={
                     'recursion_limit': self.config.config.get('recursion_limit', 30)
                 },
