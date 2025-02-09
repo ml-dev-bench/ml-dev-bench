@@ -1,0 +1,13 @@
+# @package _global_
+
+# Task-specific settings
+task_packages:
+  - "ml_dev_bench.cases.full_train_workflow_scratch.cifar100_performance"
+
+tasks:
+  - id: "cifar100_performance"
+
+# Task-specific overrides
+workspace_dir: "./ml_dev_bench/cases/full_train_workflow_scratch/cifar100_performance/setup_workspace"
+clone_workspace: true
+langchain_project: "ml-dev-bench-evaluation-cifar-100-performance"
