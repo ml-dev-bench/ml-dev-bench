@@ -1,0 +1,60 @@
+Implement a correct working forward pass of Multi-head Latent Attention (MLA) based on the provided Multi-head Attention (MHA) implementation.
+
+The MLA extends standard MHA by:
+- Using compressed projections for Q, K, V to reduce memory usage
+- Decoupling RoPE and non-RoPE parts of Q and K
+- Maintaining a compressed KV cache format
+
+Key implementation requirements:
+1. Q Projections:
+   - Project input to compressed dimension (q_proj_dim = d_model/2)
+   - Apply layernorm to compressed representation
+   - Project back to full dimension
+   - Split into RoPE and non-RoPE parts
+   - Apply RoPE to Q_for_rope part
+
+2. KV Projections:
+   - Project input to compressed dimension (kv_proj_dim = 2*d_model/3)
+   - Handle both cached and non-cached paths:
+     * No cache: Project and split into KV_for_lora and K_for_rope
+     * With cache: Concatenate with existing cache and handle both parts
+   - Apply layernorm to compressed KV
+   - Project back to full dimension
+   - Split into K and V
+
+3. RoPE Application:
+   - Apply RoPE to K_for_rope part
+   - Repeat across heads
+   - Concatenate RoPE and non-RoPE parts
+
+4. Attention:
+   - Create causal mask based on past_length
+   - Apply scaled dot-product attention
+   - Project output
+
+5. KV Cache:
+   - Return compressed KV representation for caching
+   - Cache should contain both regular KV and RoPE parts
+
+Note:
+- You are provided with a skeleton of the MLA model in mla.py
+- You need to implement only the forward pass in the MLA class
+- The model architecture, dimensions, and weight initializations are already set up
+- Reference MHA implementation is provided for attention mechanism
+
+Requirements:
+- Only modify the forward pass implementation in the MLA class
+- Do not change any other parts of mla.py
+- Do not modify the test file test_mla.py
+- Maintain compatibility with provided KV caching mechanism
+- You can verify implementation by running test_mla.py
+
+The implementation will be validated against test cases that verify:
+- Correct compression ratios
+- KV cache functionality
+- RoPE application
+- Incremental generation
+- Memory savings
+- Output correctness with controlled inputs
+
+Proceed with implementation till task is complete, do not request for additional user input or clarification. 

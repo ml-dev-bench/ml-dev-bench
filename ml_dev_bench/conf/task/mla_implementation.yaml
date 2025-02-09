@@ -1,0 +1,13 @@
+# @package _global_
+
+# Task-specific settings
+task_packages:
+  - "ml_dev_bench.cases.modify_existing_model.mla_attention"
+
+tasks:
+  - id: "mla_implementation"
+
+# Task-specific overrides
+workspace_dir: "./ml_dev_bench/cases/modify_existing_model/mla_attention/setup_workspace"
+langchain_project: "ml-dev-bench-evaluation-mla-attention" 
+clone_workspace: true
