@@ -1,0 +1,2 @@
+Source for original implementation:
+https://github.com/FoundationVision/VAR/tree/main/models
