@@ -28,4 +28,4 @@ clear_workspace: true
 
  # clones workspace to a temporary directory
 clone_workspace: false
-clone_workspace_to: "/workspace"
+clone_workspace_to: "./workspace"

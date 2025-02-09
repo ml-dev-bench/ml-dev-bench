@@ -1,0 +1,10 @@
+This implementation is based on:
+
+1. Original LoRA Paper:
+   "LoRA: Low-Rank Adaptation of Large Language Models"
+   Edward J. Hu, Yelong Shen, Phillip Wallis, Zeyuan Allen-Zhu, Yuanzhi Li, Shean Wang, Lu Wang, Weizhu Chen
+   https://arxiv.org/abs/2106.09685
+
+2. Lightning AI Studio Implementation:
+   "Implementing LoRA from Scratch"
+   https://lightning.ai/lightning-ai/studios/code-lora-from-scratch
