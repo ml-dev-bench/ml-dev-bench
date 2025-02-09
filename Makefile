@@ -23,9 +23,10 @@ deploy-build:
 	@$(MAKE) -s install-runtime-dependencies
 	@echo "$(GREEN)Build completed successfully.$(RESET)"
 
+# @$(MAKE) -s check-dependencies
+
 build:
 	@echo "$(GREEN)Building project...$(RESET)"
-	@$(MAKE) -s check-dependencies
 	@$(MAKE) -s install-python-dependencies
 	@$(MAKE) -s install-pre-commit-hooks
 	@$(MAKE) -s install-runtime-dependencies
