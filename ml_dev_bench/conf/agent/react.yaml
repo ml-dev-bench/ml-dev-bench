@@ -2,7 +2,8 @@
 
 agent:
   id: "simple_react"
-  model_name: "anthropic/claude-3-5-sonnet-20241022"
+  # model_name: "anthropic/claude-3-5-sonnet-20241022"
+  model_name: "vertex_ai/claude-3-5-sonnet-v2"
   #model_name: "together_ai/deepseek-ai/DeepSeek-R1"
   #model_name: "gpt-4o"
   recursion_limit: 50 

@@ -1,5 +1,5 @@
 import torch
-from mla import MLA, RopelessMLA
+from mla import MLA
 
 
 def test_mla_basic_forward():
