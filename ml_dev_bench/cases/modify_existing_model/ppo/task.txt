@@ -1,60 +1,40 @@
 Implement a correct working Proximal Policy Optimization (PPO) algorithm based on the provided skeleton implementation.
 
-Key implementation requirements:
+Policy Network Architecture:
+- Actor: state -> action probabilities (discrete) or action means (continuous)
+- Critic: state -> value estimate
+- For continuous actions: Gaussian distribution with fixed variance
+- For discrete actions: Categorical distribution with softmax probabilities
 
-1. Policy Network Architecture:
-   - Actor network: state -> action probabilities/means
-   - Critic network: state -> value estimates
-   - Handle both continuous actions (Pendulum-v1) and discrete actions (CartPole-v1)
-   - For continuous actions: use Gaussian distribution with learned mean
-   - For discrete actions: use Categorical distribution over action space
+The following functions need to be implemented:
 
-2. Core Functions:
-   a) ActorCritic.act(state):
-      - Convert state to tensor
-      - Get action distribution from actor
-      - Sample action and compute log probability
-      - Get state value from critic
-      - Return (action, log_prob, state_value)
+1. ActorCritic.act(state):
+   - For continuous actions: Use Gaussian distribution with fixed variance
+   - For discrete actions: Use Categorical distribution
+   - Return (action, log_prob, state_value)
 
-   b) ActorCritic.evaluate(state, action):
-      - Get action distribution and state values
-      - Compute log probabilities of actions
-      - Compute distribution entropy
-      - Return (log_probs, state_values, entropy)
+2. ActorCritic.evaluate(state, action):
+   - Compute log probabilities, state values, and entropy
+   - For continuous actions: Handle action reshaping for 1D actions
+   - Return (log_probs, state_values, dist_entropy)
 
-   c) PPO.select_action(state):
-      - Use policy_old to get action, log_prob, state_value
-      - Store in buffer: state, action, log_prob, state_value
-      - Return action (numpy array for continuous, int for discrete)
+3. PPO.select_action(state):
+   - Use policy_old to get action
+   - Store state, action, log_prob, state_value in buffer
+   - Return numpy array for continuous, integer for discrete
 
-   d) PPO.update():
-      - Calculate returns and advantages
-      - For K epochs:
-         * Get action log probs, state values, entropy
-         * Compute surrogate loss with clipping
-         * Compute value function loss
-         * Update actor and critic networks
-      - Clear buffer after update
-
-3. Implementation Details:
-   - Use separate learning rates for actor (0.0003) and critic (0.001)
-   - Policy clipping parameter: 0.2
-   - Discount factor (gamma): 0.99
-   - K epochs for updates: 4
-   - For continuous actions: handle action variance/std
+4. PPO.update():
+   - Calculate discounted returns and advantages
+   - Optimize policy for K epochs using clipped surrogate loss
+   - Include value function loss and entropy bonus
+   - Clear buffer after update
 
 Requirements:
 - Only modify the specified functions in the PPO class
 - Do not change any other parts of ppo.py
 - Do not modify the test file test_ppo.py
-- Implementation must pass all test cases:
-  * test_ppo_initialization: Verify correct parameter initialization
-  * test_continuous_action_selection: Test Pendulum-v1 action sampling
-  * test_discrete_action_selection: Test CartPole-v1 action sampling
-  * test_policy_update: Verify policy improvement and buffer management
-  * test_save_load: Check model serialization
-  * test_action_distribution: Verify reasonable action distributions
+- Implementation must pass all test cases
+- You can verify implementation by running sample tests in test_ppo.py as needed
 
 The implementation will be validated against test cases that verify:
 - Correct initialization of parameters and buffer
@@ -63,5 +43,6 @@ The implementation will be validated against test cases that verify:
 - Proper buffer management (storing and clearing)
 - Model saving and loading functionality
 - Reasonable action distributions (mean near 0, sufficient variance)
+- Learning performance on a simple quadratic cost task
 
 Proceed with implementation till task is complete, do not request for additional user input or clarification.
