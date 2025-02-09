@@ -1,6 +1,6 @@
 import torch
 import pytest
-from .lora import LoraLinear
+from lora import LoraLinear
 
 
 def test_lora_initialization():
