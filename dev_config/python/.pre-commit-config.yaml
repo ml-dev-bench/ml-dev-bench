@@ -3,9 +3,17 @@ repos:
     rev: v4.5.0
     hooks:
       - id: trailing-whitespace
-        exclude: docs/modules/python
+        exclude: |
+          (?x)(
+            docs/modules/python|
+            ml_dev_bench/cases/debugging/dinov2_debugging/setup_workspace folder/.*
+          )
       - id: end-of-file-fixer
-        exclude: docs/modules/python
+        exclude: |
+          (?x)(
+            docs/modules/python|
+            ml_dev_bench/cases/debugging/dinov2_debugging/setup_workspace folder/.*
+          )
       - id: check-yaml
       - id: debug-statements
 
@@ -27,10 +35,12 @@ repos:
         entry: ruff check --config dev_config/python/ruff.toml
         types_or: [python, pyi, jupyter]
         args: [--fix]
+        exclude: ^ml_dev_bench/cases/debugging/dinov2_debugging/setup_workspace folder/.*$
       # Run the formatter.
       - id: ruff-format
         entry: ruff format --config dev_config/python/ruff.toml
         types_or: [python, pyi, jupyter]
+        exclude: ^ml_dev_bench/cases/debugging/dinov2_debugging/setup_workspace folder/.*$
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.9.0

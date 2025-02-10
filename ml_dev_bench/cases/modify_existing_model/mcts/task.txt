@@ -1,4 +1,4 @@
-Implement Monte Carlo Tree Search (MCTS) by completing the Node and MCTS classes in mcts.py. MCTS is a heuristic search algorithm that combines tree search with random sampling to find optimal decisions in large state spaces.
+Implement a correct working Monte Carlo Tree Search (MCTS) by completing the Node and MCTS classes in mcts.py. MCTS is a heuristic search algorithm that combines tree search with random sampling to find optimal decisions in large state spaces.
 
 What is MCTS?
 -------------
@@ -54,6 +54,6 @@ Rules:
 1. Only modify the marked sections in mcts.py
 2. Do not modify test_mcts.py or any other files
 3. Maintain compatibility with provided State interface
-4. You can verify your implementation by running test_mcts.py
+4. Verify your implementation by running test_mcts.py
 
-Proceed with implementation till task is complete, do not request for additional user input or clarification. 
+Proceed with implementation till task is complete, do not request for additional user input or clarification.
