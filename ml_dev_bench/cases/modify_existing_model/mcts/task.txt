@@ -1,57 +1,81 @@
-Implement a correct working Monte Carlo Tree Search (MCTS) algorithm by completing the missing components in the provided skeleton code.
+Task: Implement Monte Carlo Tree Search (MCTS) Algorithm
 
-The MCTS implementation should include:
-- Node selection using UCB1 formula
-- Node expansion and simulation
-- Backpropagation of rewards
-- Support for both deterministic and stochastic environments
+Your task is to implement a single-player Monte Carlo Tree Search (MCTS) algorithm in Python. The implementation should be done in the `mcts.py` file, which will be tested using the provided `test_mcts.py`.
 
-Key implementation requirements:
-1. Node Selection (UCB1):
-   - Implement UCB1 score calculation considering:
-     * Exploitation (average reward)
-     * Exploration (visit count)
-     * Exploration constant
-   - Handle unvisited nodes appropriately
-   - Break ties randomly for equal UCB1 scores
-
-2. Node Expansion:
-   - Create child nodes for all possible actions
-   - Initialize node statistics
-   - Handle terminal states
-   - Support both discrete and continuous action spaces
-
-3. Simulation/Rollout:
-   - Implement default policy for action selection
-   - Support early termination
-   - Handle different reward scales
-   - Maintain simulation depth limit
-
-4. Backpropagation:
-   - Update visit counts
-   - Update reward statistics
-   - Handle discount factor
-   - Support reward transformations
-
-Note:
-- You are provided with a skeleton of the MCTS implementation in mcts.py
-- You need to implement only the marked methods in the MCTS and Node classes
-- The base tree structure and simulation loop are already set up
-- Reference implementations for environment interaction are provided
+Background:
+Monte Carlo Tree Search is a heuristic search algorithm commonly used in decision-making processes and game playing. It combines tree search with random sampling of the decision space to find optimal decisions. The algorithm is particularly useful in scenarios with large state spaces where traditional exhaustive search methods are impractical.
 
 Requirements:
-- Only modify the marked sections in mcts.py
-- Do not change any other parts of the codebase
-- Do not modify the test file test_mcts.py
-- Maintain compatibility with provided environment interface
-- You can verify implementation by running test_mcts.py
 
-The implementation will be validated against test cases that verify:
-- Correct UCB1 calculation
-- Proper tree growth
-- Reward propagation
-- Performance on benchmark problems
-- Memory efficiency
-- Exploration-exploitation balance
+1. Implement the MCTS algorithm with the following core components:
 
-Proceed with implementation till task is complete, do not request for additional user input or clarification. 
+   a) Node class that represents a state in the search tree with:
+      - State representation
+      - Parent and children nodes
+      - Visit count
+      - Total reward/value
+      - Untried actions
+      - Player to move (if relevant)
+
+   b) MCTS class with the following methods:
+      - search(state) - Main search method that returns the best action
+      - select_node() - Selection phase using UCT formula
+      - expand_node(node) - Expansion phase
+      - simulate(state) - Simulation/rollout phase
+      - backpropagate(node, reward) - Backpropagation phase
+      - get_best_action() - Returns the best action based on search results
+
+2. Implementation Requirements:
+   - Use UCT (Upper Confidence Bound for Trees) formula for node selection
+   - Implement proper state management and cloning
+   - Handle terminal states correctly
+   - Support customizable number of iterations/time limit for search
+   - Implement proper resource cleanup
+
+3. The implementation should be:
+   - Well-documented with docstrings and comments
+   - Type-hinted for better code clarity
+   - Efficient and follow Python best practices
+   - Modular and easily extendable
+
+4. Your implementation will be tested against various scenarios including:
+   - Simple game environments
+   - Path finding problems
+   - Decision trees with varying depths
+   - Different reward structures
+   - Performance under time constraints
+
+Example Usage:
+```python
+# Initialize MCTS with a root state
+mcts = MCTS()
+
+# Perform search to find best action
+best_action = mcts.search(initial_state)
+
+# Get statistics about the search
+stats = mcts.get_statistics()
+```
+
+The tests will verify:
+1. Correct implementation of all MCTS phases
+2. Proper handling of state transitions
+3. Accuracy of UCT calculations
+4. Performance within reasonable time bounds
+5. Memory efficiency
+6. Correct handling of terminal states
+7. Proper backpropagation of rewards
+
+Additional Notes:
+- The implementation should be deterministic when using a fixed random seed
+- The code should handle edge cases gracefully
+- The implementation should be compatible with Python 3.7+
+- All dependencies should be clearly specified
+- Error handling should be robust and informative
+
+Your implementation will be evaluated based on:
+1. Correctness of the MCTS algorithm implementation
+2. Code quality and organization
+3. Performance and efficiency
+4. Test coverage and passing all test cases
+5. Documentation quality 
