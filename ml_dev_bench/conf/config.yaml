@@ -8,7 +8,7 @@ defaults:
 
 hydra:
   run:
-    dir: ${output_dir}/${now:%Y-%m-%d_%H-%M-%S}
+    dir: ${output_dir}/hydra/${now:%Y-%m-%d_%H-%M-%S}
   sweep:
     dir: multirun/${now:%Y-%m-%d_%H-%M-%S}
     subdir: ${hydra.job.num}
@@ -21,7 +21,7 @@ debug: true
 num_runs: 1
 fail_fast: false
 log_level: "INFO"
-output_dir: "./results"
+output_dir: "./results/${tasks[0].id}"
 workspace_dir: "./workspace"
 langchain_project: "ml-dev-bench-evaluation"
 clear_workspace: true
