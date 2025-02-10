@@ -73,7 +73,7 @@ class LoraImplementationTask(BaseEvaluationTask):
             if isinstance(runtime, MLDevBenchRuntime):
                 result = runtime.execute_action(
                     action=Action.ML_DEV_BENCH_SHELL_TOOL_EXEC_COMMAND,
-                    request_data={'cmd': f'python {test_script}'},
+                    request_data={'cmd': f'pytest {test_script}'},
                     metadata={},
                 )
                 exit_code = result['data']['exit_code']
