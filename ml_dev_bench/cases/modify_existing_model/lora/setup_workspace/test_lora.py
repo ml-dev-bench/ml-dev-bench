@@ -1,5 +1,4 @@
 import torch
-import pytest
 from lora import LoraLinear
 
 
@@ -136,7 +135,7 @@ def test_state_dict():
     lora2.load_state_dict(state_dict)
 
     # Check if parameters match
-    for p1, p2 in zip(lora1.parameters(), lora2.parameters()):
+    for p1, p2 in zip(lora1.parameters(), lora2.parameters(), strict=False):
         assert torch.equal(p1, p2)
 
 
@@ -152,7 +151,3 @@ def test_bias_configurations():
     # Without bias
     lora_no_bias = LoraLinear(in_features, out_features, bias=False)
     assert lora_no_bias.linear.bias is None
-
-
-if __name__ == "__main__":
-    pytest.main([__file__])
