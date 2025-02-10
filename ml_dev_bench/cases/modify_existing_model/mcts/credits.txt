@@ -1,0 +1,4 @@
+Implements the MCTS algorithm from the following sources:
+
+https://github.com/FelixOpolka/Single-Player-MCTS/blob/master/mcts.py
+
