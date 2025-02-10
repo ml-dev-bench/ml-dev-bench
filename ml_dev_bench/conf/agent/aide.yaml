@@ -7,3 +7,5 @@ agent_packages:
 agent:
   id: "aide_ml_agent"
   model_name: "gpt-4o"
+
+clone_workspace: true

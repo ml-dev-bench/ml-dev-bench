@@ -11,3 +11,5 @@ agent:
 
 agent_packages:
   - "agents.react_agent"
+
+clone_workspace: true
