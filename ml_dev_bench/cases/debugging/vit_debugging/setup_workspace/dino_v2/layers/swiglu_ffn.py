@@ -25,7 +25,7 @@ class SwiGLUFFN(nn.Module):
         out_features = out_features or in_features
         hidden_features = hidden_features or in_features
         self.w12 = nn.Linear(in_features, 2 * hidden_features, bias=bias)
-        self.w3 = nn.Linear(hidden_features, out_features, bias=bias)
+        self.w3 = nn.Linear(2 * hidden_features, out_features, bias=bias)
 
     def forward(self, x: Tensor) -> Tensor:
         x12 = self.w12(x)

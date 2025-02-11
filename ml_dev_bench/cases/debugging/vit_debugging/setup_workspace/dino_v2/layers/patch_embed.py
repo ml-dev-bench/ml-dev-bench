@@ -12,14 +12,7 @@ from typing import Callable, Optional, Tuple, Union
 import torch.nn as nn
 from torch import Tensor
 
-
-def make_2tuple(x):
-    if isinstance(x, tuple):
-        assert len(x) == 2
-        return x
-
-    assert isinstance(x, int)
-    return (x, x)
+from ..models.vision_transformer import make_2tuple
 
 
 class PatchEmbed(nn.Module):
@@ -46,14 +39,13 @@ class PatchEmbed(nn.Module):
         super().__init__()
 
         image_HW = make_2tuple(img_size)
-        patch_HW = make_2tuple(patch_size)
         patch_grid_size = (
-            image_HW[0] // patch_HW[0],
-            image_HW[1] // patch_HW[1],
+            image_HW[0] // patch_size[0],
+            image_HW[1] // patch_size[1],
         )
 
         self.img_size = image_HW
-        self.patch_size = patch_HW
+        self.patch_size = patch_size
         self.patches_resolution = patch_grid_size
         self.num_patches = patch_grid_size[0] * patch_grid_size[1]
 
@@ -63,7 +55,7 @@ class PatchEmbed(nn.Module):
         self.flatten_embedding = flatten_embedding
 
         self.proj = nn.Conv2d(
-            in_chans, embed_dim, kernel_size=patch_HW, stride=patch_HW
+            in_chans, embed_dim // 2, kernel_size=patch_size, stride=patch_size
         )
         self.norm = norm_layer(embed_dim) if norm_layer else nn.Identity()
 
@@ -78,12 +70,12 @@ class PatchEmbed(nn.Module):
             f'Input image width {W} is not a multiple of patch width: {patch_W}'
         )
 
-        x = self.proj(x)  # B C H W
+        x = self.proj(x)
         H, W = x.size(2), x.size(3)
-        x = x.flatten(2).transpose(1, 2)  # B HW C
+        x = x.flatten(2).transpose(1, 2)
         x = self.norm(x)
         if not self.flatten_embedding:
-            x = x.reshape(-1, H, W, self.embed_dim)  # B H W C
+            x = x.reshape(-1, H, W, self.embed_dim)
         return x
 
     def flops(self) -> float:

@@ -28,7 +28,7 @@ class Mlp(nn.Module):
         hidden_features = hidden_features or in_features
         self.fc1 = nn.Linear(in_features, hidden_features, bias=bias)
         self.act = act_layer()
-        self.fc2 = nn.Linear(hidden_features, out_features, bias=bias)
+        self.fc2 = nn.Linear(2 * hidden_features, out_features, bias=bias)
         self.drop = nn.Dropout(drop)
 
     def forward(self, x: Tensor) -> Tensor:

@@ -15,9 +15,10 @@ from typing import Callable, Sequence, Tuple, Union
 import torch
 import torch.nn as nn
 import torch.utils.checkpoint
-from dinov2.layers import MemEffAttention, Mlp, PatchEmbed, SwiGLUFFNFused
-from dinov2.layers import NestedTensorBlock as Block
 from torch.nn.init import trunc_normal_
+
+from ..layers import MemEffAttention, Mlp, PatchEmbed, SwiGLUFFNFused
+from ..layers import NestedTensorBlock as Block
 
 logger = logging.getLogger('dinov2')
 
@@ -39,6 +40,15 @@ def named_apply(
     if depth_first and include_root:
         fn(module=module, name=name)
     return module
+
+
+def make_2tuple(x):
+    if isinstance(x, tuple):
+        assert len(x) == 2
+        return x
+
+    assert isinstance(x, int)
+    return (x, x)
 
 
 class BlockChunk(nn.ModuleList):
@@ -249,7 +259,7 @@ class DinoVisionTransformer(nn.Module):
             x = torch.cat(
                 (
                     x[:, :1],
-                    self.register_tokens.expand(x.shape[0], -1, -1),
+                    self.register_tokens.expand(x.shape[0]),
                     x[:, 1:],
                 ),
                 dim=1,
@@ -257,33 +267,7 @@ class DinoVisionTransformer(nn.Module):
 
         return x
 
-    def forward_features_list(self, x_list, masks_list):
-        x = [
-            self.prepare_tokens_with_masks(x, masks)
-            for x, masks in zip(x_list, masks_list, strict=False)
-        ]
-        for blk in self.blocks:
-            x = blk(x)
-
-        all_x = x
-        output = []
-        for x, masks in zip(all_x, masks_list, strict=False):
-            x_norm = self.norm(x)
-            output.append(
-                {
-                    'x_norm_clstoken': x_norm[:, 0],
-                    'x_norm_regtokens': x_norm[:, 1 : self.num_register_tokens + 1],
-                    'x_norm_patchtokens': x_norm[:, self.num_register_tokens + 1 :],
-                    'x_prenorm': x,
-                    'masks': masks,
-                }
-            )
-        return output
-
-    def forward_features(self, x, masks=None):
-        if isinstance(x, list):
-            return self.forward_features_list(x, masks)
-
+    def forward_features(self, x, dynamic_patch_size=None, masks=None):
         x = self.prepare_tokens_with_masks(x, masks)
 
         for blk in self.blocks:
@@ -314,7 +298,7 @@ class DinoVisionTransformer(nn.Module):
         )
         return output
 
-    def _get_intermediate_layers_chunked(self, x, n=1):
+    def _get_intermediate_layers_chunked(self, x, n=1, dynamic_patch_size=None):
         x = self.prepare_tokens_with_masks(x)
         output, i, total_block_len = [], 0, len(self.blocks[-1])
         # If n is an int, take the n last blocks. If it's a list, take them
@@ -339,6 +323,7 @@ class DinoVisionTransformer(nn.Module):
         reshape: bool = False,
         return_class_token: bool = False,
         norm=True,
+        dynamic_patch_size=None,
     ) -> Tuple[Union[torch.Tensor, Tuple[torch.Tensor]]]:
         if self.chunked_blocks:
             outputs = self._get_intermediate_layers_chunked(x, n)
@@ -360,8 +345,8 @@ class DinoVisionTransformer(nn.Module):
             return tuple(zip(outputs, class_tokens, strict=False))
         return tuple(outputs)
 
-    def forward(self, *args, is_training=False, **kwargs):
-        ret = self.forward_features(*args, **kwargs)
+    def forward(self, *args, dynamic_patch_size=None, is_training=False, **kwargs):
+        ret = self.forward_features(*args, dynamic_patch_size=None, **kwargs)
         if is_training:
             return ret
         else:
