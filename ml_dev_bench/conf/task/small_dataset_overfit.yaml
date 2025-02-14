@@ -8,6 +8,5 @@ tasks:
   - id: "small_dataset_overfit"
 
 # Task-specific overrides
-workspace_dir: "./test_workspace"
-output_dir: "./results"
-langchain_project: "ml-dev-bench-evaluation-small-dataset-overfit" 
+workspace_dir: "/workspace"
+langchain_project: "ml-dev-bench-evaluation-small-dataset-overfit"

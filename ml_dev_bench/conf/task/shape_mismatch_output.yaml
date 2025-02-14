@@ -9,5 +9,4 @@ tasks:
 
 # Task-specific overrides
 workspace_dir: "./ml_dev_bench/cases/debugging/shape_mismatch/cases/output_shape/setup_workspace"
-langchain_project: "ml-dev-bench-evaluation-shape-debug-output" 
-
+langchain_project: "ml-dev-bench-evaluation-shape-debug-output"
