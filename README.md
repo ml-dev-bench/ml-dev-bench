@@ -1,13 +1,18 @@
 # ML-Dev-Bench
 
-ML-Dev-Bench is an evaluation bench for evaluating AI agents against various ML development tasks.
+Ever wondered if AI agents can reliably develop new AI models? Look no further!
 
-Calipers is a framework for evaluating AI agents, providing tools and infrastructure for systematic assessment of AI model performance.
+ML-Dev-Bench is a benchmark for evaluating AI agents on real world ML development tasks.
+
+The benchmark currently includes 30 tasks covering various aspects of model development, including dataset management, debugging model and code failures, and implementing new ideas to achieve strong performance on various machine learning tasks.
+
+We also introduce Calipers, a framework for evaluating AI agents, providing tools and infrastructure for systematic assessment of AI model performance.
 
 [![arXiv](https://img.shields.io/badge/arXiv-2502.00964-b31b1b.svg)](https://arxiv.org/abs/2502.00964)
 
 ## Table of Contents
 [ML-Dev-Bench](#ml-dev-bench)
+  * [Highlights](#highlights)
   * [Features](#features)
   * [Adding New Evaluation Tasks](#adding-new-evaluation-tasks)
   * [Requirements](#requirements)
@@ -29,6 +34,37 @@ Calipers is a framework for evaluating AI agents, providing tools and infrastruc
   * [License](#license)
   * [Acknowledgments](#acknowledgments)
   * [Citation](#citation)
+
+## Highlights
+
+
+**What kind of tasks are currently in ml-dev-bench?**
+
+ml-dev-bench currently includes 30 tasks across the following categories.
+| Category            | Description                                                                            |
+|--------------------|----------------------------------------------------------------------------------------|
+| Dataset Handling    | Downloading and preprocessing datasets                                                 |
+| Model Training      | Loading pretrained models, fine-tuning                                                |
+| Debugging           | Addressing errors in training files, exploding gradients, and incorrect implementations|
+| Model Implementation| Modifying and implementing on top of existing model architectures                     |
+| API Integration     | Integrating logging tools like WandB                                                  |
+| Performance         | Improving baselines and achieving competitive results                                 |
+
+
+**What kind of ML problems do these tasks cover?**
+
+The tasks cover ML development in problem domains like image classification, segmentation, question answering, image generation, LLM finetuning and alignment, etc.
+
+**What is the performance of different agents on these tasks?**
+
+We currently evaluate 3 agents (ReAct, OpenHands, and AIDE) using 3 models (Claude 3.5 Sonnet, GPT-4o, and Gemini 1.5 Pro) on 30 tasks.
+![Agent Results](./docs/images/agent_results.png)
+
+**What are the common failures across agents?**
+
+Agents perform well in easier and well-defined categories like dataset handling and basic debugging with clear instructions, but struggle in open-ended and long-running tasks like model performance improvement where no agent succeeded.
+Agents also fail in debugging and implementation tasks which need modifications to large existing codebases.
+
 
 ## Features
 - Flexible evaluation framework for AI agents
@@ -263,13 +299,12 @@ If you use ML-Dev-Bench in your research, please cite our paper:
 
 ```bibtex
 @misc{mldevbench,
-      title={ML-Dev-Bench: Comparative Analysis of AI Agents on ML development workflows}, 
+      title={ML-Dev-Bench: Comparative Analysis of AI Agents on ML development workflows},
       author={Harshith Padigela and Chintan Shah and Dinkar Juyal},
       year={2025},
       eprint={2502.00964},
       archivePrefix={arXiv},
       primaryClass={cs.SE},
-      url={https://arxiv.org/abs/2502.00964}, 
+      url={https://arxiv.org/abs/2502.00964},
 }
 ```
-
