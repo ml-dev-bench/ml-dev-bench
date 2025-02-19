@@ -8,5 +8,5 @@ tasks:
   - id: "full_train_workflow_performance_test"
 
 # Task-specific overrides
-workspace_dir: "./test_workspace"
-langchain_project: "ml-dev-bench-evaluation-performance-test" 
+workspace_dir: "/workspace"
+langchain_project: "ml-dev-bench-evaluation-performance-test"

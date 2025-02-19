@@ -1,0 +1,10 @@
+You are provided with a Vision Transformer implementation that has some bugs causing the tests to fail. Your task is to get a working implementation which fixes the tests.
+
+
+Rules:
+- Only modify files under the dino_v2/ directory
+- Do not modify the test file test_vision_transformer.py
+- All tests must pass without any errors
+- Maintain the original model architecture and functionality
+
+Proceed until task completion and do not ask user for any clarification.
