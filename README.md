@@ -57,7 +57,7 @@ The tasks cover ML development in problem domains like image classification, seg
 
 **What is the performance of different agents on these tasks?**
 
-We currently evaluate 3 agents (ReAct, OpenHands, and AIDE) using 3 models (Claude 3.5 Sonnet, GPT-4o, and Gemini 1.5 Pro) on 30 tasks.
+We currently evaluate 3 agents (ReAct, OpenHands, and AIDE) using 3 models (Claude 3.5 Sonnet, GPT-4o, and Gemini 2.0 Flash) on 30 tasks.
 ![Agent Results](./docs/images/agent_results.png)
 
 **What are the common failures across agents?**
