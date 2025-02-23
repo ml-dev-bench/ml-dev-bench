@@ -24,7 +24,7 @@ log_level: "INFO"
 output_dir: "./results/${tasks[0].id}"
 workspace_dir: "./workspace"
 langchain_project: "ml-dev-bench-evaluation"
-clear_workspace: true
+clear_workspace: false
 
  # clones workspace to a temporary directory
 clone_workspace: false

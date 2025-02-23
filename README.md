@@ -281,7 +281,7 @@ CMD ["poetry", "shell"]
 
 ## Evaluation Traces
 
-Coming Soon
+Evaluation logs and Traces: [Link](https://drive.google.com/drive/folders/1o1FCvx_n9XVKgvkSWL97LlsfOh_KfG-S)
 
 ## License
 
