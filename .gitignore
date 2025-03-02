@@ -55,7 +55,7 @@ test_workspace/*
 results/*
 workspace/*
 workspaces/*
-
+ignore/*
 # Hydra
 multirun/
 multirun/*

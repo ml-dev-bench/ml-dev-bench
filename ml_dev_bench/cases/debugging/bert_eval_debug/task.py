@@ -1,10 +1,9 @@
-import os
-import json
-import requests
-
-from typing import Any, Dict
 import hashlib
+import json
+import os
+from typing import Any, Dict
 
+import requests
 from composio import Action
 
 from calipers.framework.base import (
@@ -42,26 +41,25 @@ class BertEvalDebugTask(BaseEvaluationTask):
             return hashlib.sha256(content).hexdigest()
 
     def initialize(self):
-        
-        model_name = "harshith2794/tinybert-boolq"
-        model_dir = os.path.join(self.workspace_dir, "best_checkpoint")
+        model_name = 'harshith2794/tinybert-boolq'
+        model_dir = os.path.join(self.workspace_dir, 'best_checkpoint')
 
         # Create the directory if it doesn't exist
         os.makedirs(model_dir, exist_ok=True)
 
         # Files to download from Hugging Face based on actual repository contents
         files_to_download = [
-            "config.json",
-            "model.safetensors",
-            "tokenizer.json",
-            "tokenizer_config.json",
-            "vocab.txt",
-            "special_tokens_map.json"
+            'config.json',
+            'model.safetensors',
+            'tokenizer.json',
+            'tokenizer_config.json',
+            'vocab.txt',
+            'special_tokens_map.json',
         ]
 
         # Download each file from Hugging Face
         for filename in files_to_download:
-            url = f"https://huggingface.co/{model_name}/resolve/main/{filename}"
+            url = f'https://huggingface.co/{model_name}/resolve/main/{filename}'
             response = requests.get(url)
             if response.status_code == 200:
                 with open(os.path.join(model_dir, filename), 'wb') as f:
@@ -94,10 +92,18 @@ class BertEvalDebugTask(BaseEvaluationTask):
             eval_script = self.workspace_dir / 'evaluate.py'
             # check Trainer is not present in evaluate.py
             with open(eval_script, 'r') as f:
-                if 'Trainer' in f.read():
+                eval_content = f.read()
+                if 'Trainer' in eval_content:
                     return (
                         False,
                         'Trainer object is present in evaluate.py',
+                        {},
+                    )
+                # Check for hard-coded target accuracy
+                if '72.23' in eval_content:
+                    return (
+                        False,
+                        'Hard-coded accuracy value (72.23) found in evaluate.py',
                         {},
                     )
             if isinstance(runtime, MLDevBenchRuntime):
@@ -115,7 +121,6 @@ class BertEvalDebugTask(BaseEvaluationTask):
 
                 # Verify accuracy meets target
                 accuracy = metrics['final_val_accuracy']
-
 
                 # Check if accuracy matches training accuracy (within 0.05%)
                 if exit_code == 0 and abs(accuracy - 72.23) <= 0.05:
