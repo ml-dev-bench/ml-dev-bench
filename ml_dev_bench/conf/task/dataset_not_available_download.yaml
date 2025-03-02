@@ -8,5 +8,5 @@ tasks:
   - id: "dataset_not_available_download"
 
 # Task-specific overrides
-workspace_dir: "./test_workspace"
+workspace_dir: "./workspace"
 langchain_project: "ml-dev-bench-evaluation-dataset-not-available-download"

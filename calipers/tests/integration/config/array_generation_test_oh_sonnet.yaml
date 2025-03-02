@@ -3,7 +3,7 @@ num_runs: 1
 fail_fast: false
 log_level: "INFO"
 output_dir: "./results"
-workspace_dir: "./test_workspace"
+workspace_dir: "./workspace"
 
 # Agent configuration
 agent_packages:
