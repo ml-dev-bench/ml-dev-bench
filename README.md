@@ -165,6 +165,62 @@ Run a list of tasks with a specific agent:
 ```bash
 make lint
 ```
+## Calipers Architecture
+
+```mermaid
+graph TD
+    %% Main Components
+    User([User]) --> Scripts
+    Scripts["Scripts (Entry Points)"] --> |"Configure & Run"| Framework
+
+    %% Core Components
+    subgraph "Core Framework"
+        Framework["Framework (Orchestration)"]
+        Registry["Registry (Task & Agent Repository)"]
+        Config["Configuration (Hydra-based)"]
+    end
+
+    %% Execution Components
+    subgraph "Execution Components"
+        Tasks["Evaluation Tasks"]
+        Agents["AI Agents"]
+        Runtime["Runtime (Execution Environment)"]
+    end
+
+    %% Monitoring Components
+    subgraph "Monitoring"
+        Metrics["Metrics System"]
+        Callbacks["Event Callbacks"]
+        Results["Evaluation Results"]
+    end
+
+    %% Configurations
+    Config --> |"Configure"| Framework
+    Config --> |"Task Settings"| Tasks
+    Config --> |"Agent Settings"| Agents
+
+    %% Registration Flow
+    Registry --> |"Register"| Tasks
+    Registry --> |"Register"| Agents
+    Framework --> |"Loads from"| Registry
+
+    %% Task Execution Flow
+    Framework --> |"Initialize"| Tasks
+    Tasks --> |"Run via"| Agents
+    Agents --> |"Execute in"| Runtime
+    Tasks --> |"Validate with"| Runtime
+
+    %% Monitoring Flow
+    Tasks --> |"Record"| Metrics
+    Agents --> |"Trigger"| Callbacks
+    Tasks --> |"Produce"| Results
+    Metrics --> Results
+
+
+    %% Extensions
+    MLDevBench["ML Dev Bench Runtime"] --> Runtime
+```
+
 ## Project Structure
 
 ```
