@@ -7,6 +7,7 @@ from calipers.framework.base import (
     BaseEvaluationTask,
     BaseRuntime,
 )
+from calipers.framework.config import TaskConfig
 from calipers.framework.registry import EvalRegistry
 from calipers.metrics import CounterMetric, MetricsRegistry
 
@@ -26,6 +27,10 @@ class RandomArrayGenerationTask(BaseEvaluationTask):
     task_id = 'random_array_generation'
     description = 'Generate random number arrays with specific shapes'
     categories = {'array', 'generation', 'numpy'}
+
+    def __init__(self, config: TaskConfig):
+        super().__init__(config)
+        self._setup_metrics()
 
     def _setup_metrics(self) -> None:
         """Setup metrics for array generation task"""

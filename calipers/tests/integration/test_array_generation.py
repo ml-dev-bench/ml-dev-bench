@@ -6,16 +6,48 @@ import pytest
 import yaml
 from dotenv import load_dotenv
 
+from calipers.framework.base import BaseAgent
+from calipers.framework.config import AgentConfig
+from calipers.framework.registry import EvalRegistry
 from calipers.scripts.run_evaluation import run_evaluation
-from calipers.tests.integration.tasks.array_generation import (
-    RandomArrayGenerationTask,  # noqa: F401
-)
+from calipers.tests.integration.tasks.array_generation import RandomArrayGenerationTask
 
 # Configure logging
 logging.basicConfig(
     level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+
+@EvalRegistry.register_agent
+class SimpleReactAgent(BaseAgent):
+    agent_id = 'simple_react'
+    description = 'Simple React agent for testing'
+
+    def __init__(self, config: AgentConfig):
+        super().__init__(config)
+
+    def uses_litellm(self) -> bool:
+        """This is a simple test agent that doesn't use LiteLLM"""
+        return False
+
+    async def run(self, task: str) -> dict:
+        # Create three random arrays with specified shapes
+        import numpy as np
+
+        a = np.random.rand(3)
+        b = np.random.rand(24, 24)
+        c = np.random.rand(3, 24, 24)
+
+        # Save arrays to file
+        np.savez(self.workspace_dir / 'random_arrays.npz', a=a, b=b, c=c)
+        return {'success': True}
+
+
+@pytest.fixture(scope='session', autouse=True)
+def register_tasks_and_agents():
+    """Register tasks and agents before running tests"""
+    EvalRegistry.register_task(RandomArrayGenerationTask)
 
 
 def find_env_file(start_path: Path, filename: str = '.env.runtime') -> Path:
@@ -136,3 +168,7 @@ async def test_array_generation(setup_test_env):
     assert 'config' in saved_data['metadata']
     assert 'timestamp' in saved_data['metadata']
     assert 'commit_hash' in saved_data['metadata']
+    assert 'results' in saved_data
+    assert len(saved_data['results']) == 1
+    assert saved_data['results'][0]['task_id'] == 'random_array_generation'
+    assert saved_data['results'][0]['agent_id'] == 'simple_react'

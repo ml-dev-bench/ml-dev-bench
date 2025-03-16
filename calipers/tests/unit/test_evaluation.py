@@ -201,6 +201,7 @@ def test_run_result():
         metrics={'tokens': {'value': 100}},
         start_time=start_time,
         end_time=end_time,
+        agent_output={'test': True},
     )
 
     assert result.success
@@ -224,6 +225,7 @@ def test_evaluation_result():
             },
             start_time=start_time,
             end_time=start_time + timedelta(seconds=1),
+            agent_output={'test': True},
         ),
         RunResult(
             success=False,
@@ -237,6 +239,7 @@ def test_evaluation_result():
             },
             start_time=start_time + timedelta(seconds=1),
             end_time=start_time + timedelta(seconds=3),
+            agent_output={'test': False},
         ),
     ]
 
@@ -574,7 +577,7 @@ async def test_litellm_metrics_integration(
     with (
         patch.object(framework, 'get_task', return_value=task),
         patch(
-            'calipers.framework.evaluation.MetricsCallbackHandler',
+            'calipers.callbacks.litellm_callbacks.metrics_callback.MetricsCallbackHandler',
             return_value=mock_callback_handler,
         ),
     ):
@@ -618,7 +621,9 @@ async def test_litellm_metrics_not_used(register_mocks, tmp_path):
 
     framework = EvaluationFramework(config)
 
-    with patch('calipers.framework.evaluation.MetricsCallbackHandler') as mock_handler:
+    with patch(
+        'calipers.callbacks.litellm_callbacks.metrics_callback.MetricsCallbackHandler'
+    ) as mock_handler:
         result = await framework.evaluate('mock_task', 'mock_agent')
 
         # Verify callback was never created
@@ -661,7 +666,7 @@ async def test_litellm_metrics_error_handling(
     with (
         patch.object(framework, 'get_task', return_value=task),
         patch(
-            'calipers.framework.evaluation.MetricsCallbackHandler',
+            'calipers.callbacks.litellm_callbacks.metrics_callback.MetricsCallbackHandler',
             return_value=mock_callback_handler,
         ),
     ):
