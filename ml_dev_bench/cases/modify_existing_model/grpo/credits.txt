@@ -1,0 +1,1 @@
+This task tests the implementation of GRPO algorithm, a variant of PPO with generalized reward shaping.
