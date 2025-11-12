@@ -1,0 +1,26 @@
+# Example config for benchmarking the Cursor-style agent on CIFAR-10 improve baseline
+
+num_runs: 1
+fail_fast: false
+log_level: "INFO"
+output_dir: "evaluation/results"
+env_file: ".env.runtime"
+langchain_project: "ml-dev-bench-evaluation"
+
+agent_packages:
+  - "agents.cursor_agent"
+
+agent:
+  id: "cursor_agent"
+  model_name: "openai/gpt-5"  # adjust to your provider route
+  config:
+    recursion_limit: 80
+    temperature: 0
+    tool_config: {}
+
+task_packages:
+  - "ml_dev_bench.cases.improve_baseline.cifar10"
+
+tasks:
+  - id: "improve_cifar10_baseline"
+    workspace_dir: "./ml_dev_bench/cases/improve_baseline/cifar10/setup_workspace"
