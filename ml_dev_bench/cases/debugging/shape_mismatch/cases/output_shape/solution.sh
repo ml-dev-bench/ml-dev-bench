@@ -6,3 +6,4 @@
 sed -i.bak 's/128 \* 16 \* 16/128 * 112 * 112/g' classifier_model.py
 echo "✓ Fix applied"
 
+
