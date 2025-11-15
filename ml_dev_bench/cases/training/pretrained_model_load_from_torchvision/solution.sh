@@ -3,8 +3,19 @@ set -e
 
 echo "🚀 Starting pretrained ResNet18 model download task..."
 
-# Use Poetry to run Python script that downloads and saves the model
-poetry run python << 'PYTHON_SCRIPT'
+# Use Python from poetry venv (or system python3 as fallback)
+if [ -f "/app/.venv/bin/python" ]; then
+    PYTHON_CMD="/app/.venv/bin/python"
+elif command -v poetry &> /dev/null; then
+    PYTHON_CMD="poetry run python"
+else
+    PYTHON_CMD="python3"
+fi
+
+echo "Using Python: $PYTHON_CMD"
+
+# Run Python script that downloads and saves the model
+$PYTHON_CMD << 'PYTHON_SCRIPT'
 import torch
 import torchvision
 import json
