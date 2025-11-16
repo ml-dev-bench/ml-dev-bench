@@ -1,6 +1,0 @@
-- The code uses pytorch_lightning instead of lightning which causes import issues in
-  - cifar10_classifier/model.py file.
-  - cifar10_classifier/data.py file.
-
-
-- The code uses auto accelerator which can cause issues on incompatible GPU devices.
