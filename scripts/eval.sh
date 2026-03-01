@@ -78,6 +78,7 @@
 # Available agents:
 #   - openhands : Claude-based agent
 #   - react     : React-based agent
+#   - codex     : OpenAI Codex CLI agent
 
 # Get the directory containing this script
 SCRIPT_DIR="$( cd "$( dirname "$0" )" && pwd )"
@@ -86,4 +87,4 @@ SCRIPT_DIR="$( cd "$( dirname "$0" )" && pwd )"
 cd "${SCRIPT_DIR}/.." || exit 1
 
 # Run the evaluation using Hydra through Poetry
-python -m calipers.scripts.run_hydra_evaluation $@
+python3 -m calipers.scripts.run_hydra_evaluation $@

@@ -1,0 +1,14 @@
+# @package _global_
+
+agent:
+  id: "codex_agent"
+  model_name: "gpt-5-2"
+  timeout_sec: 3600
+  max_retries: 4
+  retry_backoff_sec: 2.0
+  # reasoning_effort: "high"
+
+agent_packages:
+  - "agents.codex_agent"
+
+clone_workspace: true
