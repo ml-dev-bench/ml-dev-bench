@@ -8,5 +8,5 @@ tasks:
   - id: "noisy_label_annotation"
 
 # Task-specific overrides
-workspace_dir: "/workspace"
+workspace_dir: "${hydra:runtime.cwd}/workspace"
 langchain_project: "ml-dev-bench-evaluation-noisy-label-annotation"

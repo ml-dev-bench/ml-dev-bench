@@ -9,6 +9,7 @@ from typing import Any, Dict, Optional
 from calipers.framework.base import BaseAgent
 from calipers.framework.config import AgentConfig
 from calipers.framework.registry import EvalRegistry
+from runtime.environments.shell_setup import get_poetry_python_path
 
 
 @EvalRegistry.register_agent
@@ -63,6 +64,19 @@ class CodexAgent(BaseAgent):
         ]
         return any(marker in haystack for marker in retry_markers)
 
+    @staticmethod
+    def _build_runtime_preamble() -> str:
+        """Instruction prefix to reduce environment mismatch failures."""
+        return (
+            "Environment instructions:\\n"
+            "- Use the preconfigured ML-Dev-Bench Python runtime already available in this workspace shell.\\n"
+            "- Do NOT create a new virtual environment.\\n"
+            "- Before running task code, verify Python/tooling with commands like:\\n"
+            "  - which python\\n"
+            "  - python -c \"import torch; print(torch.__version__)\"\\n"
+            "- Prefer `python` over hardcoded interpreter paths unless required by the task.\\n\\n"
+        )
+
     async def run(self, task: str) -> Dict[str, Any]:
         workspace_dir = self.config.workspace_dir
         if workspace_dir is None:
@@ -89,6 +103,14 @@ class CodexAgent(BaseAgent):
             }
 
         env = os.environ.copy()
+        # Mirror runtime tool behavior by prioritizing the runtime Poetry Python bin.
+        # This helps Codex shell commands resolve torch-enabled Python consistently.
+        try:
+            runtime_python_bin = get_poetry_python_path()
+            env['PATH'] = f"{runtime_python_bin}:{env.get('PATH', os.environ.get('PATH', ''))}"
+        except Exception:
+            # Best effort only; keep existing PATH if runtime env discovery fails.
+            pass
         env['CODEX_HOME'] = str(workspace_dir / '.codex')
         os.makedirs(env['CODEX_HOME'], exist_ok=True)
 
@@ -97,7 +119,8 @@ class CodexAgent(BaseAgent):
         with open(auth_path, 'w', encoding='utf-8') as f:
             json.dump({'OPENAI_API_KEY': os.getenv('OPENAI_API_KEY', '')}, f)
 
-        escaped_task = shlex.quote(task)
+        full_task = self._build_runtime_preamble() + task
+        escaped_task = shlex.quote(full_task)
         reasoning_flag = (
             f'-c model_reasoning_effort={shlex.quote(str(reasoning_effort))} '
             if reasoning_effort

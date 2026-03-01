@@ -8,5 +8,5 @@ tasks:
   - id: "small_dataset_overfit"
 
 # Task-specific overrides
-workspace_dir: "/workspace"
+workspace_dir: "${hydra:runtime.cwd}/workspace"
 langchain_project: "ml-dev-bench-evaluation-small-dataset-overfit"
