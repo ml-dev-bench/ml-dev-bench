@@ -8,5 +8,5 @@ tasks:
   - id: "full_train_workflow_performance_test"
 
 # Task-specific overrides
-workspace_dir: "/workspace"
+workspace_dir: "${hydra:runtime.cwd}/workspace"
 langchain_project: "ml-dev-bench-evaluation-performance-test"

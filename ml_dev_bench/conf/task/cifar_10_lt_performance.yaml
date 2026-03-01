@@ -8,5 +8,5 @@ tasks:
   - id: "cifar_10_lt_performance"
 
 # Task-specific overrides
-workspace_dir: "./workspace"
+workspace_dir: "./ml_dev_bench/cases/full_train_workflow_scratch/cifar_10_lt_performance/setup_workspace"
 langchain_project: "ml-dev-bench-evaluation-cifar-10-lt-performance"
