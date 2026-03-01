@@ -87,4 +87,4 @@ SCRIPT_DIR="$( cd "$( dirname "$0" )" && pwd )"
 cd "${SCRIPT_DIR}/.." || exit 1
 
 # Run the evaluation using Hydra through Poetry
-python3 -m calipers.scripts.run_hydra_evaluation $@
+poetry run python -m calipers.scripts.run_hydra_evaluation $@
