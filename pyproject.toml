@@ -59,7 +59,7 @@ datasets = "*"
 optional = true
 
 [tool.poetry.group.openhands-agent.dependencies]
-openhands-ai = { git = "https://github.com/ml-dev-bench/OpenHands", branch = "ml-dev-bench-v0.21.1" }
+openhands-ai = { version = "1.4.0", python = ">=3.12,<3.14" }
 playwright = "^1.41.0"
 
 
