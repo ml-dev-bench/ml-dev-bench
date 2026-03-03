@@ -8,5 +8,5 @@ tasks:
   - id: "channel_vit_implementation_easy"
 
 # Task-specific overrides
-workspace_dir: "./ml_dev_bench/cases/modify_existing_model/channel_vit/setup_workspace"
+workspace_dir: "./ml_dev_bench/cases/modify_existing_model/channel_vit_easy/setup_workspace"
 langchain_project: "ml-dev-bench-evaluation-channel-vit" 
