@@ -1,3 +1,3 @@
-from .task import ChannelViTImplementTask
+from .task import ChannelViTImplementTaskEasy
 
-__all__ = ['ChannelViTImplementTask']
+__all__ = ['ChannelViTImplementTaskEasy']
