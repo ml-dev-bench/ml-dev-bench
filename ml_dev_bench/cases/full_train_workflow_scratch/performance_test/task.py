@@ -185,6 +185,8 @@ class FullTrainWorkflowPerformanceTestTask(BaseEvaluationTask):
                 total_params = 0
                 for param in model_state["model_state_dict"].values():
                     total_params += param.numel()
+                if total_params <= 0:
+                    return False, "Model has 0 parameters; must be > 0"
                 if total_params > 30_000_000:  # 30M parameters
                     return False, "Total parameters in model exceed 30M"
 
