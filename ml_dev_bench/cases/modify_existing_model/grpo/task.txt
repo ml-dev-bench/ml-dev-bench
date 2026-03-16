@@ -1,0 +1,34 @@
+# Task: Implement GRPO (Generalized Reward Plus Optimization)
+
+You need to implement the GRPO algorithm in the provided template. GRPO is a variant of PPO that incorporates additional reward shaping and optimization techniques.
+
+## Requirements:
+
+1. Implement the GRPO algorithm in the `grpo.py` file:
+   - Complete the `GRPOAgent` class
+   - Implement the reward shaping mechanism
+   - Add the generalized optimization step
+
+2. The implementation should:
+   - Handle both continuous and discrete action spaces
+   - Support custom reward shaping functions
+   - Maintain proper policy updates with clipping
+   - Include value function updates
+
+3. Pass all test cases in `test_grpo.py`
+
+## Evaluation Criteria:
+
+Your implementation will be tested against hidden test cases that verify:
+- Correct policy updates
+- Proper reward shaping
+- Value function estimation accuracy
+- Optimization stability
+- Clipping behavior
+
+## Tips:
+- Follow the PPO algorithm as a base
+- Add the generalized reward shaping component
+- Ensure proper handling of advantages and returns
+- Implement stable policy updates with clipping
+- Add proper value function updates
